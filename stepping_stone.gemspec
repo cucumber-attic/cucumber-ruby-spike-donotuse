@@ -7,7 +7,6 @@ Gem::Specification.new do |s|
   s.email       = "msassak@gmail.com"
   s.homepage    = "https://github.com/msassak/stepping_stone"
 
-  s.add_development_dependency 'cucumber', '~> 0.10.0'
   s.add_development_dependency 'rspec', '~> 2.5.0'
 
   s.rubygems_version   = "1.3.7"
