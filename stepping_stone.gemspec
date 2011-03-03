@@ -2,7 +2,7 @@ Gem::Specification.new do |s|
   s.name        = 'stepping_stone'
   s.version     = '0.0.1'
   s.authors     = ["Mike Sassak"]
-  s.description = "Flexible bridge between natural language and Ruby"
+  s.description = "Flexible bridge between customer-friendly data and Ruby"
   s.summary     = "stepping_stone #{s.version}"
   s.email       = "msassak@gmail.com"
   s.homepage    = "https://github.com/msassak/stepping_stone"
