@@ -25,5 +25,14 @@ module SteppingStone
       it { should_not match(:blargle) }
       it { should_not match(["fooble"]) }
     end
+
+    context 'matching Array instances' do
+      subject { Pattern.new(Array) }
+
+      it { should match([1, 2, 3]) }
+      it { should match([]) }
+      it { should_not match("string") }
+      it { should_not match(:symbol) }
+    end
   end
 end
