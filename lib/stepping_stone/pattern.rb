@@ -1,5 +1,10 @@
 module SteppingStone
   class Pattern
+    
+    def self.[](*parts)
+      new(*parts)
+    end
+
     attr_reader :parts
 
     def initialize(*parts)
@@ -21,7 +26,7 @@ module SteppingStone
     def to_s
       "#{self.class}: '#{parts}'"
     end
-
+    
     private
 
     def compare(parts, targets, last=nil)

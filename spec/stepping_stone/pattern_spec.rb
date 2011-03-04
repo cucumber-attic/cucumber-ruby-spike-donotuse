@@ -10,7 +10,7 @@ module SteppingStone
     end
 
     context 'matching "/argle$/"' do
-      subject { Pattern.new(/argle$/) }
+      subject { Pattern[/argle$/] }
       
       it { should match("blargle") }
       it { should match("flargle") }
@@ -55,7 +55,7 @@ module SteppingStone
     end
 
     context 'matching Class, :sym, [1,2,3]' do
-      subject { Pattern.new(Class, :sym, [1,2,3]) }
+      subject { Pattern[Class, :sym, [1,2,3]] }
       let(:constant) { Constant = 2112; Constant }
 
       it { should match([String, :sym, [1,2,3]]) }
