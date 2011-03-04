@@ -17,6 +17,15 @@ module SteppingStone
       it { should_not match("fooble") }
     end
 
+    context 'matching [1,2,3]' do
+      subject { Pattern.new([1,2,3]) }
+
+      it { should match([1,2,3]) }
+      it { should_not match([]) }
+      it { should_not match("fooble") }
+      it { should_not match([1,[2],[[3]]]) }
+    end
+
     context 'matching String instances' do
       subject { Pattern.new(String) } 
 
