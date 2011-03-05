@@ -11,7 +11,7 @@ module SteppingStone
 
     context 'matching "/argle$/"' do
       subject { Pattern[/argle$/] }
-      
+
       it { should match("blargle") }
       it { should match("flargle") }
       it { should_not match("fooble") }

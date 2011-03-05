@@ -1,6 +1,6 @@
 module SteppingStone
   class Pattern
-    
+
     def self.[](*parts)
       new(*parts)
     end
@@ -26,7 +26,7 @@ module SteppingStone
     def to_s
       "#{self.class}: '#{parts}'"
     end
-    
+
     private
 
     def compare(parts, targets, last=nil)
