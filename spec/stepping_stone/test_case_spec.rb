@@ -18,6 +18,11 @@ module SteppingStone
       it "is not failed" do
         subject.should_not be_failed
       end
+
+      it "is pending after execution" do
+        subject.execute!
+        subject.should be_pending
+      end
     end
 
     context "with one action" do
