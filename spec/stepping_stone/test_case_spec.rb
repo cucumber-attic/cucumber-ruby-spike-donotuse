@@ -2,32 +2,40 @@ require 'spec_helper'
 
 module SteppingStone
   describe TestCase do
-    let(:sut)    { double("sut") }
-    let(:action) { double("action") }
+    let(:sut) { double("sut") }
 
-    subject { TestCase.new(sut, action) }
+    context "with no actions" do
+      subject { TestCase.new(sut) }
 
-    it "passes when all actions pass" do
-      sut.should_receive(:apply).with(action).and_return(:passed)
-
-      subject.execute!
-      subject.should be_passed
+      it "is pending" do
+        subject.should be_pending
+      end
     end
 
-    it "fails when an action fails" do
-      sut.should_receive(:apply).with(action).and_return(:failed)
+    context "with one action" do
+      let(:action) { double("action") }
+      subject { TestCase.new(sut, action) }
 
-      subject.execute!
-      subject.should be_failed
+      it "passes when the action passes" do
+        sut.should_receive(:apply).with(action).and_return(:passed)
+
+        subject.execute!
+        subject.should be_passed
+      end
+
+      it "fails when the action fails" do
+        sut.should_receive(:apply).with(action).and_return(:failed)
+
+        subject.execute!
+        subject.should be_failed
+      end
+
+      it "is pending when the action is pending" do
+        sut.should_receive(:apply).with(action).and_return(:pending)
+
+        subject.execute!
+        subject.should be_pending
+      end
     end
-
-    it "is pending when an action is pending" do
-      sut.should_receive(:apply).with(action).and_return(:pending)
-
-      subject.execute!
-      subject.should be_pending
-    end
-
-    it "is pending when it has no actions"
   end
 end

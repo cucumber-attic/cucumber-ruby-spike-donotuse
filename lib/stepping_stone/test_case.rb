@@ -24,7 +24,7 @@ module SteppingStone
     end
 
     def pending?
-      @result == :pending
+      actions.empty? or @result == :pending
     end
   end
 end
