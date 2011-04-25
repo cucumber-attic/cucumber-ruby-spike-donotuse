@@ -10,6 +10,14 @@ module SteppingStone
       it "is pending" do
         subject.should be_pending
       end
+
+      it "is not passed" do
+        subject.should_not be_passed
+      end
+
+      it "is not failed" do
+        subject.should_not be_failed
+      end
     end
 
     context "with one action" do

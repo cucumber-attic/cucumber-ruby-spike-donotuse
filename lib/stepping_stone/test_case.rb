@@ -20,7 +20,7 @@ module SteppingStone
     end
 
     def failed?
-      !passed?
+      !actions.empty? and !passed?
     end
 
     def pending?
