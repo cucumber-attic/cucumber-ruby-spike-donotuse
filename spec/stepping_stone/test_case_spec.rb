@@ -78,20 +78,40 @@ module SteppingStone
         subject.should be_passed
       end
 
-      it "does not execute actions after failed action" do
-        sut.stub(:apply).with(first) { :failed }
-        sut.should_not_receive(:apply).with(second)
-
+      it "fails when the last action fails" do
+        sut.stub(:apply) { |action| action == first ? :passed : :failed }
         subject.execute!
         subject.should be_failed
+      end
+
+      it "is pending when the last action is pending" do
+        sut.stub(:apply) { |action| action == first ? :passed : :pending }
+        subject.execute!
+        subject.should be_pending
+      end
+
+      it "fails when the first action fails" do
+        sut.stub(:apply) { |action| action == first ? :failed : :passed }
+        subject.execute!
+        subject.should be_failed
+      end
+
+      it "is pending when the first action is pending" do
+        sut.stub(:apply) { |action| action == first ? :pending : :passed }
+        subject.execute!
+        subject.should be_pending
+      end
+
+      it "does not execute actions after a failed action" do
+        sut.stub(:apply).with(first) { :failed }
+        sut.should_not_receive(:apply).with(second)
+        subject.execute!
       end
 
       it "does not execute actions after a pending action" do
         sut.stub(:apply).with(first) { :pending }
         sut.should_not_receive(:apply).with(second)
-
         subject.execute!
-        subject.should be_pending
       end
     end
   end

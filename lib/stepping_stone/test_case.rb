@@ -20,7 +20,7 @@ module SteppingStone
 
         sut.end_test_case(self)
 
-        @result = results.uniq[0]
+        @result = results.last
       end
     end
 
