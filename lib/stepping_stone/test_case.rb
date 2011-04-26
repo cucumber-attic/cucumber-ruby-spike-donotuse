@@ -10,13 +10,10 @@ module SteppingStone
 
     def execute!
       with_start_and_end do
-        results = []
         actions.each do |action|
-          action_result = sut.apply(action)
-          results << action_result
-          break unless action_result == :passed
+          @result = sut.apply(action)
+          break unless passed?
         end
-        @result = results.last
       end
     end
 
