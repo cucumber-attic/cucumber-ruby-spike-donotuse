@@ -1,10 +1,11 @@
 module SteppingStone
   class TestCase
-    attr_reader :sut, :actions
+    attr_reader :sut, :actions, :result
 
     def initialize(sut, *actions)
       @sut = sut
       @actions = actions
+      @result = :pending
     end
 
     def execute!
@@ -25,15 +26,15 @@ module SteppingStone
     end
 
     def passed?
-      @result == :passed
+      result == :passed
     end
 
     def failed?
-      !actions.empty? and !passed?
+      result == :failed
     end
 
     def pending?
-      actions.empty? or @result == :pending
+      result == :pending
     end
   end
 end
