@@ -9,19 +9,21 @@ module SteppingStone
     end
 
     def execute!
-      if !actions.empty?
-        sut.start_test_case(self)
+      within_start_and_end do
+        if !actions.empty?
+          sut.start_test_case(self)
 
-        results = []
-        actions.each do |action|
-          result = sut.apply(action)
-          results << result
-          break unless result == :passed
+          results = []
+          actions.each do |action|
+            action_result = sut.apply(action)
+            results << action_result
+            break unless action_result == :passed
+          end
+
+          sut.end_test_case(self)
+
+          @result = results.last
         end
-
-        sut.end_test_case(self)
-
-        @result = results.last
       end
     end
 
@@ -35,6 +37,12 @@ module SteppingStone
 
     def pending?
       result == :pending
+    end
+
+    private
+
+    def within_start_and_end(&block)
+      block.call
     end
   end
 end
