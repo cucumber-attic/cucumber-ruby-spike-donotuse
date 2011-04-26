@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module SteppingStone
   describe TestCase do
-    let(:sut) { double("sut") }
+    let(:sut) { double("sut").as_null_object }
 
     context "with no actions" do
       subject { TestCase.new(sut) }
@@ -24,7 +24,12 @@ module SteppingStone
         subject.should be_pending
       end
 
-      it "sends neither the start nor end messages to the SUT"
+      it "sends neither the start nor end messages to the SUT" do
+        sut.should_not_receive(:start_test_case)
+        sut.should_not_receive(:end_test_case)
+
+        subject.execute!
+      end
     end
 
     context "with one action" do
@@ -52,7 +57,12 @@ module SteppingStone
         subject.should be_pending
       end
 
-      it "sends the start and end messages to the SUT"
+      it "sends the start and end messages to the SUT" do
+        sut.should_receive(:start_test_case).with(subject).exactly(:once).ordered
+        sut.should_receive(:end_test_case).with(subject).exactly(:once).ordered
+
+        subject.execute!
+      end
     end
 
     context "with many actions" do

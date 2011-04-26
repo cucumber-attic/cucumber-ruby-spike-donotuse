@@ -8,15 +8,20 @@ module SteppingStone
     end
 
     def execute!
-      results = []
+      if !actions.empty?
+        sut.start_test_case(self)
 
-      actions.each do |action|
-        result = sut.apply(action)
-        results << result
-        break unless result == :passed
+        results = []
+        actions.each do |action|
+          result = sut.apply(action)
+          results << result
+          break unless result == :passed
+        end
+
+        sut.end_test_case(self)
+
+        @result = results.uniq[0]
       end
-
-      @result = results.uniq[0]
     end
 
     def passed?
