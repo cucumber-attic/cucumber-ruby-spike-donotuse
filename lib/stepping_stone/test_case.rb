@@ -8,8 +8,12 @@ module SteppingStone
     end
 
     def execute!
-      results = actions.collect do |action|
-        sut.apply(action)
+      results = []
+
+      actions.each do |action|
+        result = sut.apply(action)
+        results << result
+        break unless result == :passed
       end
 
       @result = results.uniq[0]

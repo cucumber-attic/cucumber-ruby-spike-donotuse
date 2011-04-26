@@ -23,6 +23,8 @@ module SteppingStone
         subject.execute!
         subject.should be_pending
       end
+
+      it "sends neither the start nor end messages to the SUT"
     end
 
     context "with one action" do
@@ -30,21 +32,53 @@ module SteppingStone
       subject { TestCase.new(sut, action) }
 
       it "passes when the action passes" do
-        sut.should_receive(:apply).with(action).and_return(:passed)
+        sut.stub(:apply) { :passed }
 
         subject.execute!
         subject.should be_passed
       end
 
       it "fails when the action fails" do
-        sut.should_receive(:apply).with(action).and_return(:failed)
+        sut.stub(:apply) { :failed }
 
         subject.execute!
         subject.should be_failed
       end
 
       it "is pending when the action is pending" do
-        sut.should_receive(:apply).with(action).and_return(:pending)
+        sut.stub(:apply) { :pending }
+
+        subject.execute!
+        subject.should be_pending
+      end
+
+      it "sends the start and end messages to the SUT"
+    end
+
+    context "with many actions" do
+      let(:first) { double("first action") }
+      let(:second) { double("second action") }
+
+      subject { TestCase.new(sut, first, second) }
+
+      it "passes when all actions pass" do
+        sut.stub(:apply) { :passed }
+
+        subject.execute!
+        subject.should be_passed
+      end
+
+      it "does not execute actions after failed action" do
+        sut.stub(:apply).with(first) { :failed }
+        sut.should_not_receive(:apply).with(second)
+
+        subject.execute!
+        subject.should be_failed
+      end
+
+      it "does not execute actions after a pending action" do
+        sut.stub(:apply).with(first) { :pending }
+        sut.should_not_receive(:apply).with(second)
 
         subject.execute!
         subject.should be_pending
