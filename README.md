@@ -93,10 +93,10 @@ and type the following:
     end
 
 Ok, simple enough. You execute the feature and the first step passes.
-Now you need a mapper for steps that look like "When I add N and M
+Now you need a mapper for steps that look like "When N and M are added
 together". This is different than before because you need to capture
 the values of N and M, so you add a map with capture groups and the
-supporting metho:
+supporting method:
 
     def_map /(\d+) and (\d+) are added together/ => :add
 
@@ -200,7 +200,7 @@ this?:
       end
     end
 
-You can. But please keep in mind these are only the basics.
+Good news: you can! But please keep in mind these are only the basics.
 
 ## FAQ
 
