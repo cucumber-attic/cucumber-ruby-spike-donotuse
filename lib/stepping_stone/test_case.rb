@@ -1,9 +1,9 @@
 module SteppingStone
   class TestCase
-    attr_reader :sut, :actions, :result
+    attr_reader :server, :actions, :result
 
-    def initialize(sut, *actions)
-      @sut = sut
+    def initialize(server, *actions)
+      @server = server
       @actions = actions
       @result = :pending
     end
@@ -11,7 +11,7 @@ module SteppingStone
     def execute!
       with_start_and_end do
         actions.each do |action|
-          @result = sut.apply(action)
+          @result = server.apply(action)
           break unless passed?
         end
       end
@@ -33,9 +33,9 @@ module SteppingStone
 
     def with_start_and_end(&block)
       if !actions.empty?
-        sut.start_test_case(self)
+        server.start_test_case(self)
         block.call
-        sut.end_test_case(self)
+        server.end_test_case(self)
       end
     end
   end

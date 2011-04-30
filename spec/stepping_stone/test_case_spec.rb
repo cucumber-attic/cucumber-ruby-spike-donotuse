@@ -2,10 +2,10 @@ require 'spec_helper'
 
 module SteppingStone
   describe TestCase do
-    let(:sut) { double("sut").as_null_object }
+    let(:server) { double("server").as_null_object }
 
     context "with no actions" do
-      subject { TestCase.new(sut) }
+      subject { TestCase.new(server) }
 
       it "is pending" do
         subject.should be_pending
@@ -24,9 +24,9 @@ module SteppingStone
         subject.should be_pending
       end
 
-      it "sends neither the start nor end messages to the SUT" do
-        sut.should_not_receive(:start_test_case)
-        sut.should_not_receive(:end_test_case)
+      it "sends neither the start nor end messages to the server" do
+        server.should_not_receive(:start_test_case)
+        server.should_not_receive(:end_test_case)
 
         subject.execute!
       end
@@ -34,32 +34,32 @@ module SteppingStone
 
     context "with one action" do
       let(:action) { double("action") }
-      subject { TestCase.new(sut, action) }
+      subject { TestCase.new(server, action) }
 
       it "passes when the action passes" do
-        sut.stub(:apply) { :passed }
+        server.stub(:apply) { :passed }
 
         subject.execute!
         subject.should be_passed
       end
 
       it "fails when the action fails" do
-        sut.stub(:apply) { :failed }
+        server.stub(:apply) { :failed }
 
         subject.execute!
         subject.should be_failed
       end
 
       it "is pending when the action is pending" do
-        sut.stub(:apply) { :pending }
+        server.stub(:apply) { :pending }
 
         subject.execute!
         subject.should be_pending
       end
 
-      it "sends the start and end messages to the SUT" do
-        sut.should_receive(:start_test_case).with(subject).exactly(:once).ordered
-        sut.should_receive(:end_test_case).with(subject).exactly(:once).ordered
+      it "sends the start and end messages to the server" do
+        server.should_receive(:start_test_case).with(subject).exactly(:once).ordered
+        server.should_receive(:end_test_case).with(subject).exactly(:once).ordered
 
         subject.execute!
       end
@@ -69,48 +69,48 @@ module SteppingStone
       let(:first) { double("first action") }
       let(:second) { double("second action") }
 
-      subject { TestCase.new(sut, first, second) }
+      subject { TestCase.new(server, first, second) }
 
       it "passes when all actions pass" do
-        sut.stub(:apply) { :passed }
+        server.stub(:apply) { :passed }
 
         subject.execute!
         subject.should be_passed
       end
 
       it "fails when the last action fails" do
-        sut.stub(:apply) { |action| action == first ? :passed : :failed }
+        server.stub(:apply) { |action| action == first ? :passed : :failed }
         subject.execute!
         subject.should be_failed
       end
 
       it "is pending when the last action is pending" do
-        sut.stub(:apply) { |action| action == first ? :passed : :pending }
+        server.stub(:apply) { |action| action == first ? :passed : :pending }
         subject.execute!
         subject.should be_pending
       end
 
       it "fails when the first action fails" do
-        sut.stub(:apply) { |action| action == first ? :failed : :passed }
+        server.stub(:apply) { |action| action == first ? :failed : :passed }
         subject.execute!
         subject.should be_failed
       end
 
       it "is pending when the first action is pending" do
-        sut.stub(:apply) { |action| action == first ? :pending : :passed }
+        server.stub(:apply) { |action| action == first ? :pending : :passed }
         subject.execute!
         subject.should be_pending
       end
 
       it "does not execute actions after a failed action" do
-        sut.stub(:apply).with(first) { :failed }
-        sut.should_not_receive(:apply).with(second)
+        server.stub(:apply).with(first) { :failed }
+        server.should_not_receive(:apply).with(second)
         subject.execute!
       end
 
       it "does not execute actions after a pending action" do
-        sut.stub(:apply).with(first) { :pending }
-        sut.should_not_receive(:apply).with(second)
+        server.stub(:apply).with(first) { :pending }
+        server.should_not_receive(:apply).with(second)
         subject.execute!
       end
     end
