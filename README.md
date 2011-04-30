@@ -191,7 +191,7 @@ this?:
     class CalculatorMapper
       include SteppingStone::Mapper
 
-      def_subject "a calculator"                   => [Calculator, :new]
+      def_subject "a calculator"                   => Calculator, :new
       def_map "the calculator is cleared"          => :clear
       def_map /(\d+) and (\d+) are added together/ => :add, [Integer, Integer]
       def_map /the answer is (\d+)/                => :assert_answer, [Integer]
@@ -201,7 +201,7 @@ this?:
       end
     end
 
-You can.
+You can. But please keep in mind these are only the basics.
 
 ## FAQ
 
