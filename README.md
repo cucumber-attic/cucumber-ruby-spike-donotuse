@@ -53,10 +53,10 @@ with people you barely know or something. Whatever the case, it's a
 pretty big deal and you'd like to have some way to show the interested
 venture capitalists (they're exceptionally dull VCs) what it is capable
 of, but it doesn't have a web front-end yet and writing documentation is
-terrible and enterprisey, so you decide to write out examples of all
-the great things one could do with the calculator as Gherkin features.
-This way you get the docs all serious business people love, but they'll
-fail when your code changes, keeping you honest.
+terrible and enterprisey, so you decide to write Gherkin feautures
+documenting all the great things one could with it. This way you get the
+docs all serious business people love, but they'll fail when your code
+changes, keeping you honest.
 
 Your first feature looks like this:
 
