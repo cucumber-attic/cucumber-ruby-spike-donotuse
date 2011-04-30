@@ -25,8 +25,8 @@ module SteppingStone
       end
 
       it "sends neither the start nor end messages to the server" do
-        server.should_not_receive(:start_test_case)
-        server.should_not_receive(:end_test_case)
+        server.should_not_receive(:start_test)
+        server.should_not_receive(:end_test)
 
         subject.execute!
       end
@@ -58,8 +58,8 @@ module SteppingStone
       end
 
       it "sends the start and end messages to the server" do
-        server.should_receive(:start_test_case).with(subject).exactly(:once).ordered
-        server.should_receive(:end_test_case).with(subject).exactly(:once).ordered
+        server.should_receive(:start_test).with(subject).exactly(:once).ordered
+        server.should_receive(:end_test).with(subject).exactly(:once).ordered
 
         subject.execute!
       end

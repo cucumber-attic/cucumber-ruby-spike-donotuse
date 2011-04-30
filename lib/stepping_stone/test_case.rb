@@ -33,9 +33,9 @@ module SteppingStone
 
     def with_start_and_end(&block)
       if !actions.empty?
-        server.start_test_case(self)
+        server.start_test(self)
         block.call
-        server.end_test_case(self)
+        server.end_test(self)
       end
     end
   end
