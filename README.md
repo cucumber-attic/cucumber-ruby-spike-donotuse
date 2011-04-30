@@ -1,8 +1,7 @@
 # Stepping Stone
 
 Stepping Stone is a flexible bridge between customer-friendly
-information about the software you are developing and the software you
-are developing.
+data and code.
 
 ## What is customer-friendly information?
 
