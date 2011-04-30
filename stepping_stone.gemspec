@@ -7,6 +7,8 @@ Gem::Specification.new do |s|
   s.email       = "msassak@gmail.com"
   s.homepage    = "https://github.com/msassak/stepping_stone"
 
+  s.add_dependency 'slop'
+
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'cucumber'
   s.add_development_dependency 'aruba'
