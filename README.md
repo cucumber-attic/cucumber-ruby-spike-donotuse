@@ -86,9 +86,9 @@ and type the following:
     class CalculatorMapper
       include SteppingStone::Mapper
 
-      def_map "a calculator" => :create_calculator
+      def_map "a calculator" => :create
 
-      def create_calculator
+      def create
         @calculator = Calculator.new
       end
     end
@@ -99,7 +99,7 @@ together". This is different than before because you need to capture
 the values of N and M, so you add a map with capture groups and the
 supporting metho:
 
-    def_map /^(\d+) and (\d+) are added together$/ => :add
+    def_map /(\d+) and (\d+) are added together/ => :add
 
     def add(n, m)
       @calculator.add(n, m)
@@ -108,7 +108,7 @@ supporting metho:
 Now you're getting impatient so you just toss in the verification step
 as well:
 
-    def_map /^the answer is (\d+)$/ => :assert_answer
+    def_map /the answer is (\d+)/ => :assert_answer
 
     def assert_answer(r)
       @calculator.answer.should == r
@@ -141,7 +141,65 @@ having to sprinkle them throughout your testing API. Luckily, there is a
 better way. Let's remove those conversion methods and rewrite our maps
 like this:
 
-    def_map /^the answer is (\d+)$/ => :assert_answer
+    def_map /(\d+) and (\d+) are added together/ => :add, [Integer, Integer]
+    def_map /the answer is (\d+)/ => :assert_answer, [Integer]
+
+Now the captures will be converted into integers before they are sent to
+the named method! All the tests pass and you don't have to worry about
+transforming the data within the helper metho. Hooray!
+
+Newly invigorated, you implement the remaining pending map:
+
+    def_map "the calculator is cleared" => :clear
+
+    def clear
+      @calculator.clear
+    end
+
+Now your entire mapper looks like this:
+
+    class CalculatorMapper
+      include SteppingStone::Mapper
+
+      def_map "a calculator"                       => :create
+      def_map "the calculator is cleared"          => :clear
+      def_map /(\d+) and (\d+) are added together/ => :add, [Integer, Integer]
+      def_map /the answer is (\d+)/                => :assert_answer, [Integer]
+
+      def create
+        @calculator = Calculator.new
+      end
+
+      def clear
+        @calculator.clear
+      end
+
+      def add(n, m)
+        @calculator.add(n, m)
+      end
+
+      def assert_answer(r)
+        @calculator.answer.should == r
+      end
+    end
+
+Not bad, eh? But you still feel like something is off. Why can't you
+just write something like this?:
+
+    class CalculatorMapper
+      include SteppingStone::Mapper
+
+      def_map "a calculator"                       => [Calculator, :new]
+      def_map "the calculator is cleared"          => :clear
+      def_map /(\d+) and (\d+) are added together/ => :add, [Integer, Integer]
+      def_map /the answer is (\d+)/                => :assert_answer, [Integer]
+
+      def assert_answer(r)
+        calculator.answer.should == r
+      end
+    end
+
+You can.
 
 ## FAQ
 
