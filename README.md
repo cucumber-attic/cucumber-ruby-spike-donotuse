@@ -146,7 +146,7 @@ like this:
 
 Now the captures will be converted into integers before they are sent to
 the named method! All the tests pass and you don't have to worry about
-transforming the data within the helper metho. Hooray!
+transforming the data within the helper method. Hooray!
 
 Newly invigorated, you implement the remaining pending map:
 
@@ -183,13 +183,15 @@ Now your entire mapper looks like this:
       end
     end
 
-Not bad, eh? But you still feel like something is off. Why can't you
-just write something like this?:
+Not bad, eh? But you still feel like something is off. There is a lot of
+duplication between the macros, the helper methods and the instance
+methods of the Calculator class. Why can't you just write something like
+this?:
 
     class CalculatorMapper
       include SteppingStone::Mapper
 
-      def_map "a calculator"                       => [Calculator, :new]
+      def_subject "a calculator"                   => [Calculator, :new]
       def_map "the calculator is cleared"          => :clear
       def_map /(\d+) and (\d+) are added together/ => :add, [Integer, Integer]
       def_map /the answer is (\d+)/                => :assert_answer, [Integer]
