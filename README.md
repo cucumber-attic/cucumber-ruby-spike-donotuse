@@ -104,8 +104,8 @@ supporting method:
       @calculator.add(n, m)
     end
 
-Now you're getting impatient so you just toss in the verification step
-as well:
+Now you're getting impatient, so rather than execute the feature you move
+on to the verification step:
 
     def_map /the answer is (\d+)/ => :assert_answer
 

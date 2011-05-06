@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     stepping_stone (0.0.1)
-      slop
 
 GEM
   remote: http://www.rubygems.org/
@@ -35,7 +34,6 @@ GEM
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
-    slop (1.5.3)
     term-ansicolor (1.0.5)
 
 PLATFORMS

@@ -1,5 +1,5 @@
 Feature: CLI
-  Scenario: Execution
+  cenario: Execution
     Given a file named "sst/features/calculator.feature" with:
       """
       Feature: Calculator
@@ -14,7 +14,7 @@ Feature: CLI
       require 'stepping_stone'
       require 'rspec/expectations'
       """
-    And a file named "sst/lib/calculator_mapping.rb" with:
+    And a file named "sst/mappers/calculator_mapper.rb" with:
       """
       require 'sst_helper'
 
