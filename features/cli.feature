@@ -1,5 +1,6 @@
 Feature: CLI
-  cenario: Execution
+
+  Scenario: Execution
     Given a file named "sst/features/calculator.feature" with:
       """
       Feature: Calculator
