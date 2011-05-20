@@ -1,29 +1,8 @@
-require 'optparse'
+require 'kerplutz'
 
 module SteppingStone
   module Cli
-    class ExecParser
-      def self.parse(args)
-        new(args).parse
-      end
-
-      def initialize(args)
-        @args = args
-      end
-
-      def parse
-        OptionParser.new do |parser|
-          parser.on('-v', '--v', 'Verbose') do
-            puts "Verbose!"
-          end
-        end.parse!(@args)
-      end
-    end
-
     def self.go!(args)
-      # parse options from args
-      parse_command(args)
-
       # add sst/sst_helper to load path
       # require every file in sst/lib
       # Create a parser
@@ -32,29 +11,15 @@ module SteppingStone
       # formatter = ProgressFormatter.new
       # test_case = TestCase.new(server, formatter)
       # test_case.execute!
-    end
+      results = Kerplutz.build("sst") do |base|
+        base.banner = "Usage: #{base.name} [OPTIONS] COMMAND [ARGS]"
+        base.action :version, "Show the version", abbrev: :V do
+          puts "Stepping Stone v0.0.0"
+        end
 
-    def self.parse_command(args)
-      case args.shift
-      when "x", "exec"
-        ExecParser.parse(args)
-      when "-h", "--help"
-
-        print <<-EOH
-Usage: sst [command] [options] [input source]
-
- Commands:
-  x, exec  Execute input from a file or directory
-
- For command-specific options, type: sst [command] -h
-        EOH
-
-      else
-        print "For help, type: sst -h\n"
-      end
-    end
-
-    def self.print_help
+        base.command :exec, "Execute a specification" do |cmd|
+        end
+      end.parse(args)
     end
   end
 end

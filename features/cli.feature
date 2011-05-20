@@ -45,7 +45,7 @@ Feature: CLI
         end
       end
       """
-    When I successfully run `sst x sst/features/calculator.feature`
+    When I successfully run `sst exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
       ...
