@@ -30,7 +30,7 @@ Feature: CLI
           @calculator = Class.new(Calculator) do
             attr_reader :answer
 
-            def add(m, m)
+            def add(m, n)
               @answer += m + n
             end
           end.new

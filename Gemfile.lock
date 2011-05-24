@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     stepping_stone (0.0.1)
+      gherkin
       kerplutz (>= 0.1.2)
 
 GEM
