@@ -1,6 +1,7 @@
 require 'kerplutz'
 
 require 'stepping_stone/gherkin_compiler'
+require 'stepping_stone/results'
 
 module SteppingStone
   module Cli
@@ -67,9 +68,14 @@ module SteppingStone
           compiler.compile(content)
         end
 
+        results = Results.new
+        server = RbServer.new(results)
+
         test_cases.each do |test_case|
-          test_case.execute!
+          server.execute(test_case)
         end
+
+        puts results.to_s
       end
     end
   end

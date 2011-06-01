@@ -22,12 +22,12 @@ Feature: CLI
       module CalculatorMapper
         extend SteppingStone::TextMapper
 
-        def_map "a calculator"                         => :create
-        def_map /^(\d+) and (\d+) are added together$/ => :add
-        def_map /^the answer is (\d+)$/                => :assert_result
+        def_map "a calculator"                       => :create
+        def_map /(\d+) and (\d+) are added together/ => :add
+        def_map /the answer is (\d+)/                => :assert_result
 
         def create
-          @calculator = Class.new(Calculator) do
+          @calculator = Class.new do
             attr_reader :answer
 
             def add(m, n)

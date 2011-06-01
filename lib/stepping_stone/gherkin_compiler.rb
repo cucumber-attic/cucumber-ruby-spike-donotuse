@@ -1,7 +1,6 @@
 require 'gherkin'
 
 require 'stepping_stone/test_case'
-require 'stepping_stone/rb_server'
 
 module SteppingStone
   class Action
@@ -10,6 +9,10 @@ module SteppingStone
     def initialize(*elements)
       @elements = elements.collect(&:freeze)
       @elements.freeze
+    end
+
+    def to_s
+      elements.join
     end
   end
 
@@ -32,7 +35,7 @@ module SteppingStone
     end
 
     def eof
-      @test_case = SteppingStone::TestCase.new(RbServer.new, *@actions)
+      @test_case = SteppingStone::TestCase.new(*@actions)
     end
 
     def method_missing(name, *args, &blk)
