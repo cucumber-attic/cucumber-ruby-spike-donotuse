@@ -15,11 +15,15 @@ Feature: CLI
 
         def_map "a calculator"                       => :create
         def_map /(\d+) and (\d+) are added together/ => :add
-        def_map /the answer is (\d+)/                => :assert_result
+        def_map /the answer is (\d+)/                => :assert_answer
 
         def create
           @calculator = Class.new do
             attr_reader :answer
+
+            def initialize
+              @answer = 0
+            end
 
             def add(m, n)
               @answer += m + n
@@ -67,8 +71,7 @@ Feature: CLI
     When I successfully run `sst exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
-      ..E
+      ..F
 
       """
-
 
