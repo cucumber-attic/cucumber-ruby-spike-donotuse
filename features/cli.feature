@@ -1,16 +1,7 @@
 Feature: CLI
 
-  Scenario: Execution
-    Given a file named "sst/features/calculator.feature" with:
-      """
-      Feature: Calculator
-        Scenario: Addition
-          Given a calculator
-          When 5 and 4 are added together
-          Then the answer is 9
-
-      """
-    And a file named "sst/sst_helper.rb" with:
+  Background:
+    Given a file named "sst/sst_helper.rb" with:
       """
       require 'stepping_stone'
       require 'rspec/expectations'
@@ -45,9 +36,39 @@ Feature: CLI
         end
       end
       """
+
+  Scenario: Executing a passing scenario
+    Given a file named "sst/features/calculator.feature" with:
+      """
+      Feature: Calculator
+        Scenario: Addition
+          Given a calculator
+          When 5 and 4 are added together
+          Then the answer is 9
+
+      """
     When I successfully run `sst exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
       ...
 
       """
+
+  Scenario: Executing a failing scenario
+    Given a file named "sst/features/calculator.feature" with:
+      """
+      Feature: Calculator
+        Scenario: Bad Addition
+          Given a calculator
+          When 6 and 10 are added together
+          Then the answer is 20
+
+      """
+    When I successfully run `sst exec sst/features/calculator.feature`
+    Then the output should contain exactly:
+      """
+      ..E
+
+      """
+
+
