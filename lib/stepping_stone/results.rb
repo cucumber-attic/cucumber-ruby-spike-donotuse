@@ -17,6 +17,8 @@ module SteppingStone
           "."
         when :failed
           "F"
+        when :missing
+          "M"
         else
           raise "This should never happen"
         end

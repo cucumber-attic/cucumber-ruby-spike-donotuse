@@ -43,7 +43,7 @@ module SteppingStone
             :failed
           end
         else
-          :pending
+          :missing
         end
       end
     end

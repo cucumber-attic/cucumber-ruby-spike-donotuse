@@ -75,3 +75,22 @@ Feature: CLI
 
       """
 
+  Scenario: Executing a scenario with a missing mapping
+    Given a file named "sst/features/calculator.feature" with:
+      """
+      Feature: Calculator
+        Scenario: Pending Addition
+          Given a calculator
+          When 6 and 10 are added together
+          # This next step is missing a mapping
+          And 5 is added to the result
+          Then the answer is 20
+
+      """
+    When I successfully run `sst exec sst/features/calculator.feature`
+    Then the output should contain exactly:
+      """
+      ..MP
+
+      """
+

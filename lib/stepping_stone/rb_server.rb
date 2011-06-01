@@ -17,7 +17,12 @@ module SteppingStone
     end
 
     def apply(action)
-      context.dispatch(action)
+      if @last_result == :missing
+        :pending
+      else
+        @last_result = this_result = context.dispatch(action)
+        this_result
+      end
     end
 
     def start_test(test_case)
