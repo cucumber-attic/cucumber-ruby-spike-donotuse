@@ -25,11 +25,11 @@ module SteppingStone
 
     private
 
-    def compare(parts, targets, last=nil)
-      return last unless part = parts[0] and target = targets[0]
-      current = (part === target)
-      return false unless current
-      compare(parts[1..-1], targets[1..-1], current)
+    def compare(parts, targets, last_result=nil)
+      return last_result unless part = parts[0] and target = targets[0]
+      current_result = (part === target)
+      return false unless current_result
+      compare(parts[1..-1], targets[1..-1], current_result)
     end
 
   end
