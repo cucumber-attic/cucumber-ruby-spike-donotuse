@@ -31,6 +31,5 @@ module SteppingStone
       return false unless current_result
       compare(parts[1..-1], targets[1..-1], current_result)
     end
-
   end
 end
