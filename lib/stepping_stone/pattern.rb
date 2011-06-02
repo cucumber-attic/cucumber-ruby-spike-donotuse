@@ -1,6 +1,5 @@
 module SteppingStone
   class Pattern
-
     def self.[](*parts)
       new(*parts)
     end
