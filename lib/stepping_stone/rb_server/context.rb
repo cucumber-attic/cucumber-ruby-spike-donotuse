@@ -10,7 +10,7 @@ module SteppingStone
           extend(mapper)
         end
 
-        @mappings = TextMapper.mappers.collect(&:mappings)
+        @mappings = TextMapper.mappers.collect(&:mappings).flatten
       end
 
       def dispatch(action)
@@ -30,7 +30,7 @@ module SteppingStone
           #captures
         #end
 
-        if mapping = @mappings[0].find { |mapping| mapping.match(*action.elements) }
+        if mapping = @mappings.find { |mapping| mapping.match(*action.elements) }
           begin
             send(mapping.to, *mapping.captures_from(action.to_s))
             :passed
