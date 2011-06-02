@@ -30,7 +30,7 @@ module SteppingStone
 
     def step(step)
       @actions ||= []
-      elements = [step.keyword, step.name, step.multiline_arg].compact
+      elements = [step.name, step.multiline_arg].compact
       @actions << Action.new(*elements)
     end
 

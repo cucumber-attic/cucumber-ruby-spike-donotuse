@@ -30,14 +30,9 @@ module SteppingStone
           #captures
         #end
 
-        #send(meth_name, *arguments)
-
-        if mapping = @mappings[0].find { |from, _| action.to_s =~ Regexp.new(from) }
-          from, to = mapping
-          meth_name, arg_types = to
-          captures = Regexp.new(from).match(action.to_s).captures
+        if mapping = @mappings[0].find { |mapping| mapping.match(*action.elements) }
           begin
-            send(meth_name, *captures)
+            send(mapping.to, *mapping.captures_from(action.to_s))
             :passed
           rescue RSpec::Expectations::ExpectationNotMetError
             :failed
