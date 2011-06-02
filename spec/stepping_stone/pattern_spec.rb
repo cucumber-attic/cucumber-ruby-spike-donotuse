@@ -5,43 +5,50 @@ module SteppingStone
     context 'matching "blargle"' do
       subject { Pattern.new("blargle") }
 
-      it { should match("blargle") }
-      it { should_not match("fooble") }
+      it { should match(["blargle"]) }
+      it { should_not match(["fooble"]) }
+      it { should_not match("blargle") }
+      it { should_not match([]) }
     end
 
     context 'matching "/argle$/"' do
       subject { Pattern[/argle$/] }
 
-      it { should match("blargle") }
-      it { should match("flargle") }
+      it { should match(["blargle"]) }
+      it { should match(["flargle"]) }
+      it { should_not match("blargle") }
       it { should_not match("fooble") }
     end
 
     context 'matching [1,2,3]' do
       subject { Pattern.new([1,2,3]) }
 
-      it { should match([1,2,3]) }
+      it { should match([[1,2,3]]) }
       it { should_not match([]) }
+      it { should_not match([1,2,3]) }
+      it { should_not match([[1,2,3,4]]) }
       it { should_not match("fooble") }
       it { should_not match([1,[2],[[3]]]) }
     end
 
     context 'matching String instances' do
-      subject { Pattern.new(String) } 
+      subject { Pattern.new(String) }
 
-      it { should match("blargle") }
-      it { should match("") }
-      it { should_not match(:blargle) }
-      it { should_not match(["fooble"]) }
+      it { should match(["blargle"]) }
+      it { should match([""]) }
+      it { should_not match("blargle") }
+      it { should_not match([:blargle]) }
+      it { should_not match([]) }
     end
 
     context 'matching Array instances' do
       subject { Pattern.new(Array) }
 
-      it { should match([1, 2, 3]) }
-      it { should match([]) }
-      it { should_not match("string") }
-      it { should_not match(:symbol) }
+      it { should match([[1, 2, 3]]) }
+      it { should match([[]]) }
+      it { should_not match(["string"]) }
+      it { should_not match([:symbol]) }
+      it { should_not match([]) }
     end
 
     context 'matching "hello", /(world|universe)/' do

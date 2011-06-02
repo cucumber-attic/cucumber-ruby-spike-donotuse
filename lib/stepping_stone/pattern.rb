@@ -10,16 +10,13 @@ module SteppingStone
       @parts = parts
     end
 
-    def match(target)
-      self.===(target)
+    def match(targets)
+      self.===(targets)
     end
 
-    def ===(target)
-      if parts.length == 1
-        compare(parts, [target])
-      else
-        compare(parts, target)
-      end
+    def ===(targets)
+      return false unless Array === targets
+      compare(parts, targets)
     end
 
     def to_s
