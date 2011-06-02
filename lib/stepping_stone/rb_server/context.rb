@@ -30,7 +30,7 @@ module SteppingStone
           #captures
         #end
 
-        if mapping = @mappings.find { |mapping| mapping.match(*action.elements) }
+        if mapping = @mappings.find { |mapping| mapping.match(action.elements) }
           begin
             send(mapping.to, *mapping.captures_from(action.to_s))
             :passed
