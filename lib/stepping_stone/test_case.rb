@@ -1,10 +1,10 @@
 module SteppingStone
   class TestCase
-    attr_reader :actions, :result
+    attr_reader :actions#, :result
 
     def initialize(*actions)
       @actions = actions
-      @result = :pending
+      #@result = :pending
     end
 
     # Remove commented
@@ -21,17 +21,17 @@ module SteppingStone
       @actions.each(&blk)
     end
 
-    def passed?
-      result == :passed
-    end
+    #def passed?
+      #result == :passed
+    #end
 
-    def failed?
-      result == :failed
-    end
+    #def failed?
+      #result == :failed
+    #end
 
-    def pending?
-      result == :pending
-    end
+    #def pending?
+      #result == :pending
+    #end
 
     def empty?
       @actions.empty?
