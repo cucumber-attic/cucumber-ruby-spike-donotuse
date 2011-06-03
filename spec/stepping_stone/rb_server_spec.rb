@@ -3,7 +3,12 @@ require 'spec_helper'
 module SteppingStone
   describe RbServer do
     let(:context) { RbServer::Context.new }
-    subject { RbServer.new(context) }
+
+    subject do
+      server = RbServer.new(double("reporter"))
+      server.context = context
+      server
+    end
 
     describe "#apply" do
       it "sends the action to the context" do

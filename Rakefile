@@ -1,5 +1,5 @@
 desc "Run Cukes and Specs"
-task :default => ["spec", "cukes"]
+task :default => ["spec", "cucumber"]
 
 task :cucumber do
   sh "cucumber"

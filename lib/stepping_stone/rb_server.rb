@@ -2,7 +2,8 @@ require 'stepping_stone/rb_server/context'
 
 module SteppingStone
   class RbServer
-    attr_reader :results, :context
+    attr_reader :results
+    attr_accessor :context
 
     def initialize(results)
       @results = results
