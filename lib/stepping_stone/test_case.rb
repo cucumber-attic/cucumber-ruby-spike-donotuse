@@ -1,6 +1,8 @@
 module SteppingStone
   class TestCase
-    attr_reader :actions#, :result
+    include Enumerable
+
+    attr_reader :actions #, :result
 
     def initialize(*actions)
       @actions = actions

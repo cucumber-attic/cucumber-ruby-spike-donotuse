@@ -2,6 +2,10 @@ require 'spec_helper'
 
 module SteppingStone
   describe TestCase do
+    it "is Enumerable" do
+      subject.class.should include(Enumerable)
+    end
+
     # The pending tests are leftover from a spike. I don't want to remove them yet
     # because they are good reminders of behavior needed in other parts of the system.
     let(:server) { double("server").as_null_object }
@@ -71,7 +75,15 @@ module SteppingStone
       let(:first) { double("first action") }
       let(:second) { double("second action") }
 
-      subject { TestCase.new(server, first, second) }
+      subject { TestCase.new(first, second) }
+
+      describe "#each" do
+        it "yields its actions" do
+          actions = []
+          subject.each { |action| actions << action }
+          actions.should == [first, second]
+        end
+      end
 
       xit "passes when all actions pass" do
         server.stub(:apply) { :passed }
