@@ -1,5 +1,6 @@
 require 'kerplutz'
 
+require 'stepping_stone'
 require 'stepping_stone/gherkin_compiler'
 require 'stepping_stone/results'
 
@@ -39,26 +40,12 @@ module SteppingStone
       end
 
       def execute
-        # add sst/sst_helper to load path
-        # require every file in sst/mappers
-        # Create a parser
-        # parser feature file, get test_case out
-        # server = RbServer.new
-        # formatter = ProgressFormatter.new
-        # test_case = TestCase.new(server, formatter)
-        # test_case.execute!
-        #
-        # server = RbServer.new
-        # formatter = ProgressFormatter.new
-        # server.execute!(TestCase.new) do |result|
-        #   formatter.output(result)
-        # end
-
+        # Should be part of boot process
         require 'stepping_stone/rb_project'
-
         RbProject.add_to_load_path('.', 'sst')
         require 'sst/sst_helper'
 
+        # Part of loading the rb server
         RbProject.require_glob("sst/mappers", "**/*")
 
         compiler = GherkinCompiler.new
