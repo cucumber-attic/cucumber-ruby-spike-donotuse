@@ -21,14 +21,16 @@ module SteppingStone
       end
 
       def captures_from(str)
-        Regexp.new(from).match(str).captures
+        if match = Regexp.new(from).match(str)
+          match.captures
+        else
+          []
+        end
       end
 
-      def to_proc
-        this = self
-        Proc.new do
-          send(this.to)
-        end
+      def dispatch(target, action="")
+        args = captures_from(action)
+        target.send(to, *args)
       end
     end
   end

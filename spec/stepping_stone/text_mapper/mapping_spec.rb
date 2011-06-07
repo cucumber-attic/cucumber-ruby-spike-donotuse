@@ -2,30 +2,26 @@ require 'spec_helper'
 
 module SteppingStone
   module TextMapper
-    class TestRecorder
-      attr_reader :events
-
-      def initialize(mapping)
-        @mapping = mapping
-        @events = {}
-      end
-
-      def exec
-        instance_eval(&@mapping.to_proc)
-      end
-
-      def method_missing(name, *args, &blk)
-        @events[name] = [args, blk]
-      end
-    end
-
     describe Mapping do
-      it "converts to a proc" do
-        mapping = Mapping.new(:foo, :bar)
-        context = TestRecorder.new(mapping)
-        context.exec
-        context.events.should == { bar: [[], nil] }
+      let(:context) { double("execution context") }
+
+      it "invokes the correct method name" do
+        context.should_receive(:to)
+        mapping = Mapping.new("from", :to)
+        mapping.dispatch(context)
       end
+
+      it "invokes a method with arguments" do
+        context.should_receive(:hair).with("red")
+        mapping = Mapping.new(/(.+) hair/, :hair)
+        mapping.dispatch(context, "red hair")
+      end
+
+      it "converts captured arguments into the specified type"
+      it "raises an error when the from does not match"
+      it "raises an error when the to cannot be resolved"
+      it "invokes a method on a different subject"
+      it "rearranges argument order"
     end
   end
 end
