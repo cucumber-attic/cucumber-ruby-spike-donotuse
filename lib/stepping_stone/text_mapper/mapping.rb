@@ -17,7 +17,7 @@ module SteppingStone
       end
 
       def match(pattern)
-        @pattern === pattern
+        @pattern === pattern.to_a
       end
 
       def captures_from(str)

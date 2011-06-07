@@ -11,6 +11,10 @@ module SteppingStone
       @elements.freeze
     end
 
+    def to_a
+      elements
+    end
+
     def to_s
       elements.join
     end
