@@ -14,22 +14,6 @@ module SteppingStone
       end
 
       def dispatch(action)
-        #from, to             = mappings.find{ |regex, _| action =~ regex }
-        #meth_name, arg_types = to
-        #captures             = from.match(action).captures
-
-        #arguments = if !arg_types.empty?
-          #captures.zip(arg_types).collect do |capture, type|
-            #if type == Integer
-              #capture.to_i
-            #else
-              #type.new(capture)
-            #end
-          #end
-        #else
-          #captures
-        #end
-
         if mapping = @mappings.find { |mapping| mapping.match(action) }
           begin
             mapping.dispatch(self, action.to_s)
