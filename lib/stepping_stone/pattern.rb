@@ -1,12 +1,12 @@
 module SteppingStone
   class Pattern
     def self.[](*parts)
-      new(*parts)
+      new(parts)
     end
 
     attr_reader :parts
 
-    def initialize(*parts)
+    def initialize(parts)
       @parts = parts
     end
 

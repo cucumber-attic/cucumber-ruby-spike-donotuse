@@ -13,7 +13,7 @@ module SteppingStone
       def initialize(from, to)
         @from = from
         @to = to # MethodSignature.new(to) ???
-        @pattern = Pattern.new(from)
+        @pattern = Pattern.new([from])
       end
 
       def match(pattern)

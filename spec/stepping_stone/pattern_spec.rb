@@ -3,7 +3,7 @@ require 'spec_helper'
 module SteppingStone
   describe Pattern do
     context 'matching "blargle"' do
-      subject { Pattern.new("blargle") }
+      subject { Pattern.new(["blargle"]) }
 
       it { should match(["blargle"]) }
       it { should_not match(["fooble"]) }
@@ -21,7 +21,7 @@ module SteppingStone
     end
 
     context 'matching [1,2,3]' do
-      subject { Pattern.new([1,2,3]) }
+      subject { Pattern.new([[1,2,3]]) }
 
       it { should match([[1,2,3]]) }
       it { should_not match([]) }
@@ -32,7 +32,7 @@ module SteppingStone
     end
 
     context 'matching String instances' do
-      subject { Pattern.new(String) }
+      subject { Pattern.new([String]) }
 
       it { should match(["blargle"]) }
       it { should match([""]) }
@@ -42,7 +42,7 @@ module SteppingStone
     end
 
     context 'matching Array instances' do
-      subject { Pattern.new(Array) }
+      subject { Pattern.new([Array]) }
 
       it { should match([[1, 2, 3]]) }
       it { should match([[]]) }
@@ -52,7 +52,7 @@ module SteppingStone
     end
 
     context 'matching "hello", /(world|universe)/' do
-      subject { Pattern.new("hello", /(world|universe)/) }
+      subject { Pattern.new(["hello", /(world|universe)/]) }
 
       it { should match(["hello", "world"]) }
       it { should match(["hello", "universe"]) }
