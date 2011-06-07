@@ -32,7 +32,7 @@ module SteppingStone
 
         if mapping = @mappings.find { |mapping| mapping.match(action.elements) }
           begin
-            send(mapping.to, *mapping.captures_from(action.to_s))
+            mapping.dispatch(self, action.to_s)
             :passed
           rescue RSpec::Expectations::ExpectationNotMetError
             :failed
