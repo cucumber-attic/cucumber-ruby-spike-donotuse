@@ -5,9 +5,9 @@ data and code.
 
 ## What is customer-friendly information?
 
-business readable
-structured text
-customer friendly
+* business readable
+* structured text
+* understandable by mere mortals
 
 ## Getting Started
 
@@ -18,7 +18,7 @@ First install Stepping Stone:
 Then generate the directories to contain the files Stepping
 Stone will use:
 
-    $ sst g
+    $ sst generate
 
 This will create the following:
 
@@ -36,7 +36,7 @@ Once you have written some features and the mappings from the actions
 described in them onto code that drives your system, you can start
 executing the features:
 
-    $ sst x features/my_lovely_feature.feature
+    $ sst exec features/my_lovely_feature.feature
 
 And that's it. Millions of dollars and priceless fame await!
 
@@ -53,7 +53,7 @@ with people you barely know or something. Whatever the case, it's a
 pretty big deal and you'd like to have some way to show the interested
 venture capitalists (they're exceptionally dull VCs) what it is capable
 of, but it doesn't have a web front-end yet and writing documentation is
-terrible and enterprisey, so you decide to write Gherkin feautures
+terrible and enterprisey, so you decide to write Gherkin features
 documenting all the great things one could with it. This way you get the
 docs all serious business people love, but they'll fail when your code
 changes, keeping you honest.
@@ -140,8 +140,8 @@ having to sprinkle them throughout your testing API. Luckily, there is a
 better way. Let's remove those conversion methods and rewrite our maps
 like this:
 
-    def_map /(\d+) and (\d+) are added together/ => :add, [Integer, Integer]
-    def_map /the answer is (\d+)/ => :assert_answer, [Integer]
+    def_map /(\d+) and (\d+) are added together/ => [:add, Integer, Integer]
+    def_map /the answer is (\d+)/ => [:assert_answer, Integer]
 
 Now the captures will be converted into integers before they are sent to
 the named method! All the tests pass and you don't have to worry about
@@ -162,8 +162,8 @@ Now your entire mapper looks like this:
 
       def_map "a calculator"                       => :create
       def_map "the calculator is cleared"          => :clear
-      def_map /(\d+) and (\d+) are added together/ => :add, [Integer, Integer]
-      def_map /the answer is (\d+)/                => :assert_answer, [Integer]
+      def_map /(\d+) and (\d+) are added together/ => [:add, Integer, Integer]
+      def_map /the answer is (\d+)/                => [:assert_answer, Integer]
 
       def create
         @calculator = Calculator.new
@@ -192,8 +192,8 @@ this?:
 
       def_subject "a calculator"                   => Calculator, :new
       def_map "the calculator is cleared"          => :clear
-      def_map /(\d+) and (\d+) are added together/ => :add, [Integer, Integer]
-      def_map /the answer is (\d+)/                => :assert_answer, [Integer]
+      def_map /(\d+) and (\d+) are added together/ => [:add, Integer, Integer]
+      def_map /the answer is (\d+)/                => [:assert_answer, Integer]
 
       def assert_answer(r)
         calculator.answer.should == r
@@ -204,6 +204,8 @@ Good news: you can! But please keep in mind these are only the basics.
 
 ## FAQ
 
+### BDD?
+
 Given its focus on natural language, it would not be entirely unfair to
 call Stepping Stone a tool for Behavior-Driven Development, but the
 pudding's proof is in the tasting, and so Stepping Stone aims to be
@@ -212,8 +214,10 @@ testing and software development theories second. This is by no means a
 knock on BDD. Behavior-Driven Development remains a revelation for those
 who have no real experience with testing's relationship to software
 design, but that sort of thing is best left to the wider internet. Let
-your hammers be hammers, and use them properly, as you see fit. Stepping
-Stone is officially theory-agnostic.
+your hammers be hammers--only use them properly. Stepping Stone is officially
+theory-agnostic.
+
+### Cucumber?
 
 This is just Cucumber. Yes and no. Cucumber itself suffers from a sort
 of identity crisis. Stepping Stone's relationship to Cucumber can best
@@ -240,12 +244,10 @@ could work, but they are showing their age.
 
 ## Usage
 
-### With Cucumber
+### With "Legacy" Cucumber Code
 
-Stepping Stone includes excellent support for Cucumber. First is a
-custom language extension that allows you to use the Stepping Stone DSL
-as the primary method of interacting with Cucumber. The second is a
-compatibility layer that re-uses your old step definitions.
+Stepping Stone includes excellent support for Cucumber. Require
+'stepping_stone/step_defs' in your mappers and go to town.
 
 ## Copyright
 
