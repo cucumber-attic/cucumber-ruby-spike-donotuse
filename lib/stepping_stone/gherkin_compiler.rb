@@ -1,25 +1,9 @@
 require 'gherkin'
 
 require 'stepping_stone/model/test_case'
+require 'stepping_stone/model/action'
 
 module SteppingStone
-  class Action
-    attr_reader :elements
-
-    def initialize(*elements)
-      @elements = elements.collect(&:freeze)
-      @elements.freeze
-    end
-
-    def to_a
-      elements
-    end
-
-    def to_s
-      elements.join
-    end
-  end
-
   class GherkinCompiler
     def initialize
       @parser = ::Gherkin::Parser::Parser.new(self, true, "root", false)
@@ -35,11 +19,11 @@ module SteppingStone
     def step(step)
       @actions ||= []
       elements = [step.name, step.multiline_arg].compact
-      @actions << Action.new(*elements)
+      @actions << Model::Action.new(*elements)
     end
 
     def eof
-      @test_case = SteppingStone::TestCase.new(*@actions)
+      @test_case = Model::TestCase.new(*@actions)
     end
 
     def method_missing(name, *args, &blk)

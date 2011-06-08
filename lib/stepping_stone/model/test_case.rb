@@ -1,19 +1,21 @@
 module SteppingStone
-  class TestCase
-    include Enumerable
+  module Model
+    class TestCase
+      include Enumerable
 
-    attr_reader :actions
+      attr_reader :actions
 
-    def initialize(*actions)
-      @actions = actions
-    end
+      def initialize(*actions)
+        @actions = actions
+      end
 
-    def each(&blk)
-      @actions.each(&blk)
-    end
+      def each(&blk)
+        @actions.each(&blk)
+      end
 
-    def empty?
-      @actions.empty?
+      def empty?
+        @actions.empty?
+      end
     end
   end
 end
