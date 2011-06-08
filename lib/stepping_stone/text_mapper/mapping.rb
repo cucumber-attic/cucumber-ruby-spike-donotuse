@@ -5,7 +5,8 @@ module SteppingStone
     class Mapping
       def self.from_fluent(dsl_args)
         from, to = dsl_args.shift
-        new(from, to)
+        meth_name, *types = to
+        new(from, meth_name, types)
       end
 
       attr_accessor :from, :to

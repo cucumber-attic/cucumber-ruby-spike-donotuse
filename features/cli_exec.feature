@@ -15,7 +15,7 @@ Feature: sst exec
         extend SteppingStone::TextMapper
 
         def_map "a calculator"                       => :create
-        def_map /(\d+) and (\d+) are added together/ => :add
+        def_map /(\d+) and (\d+) are added together/ => [:add, Integer, Integer]
         def_map /the answer is (\d+)/                => :assert_answer
 
         def create
@@ -33,7 +33,7 @@ Feature: sst exec
         end
 
         def add(n, m)
-          @calculator.add(n.to_i, m.to_i)
+          @calculator.add(n, m)
         end
 
         def assert_answer(r)
