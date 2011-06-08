@@ -1,6 +1,6 @@
 require 'gherkin'
 
-require 'stepping_stone/test_case'
+require 'stepping_stone/model/test_case'
 
 module SteppingStone
   class Action
