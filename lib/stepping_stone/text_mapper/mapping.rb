@@ -1,4 +1,4 @@
-require 'stepping_stone/pattern'
+require 'stepping_stone/text_mapper/pattern'
 
 module SteppingStone
   module TextMapper
