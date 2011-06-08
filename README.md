@@ -83,7 +83,7 @@ calculator, so open `sst/lib/calculator_mapper.rb` in your favorite editor
 and type the following:
 
     class CalculatorMapper
-      include SteppingStone::Mapper
+      extend SteppingStone::TextMapper
 
       def_map "a calculator" => :create
 
@@ -158,7 +158,7 @@ Newly invigorated, you implement the remaining pending map:
 Now your entire mapper looks like this:
 
     class CalculatorMapper
-      include SteppingStone::Mapper
+      extend SteppingStone::TextMapper
 
       def_map "a calculator"                       => :create
       def_map "the calculator is cleared"          => :clear
@@ -188,7 +188,7 @@ methods of the Calculator class. Why can't you just write something like
 this?:
 
     class CalculatorMapper
-      include SteppingStone::Mapper
+      extend SteppingStone::TextMapper
 
       def_subject "a calculator"                   => Calculator, :new
       def_map "the calculator is cleared"          => :clear
