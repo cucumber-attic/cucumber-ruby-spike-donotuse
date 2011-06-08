@@ -1,4 +1,5 @@
-Feature: CLI
+Feature: sst exec
+  Usage of the 'sst exec' command
 
   Background:
     Given a file named "sst/sst_helper.rb" with:
