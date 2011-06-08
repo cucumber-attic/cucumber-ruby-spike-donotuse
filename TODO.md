@@ -7,5 +7,6 @@
 * Debug Mapping wrapper to trace execution
 * Read input from STDIN
 * Demonstrate conversion of HTML (microgherkin) or Markdown into test case
+* Cucumber stepdef compatibility DSL
 
 ## Done
