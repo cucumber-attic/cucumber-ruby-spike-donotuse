@@ -22,6 +22,8 @@ module SteppingStone
       end
 
       def captures_from(str)
+        # TODO: Remove Regexp once the Pattern class can extract variables from applied
+        # target patterns
         if match = Regexp.new(from).match(str)
           if @types.empty?
             match.captures
