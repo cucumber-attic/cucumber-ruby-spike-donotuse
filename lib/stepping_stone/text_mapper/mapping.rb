@@ -3,7 +3,7 @@ require 'stepping_stone/pattern'
 module SteppingStone
   module TextMapper
     class Mapping
-      def self.build(dsl_args)
+      def self.from_fluent(dsl_args)
         from, to = dsl_args.shift
         new(from, to)
       end

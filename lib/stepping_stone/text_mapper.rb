@@ -17,7 +17,7 @@ module SteppingStone
       end
 
       def def_map(mapping)
-        mappings << Mapping.build(mapping)
+        mappings << Mapping.from_fluent(mapping)
       end
     end
   end
