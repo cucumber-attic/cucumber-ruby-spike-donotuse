@@ -6,7 +6,7 @@ data and code.
 ## What is customer-friendly information?
 
 * business readable
-* structured text
+* semi-structured text or markup
 * understandable by mere mortals
 
 ## Getting Started
@@ -223,6 +223,8 @@ This is just Cucumber. Yes and no. Cucumber itself suffers from a sort
 of identity crisis. Stepping Stone's relationship to Cucumber can best
 be understood as an *argument* about the direction Cucumber and its
 ecosystem should take.
+
+...some stuff about architecture and design...
 
 Hey wait that sounds an awful lot like a Meta-Object Protocol for
 testing! You are very well read, sir.
