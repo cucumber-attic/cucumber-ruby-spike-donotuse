@@ -22,7 +22,7 @@ module SteppingStone
         base.banner = "Usage: #{base.name} [OPTIONS] COMMAND [ARGS]"
 
         base.action :version, "Show the version", abbrev: :V do
-          puts "Stepping Stone v0.0.0"
+          puts "Stepping Stone v#{SteppingStone::VERSION}"
         end
 
         base.command :exec, "Execute a specification" do |cmd|
