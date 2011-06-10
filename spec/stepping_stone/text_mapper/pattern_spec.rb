@@ -85,6 +85,16 @@ module SteppingStone
           subject.===([:def]).should be(false)
         end
       end
+
+      describe "#captures_from" do
+        subject { Pattern[String, "A", 3] }
+
+        it "extracts class captures" do
+          subject.captures_from(["hello", "A", 3]).should == ["hello"]
+        end
+
+        it "extracts regex captures"
+      end
     end
   end
 end
