@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module SteppingStone
-  class RbServer
+  module TextMapper
     describe "Context" do
       describe ".including" do
         it "ensures the modules are included within the context" do

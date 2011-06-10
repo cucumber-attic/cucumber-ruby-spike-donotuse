@@ -1,5 +1,5 @@
 module SteppingStone
-  class RbServer
+  module TextMapper
     class Context
       def self.include_mappers(mappers)
         mappers.each { |mapper| send(:include, mapper) }

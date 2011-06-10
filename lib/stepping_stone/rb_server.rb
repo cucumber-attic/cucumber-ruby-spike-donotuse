@@ -1,4 +1,4 @@
-require 'stepping_stone/rb_server/context'
+require 'stepping_stone/text_mapper/context'
 
 module SteppingStone
   class RbServer
@@ -27,7 +27,7 @@ module SteppingStone
     end
 
     def start_test(test_case)
-      @context = Context.new
+      @context = TextMapper::Context.new
     end
 
     def end_test(test_case)
