@@ -87,13 +87,25 @@ module SteppingStone
       end
 
       describe "#captures_from" do
-        subject { Pattern[String, "A", 3] }
-
         it "extracts class captures" do
-          subject.captures_from(["hello", "A", 3]).should == ["hello"]
+          pattern = Pattern[String, "A", 3]
+          pattern.captures_from(["hello", "A", 3]).should == ["hello"]
         end
 
-        it "extracts regex captures"
+        it "extracts regex captures" do
+          pattern = Pattern[:foo, /dog (\w+)/, [1,2]]
+          pattern.captures_from([:foo, "dog cat", [1,2]]).should == ["cat"]
+        end
+
+        it "extracts multiple capture-regex captures" do
+          pattern = Pattern[/(\d+) and (\d+) are added/]
+          pattern.captures_from(["4 and 10 are added"]).should == ["4", "10"]
+        end
+
+        it "extracts compound captures" do
+          pattern = Pattern[:foo, Hash, 1, /Cucumis (\w+)/]
+          pattern.captures_from([:foo, { oh: 'hai' }, 1, "Cucumis sativus"]).should == [{oh: 'hai'}, "sativus"]
+        end
       end
     end
   end

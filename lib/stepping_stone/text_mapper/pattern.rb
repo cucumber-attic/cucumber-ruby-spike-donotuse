@@ -29,7 +29,12 @@ module SteppingStone
 
       current_result = (part === target)
       if current_result
-        captures << target if Class === part
+        case part
+        when Class
+          captures.push(target)
+        when Regexp
+          captures.push(*part.match(target).captures)
+        end
         captures_helper(parts[1..-1], targets[1..-1], current_result, captures)
       end
     end
