@@ -1,7 +1,6 @@
 require 'gherkin'
 
 require 'stepping_stone/model/test_case'
-require 'stepping_stone/model/action'
 
 module SteppingStone
   class GherkinCompiler
@@ -18,8 +17,7 @@ module SteppingStone
 
     def step(step)
       @actions ||= []
-      elements = [step.name, step.multiline_arg].compact
-      @actions << Model::Action.new(*elements)
+      @actions << [step.name, step.multiline_arg].compact
     end
 
     def eof

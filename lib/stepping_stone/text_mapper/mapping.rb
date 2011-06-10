@@ -46,7 +46,7 @@ module SteppingStone
       end
 
       def dispatch(target, action="")
-        args = captures_from(action)
+        args = captures_from(action.to_s)
         target.send(to, *args)
       end
     end

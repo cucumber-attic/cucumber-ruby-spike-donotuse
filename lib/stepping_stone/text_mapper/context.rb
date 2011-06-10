@@ -16,7 +16,7 @@ module SteppingStone
       def dispatch(action)
         if mapping = @mappings.find { |mapping| mapping.match(action) }
           begin
-            mapping.dispatch(self, action.to_s)
+            mapping.dispatch(self, action)
             :passed
           rescue RSpec::Expectations::ExpectationNotMetError
             :failed
