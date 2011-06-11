@@ -12,24 +12,21 @@ module SteppingStone
       attr_accessor :from, :to
 
       def initialize(from, to, types=[])
-        @from = from
+        @from = Pattern[from]
         @to = to # MethodSignature.new(to) ???
-        @pattern = Pattern[from]
         @types = types
       end
 
       def match(pattern)
-        @pattern === pattern.to_a
+        @from === pattern
       end
 
       def captures_from(str)
-        # TODO: Remove Regexp once the Pattern class can extract variables from applied
-        # target patterns
-        if match = Regexp.new(from).match(str)
+        if captures = @from.match([str])
           if @types.empty?
-            match.captures
+            captures
           else
-            match.captures.zip(@types).collect do |capture, type|
+            captures.zip(@types).collect do |capture, type|
               # FIXME: Add other built-ins with idiosyncratic build protocols
               if Integer == type
                 capture.to_i
