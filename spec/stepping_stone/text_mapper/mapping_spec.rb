@@ -30,12 +30,12 @@ module SteppingStone
         it "rearranges argument order"
       end
 
-      describe "#match" do
+      describe "#matches?" do
         it "returns true if the mapping matches"
         it "returns false if the mapping does not match"
       end
 
-      describe ".build" do
+      describe ".from_fluent" do
         it "can anchor all strings and regexen"
         it "can set debug level"
       end
