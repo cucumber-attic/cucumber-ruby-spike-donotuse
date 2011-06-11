@@ -12,7 +12,7 @@ module SteppingStone
       end
 
       def match(targets)
-        self.===(targets)
+        captures_from(targets)
       end
 
       def ===(targets)
@@ -33,6 +33,8 @@ module SteppingStone
       private
 
       def compare(parts, targets, last_result=nil, captures=[])
+        return [last_result, captures] if parts.length != targets.length
+
         return [last_result, captures] unless part = parts[0] and target = targets[0]
 
         current_result = (part === target)
