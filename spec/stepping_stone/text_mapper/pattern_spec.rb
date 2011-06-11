@@ -4,14 +4,11 @@ module SteppingStone
   module TextMapper
     describe Pattern do
       describe "#match" do
-        it "returns nil when there is no match" do
-          Pattern[1,2,3].match([1,2]).should be(nil) # be(nil) eventually
-        end
-
         context 'matching "blargle"' do
           subject { Pattern.new(["blargle"]) }
 
           it { should match(["blargle"]) }
+          it { should_not match(["blargle", "fooble"]) }
           it { should_not match(["fooble"]) }
           it { should_not match("blargle") }
           it { should_not match([]) }
@@ -76,6 +73,28 @@ module SteppingStone
           it { should_not match([Module, :method, [1,2,3]]) }
           it { should_not match([constant, :sym, [1,2,3]]) }
         end
+
+        context "extracting captures from the target" do
+          it "extracts class captures" do
+            pattern = Pattern[String, "A", 3]
+            pattern.match(["hello", "A", 3]).should == ["hello"]
+          end
+
+          it "extracts regex captures" do
+            pattern = Pattern[:foo, /dog (\w+)/, [1,2]]
+            pattern.match([:foo, "dog cat", [1,2]]).should == ["cat"]
+          end
+
+          it "extracts multiple capture-regex captures" do
+            pattern = Pattern[/(\d+) and (\d+) are added/]
+            pattern.match(["4 and 10 are added"]).should == ["4", "10"]
+          end
+
+          it "extracts compound captures" do
+            pattern = Pattern[:foo, Hash, 1, /Cucumis (\w+)/]
+            pattern.match([:foo, { oh: 'hai' }, 1, "Cucumis sativus"]).should == [{oh: 'hai'}, "sativus"]
+          end
+        end
       end
 
       describe "#===" do
@@ -87,28 +106,6 @@ module SteppingStone
 
         it "returns false when there is not a match" do
           subject.===([:def]).should be(false)
-        end
-      end
-
-      describe "#captures_from" do
-        it "extracts class captures" do
-          pattern = Pattern[String, "A", 3]
-          pattern.captures_from(["hello", "A", 3]).should == ["hello"]
-        end
-
-        it "extracts regex captures" do
-          pattern = Pattern[:foo, /dog (\w+)/, [1,2]]
-          pattern.captures_from([:foo, "dog cat", [1,2]]).should == ["cat"]
-        end
-
-        it "extracts multiple capture-regex captures" do
-          pattern = Pattern[/(\d+) and (\d+) are added/]
-          pattern.captures_from(["4 and 10 are added"]).should == ["4", "10"]
-        end
-
-        it "extracts compound captures" do
-          pattern = Pattern[:foo, Hash, 1, /Cucumis (\w+)/]
-          pattern.captures_from([:foo, { oh: 'hai' }, 1, "Cucumis sativus"]).should == [{oh: 'hai'}, "sativus"]
         end
       end
     end

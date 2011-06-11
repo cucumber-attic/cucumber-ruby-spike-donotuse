@@ -12,18 +12,13 @@ module SteppingStone
       end
 
       def match(targets)
-        captures_from(targets)
+        return false unless targets.respond_to?(:to_a)
+        result, bindings = compare(parts, targets.to_a)
+        return bindings if result
       end
 
       def ===(targets)
-        return false unless Array === targets
-        result, _bindings = compare(parts, targets)
-        !!result
-      end
-
-      def captures_from(targets)
-        result, bindings = compare(parts, targets)
-        return bindings if result
+        !!match(targets)
       end
 
       def to_s
@@ -34,11 +29,9 @@ module SteppingStone
 
       def compare(parts, targets, last_result=nil, captures=[])
         return [last_result, captures] if parts.length != targets.length
-
         return [last_result, captures] unless part = parts[0] and target = targets[0]
 
-        current_result = (part === target)
-        if current_result
+        if current_result = (part === target)
           case part
           when Class
             captures.push(target)
