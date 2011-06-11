@@ -4,6 +4,10 @@ module SteppingStone
   module TextMapper
     describe Pattern do
       describe "#match" do
+        xit "returns nil when there is no match" do
+          Pattern[1,2,3].match([1,2]).should be(nil)
+        end
+
         context 'matching "blargle"' do
           subject { Pattern.new(["blargle"]) }
 
