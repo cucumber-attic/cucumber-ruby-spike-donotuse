@@ -9,7 +9,7 @@ module SteppingStone
         new(from, meth_name, types)
       end
 
-      attr_accessor :from, :to
+      attr_reader :from, :to
 
       def initialize(from, to, types=[])
         @from = Pattern[from]
