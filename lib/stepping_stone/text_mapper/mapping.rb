@@ -21,8 +21,8 @@ module SteppingStone
         @from === pattern
       end
 
-      def captures_from(str)
-        if captures = @from.match([str])
+      def captures_from(pattern)
+        if captures = @from.match(pattern)
           if @types.empty?
             captures
           else
@@ -42,8 +42,8 @@ module SteppingStone
         end
       end
 
-      def dispatch(target, action="")
-        args = captures_from(action.to_s)
+      def dispatch(target, action=[])
+        args = captures_from(action)
         target.send(to, *args)
       end
     end
