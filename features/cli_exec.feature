@@ -14,9 +14,10 @@ Feature: sst exec
       module CalculatorMapper
         extend SteppingStone::TextMapper
 
-        def_map "a calculator"                       => :create
-        def_map /(\d+) and (\d+) are added together/ => [:add, Integer, Integer]
-        def_map /the answer is (\d+)/                => :assert_answer
+        def_map "a calculator"                                  => :create
+        def_map /(\d+) and (\d+) are added together/            => [:add, Integer, Integer]
+        def_map ["these numbers are added together", DocString] => [:add_script, DocString]
+        def_map /the answer is (\d+)/                           => :assert_answer
 
         def create
           @calculator = Class.new do
@@ -34,6 +35,10 @@ Feature: sst exec
 
         def add(n, m)
           @calculator.add(n, m)
+        end
+
+        def add_script(doc_string)
+          doc_string.split.map(&:to_i).inject(&:+)
         end
 
         def assert_answer(r)
@@ -95,3 +100,22 @@ Feature: sst exec
 
       """
 
+  Scenario: Executing a scenario with a doc string
+    Given a file named "sst/features/calculator.feature" with:
+      """
+      Feature: Calculator
+        Scenario: Addition script
+          Given a calculator
+          When these numbers are added together:
+            \"\"\"
+            4
+            10
+            \"\"\"
+          Then the answer is 14
+
+      """
+    When I successfully run `sst exec sst/features/calculator.feature`
+    Then the output should contain exactly:
+      """
+      ...
+      """
