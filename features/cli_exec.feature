@@ -37,8 +37,8 @@ Feature: sst exec
           @calculator.add(n, m)
         end
 
-        def add_script(doc_string)
-          doc_string.split.map(&:to_i).inject(&:+)
+        def add_script(script)
+          script.split.map(&:to_i).inject(&:+)
         end
 
         def assert_answer(r)
