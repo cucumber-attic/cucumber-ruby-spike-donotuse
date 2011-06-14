@@ -12,7 +12,7 @@ module SteppingStone
       attr_reader :from, :to
 
       def initialize(from, to, types=[])
-        @from = Pattern[from]
+        @from = Pattern[*from]
         @to = to # MethodSignature.new(to) ???
         @types = types
       end

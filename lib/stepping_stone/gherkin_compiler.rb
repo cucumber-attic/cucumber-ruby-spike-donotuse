@@ -17,7 +17,9 @@ module SteppingStone
 
     def step(step)
       @actions ||= []
-      @actions << [step.name, step.multiline_arg].compact
+      action = [step.name]
+      action << step.multiline_arg.value if step.multiline_arg
+      @actions << action
     end
 
     def eof

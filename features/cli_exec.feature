@@ -16,7 +16,7 @@ Feature: sst exec
 
         def_map "a calculator"                                  => :create
         def_map /(\d+) and (\d+) are added together/            => [:add, Integer, Integer]
-        def_map ["these numbers are added together", DocString] => [:add_script, DocString]
+        def_map ["these numbers are added together:", String]   => :add_script
         def_map /the answer is (\d+)/                           => :assert_answer
 
         def create
@@ -30,6 +30,10 @@ Feature: sst exec
             def add(m, n)
               @answer += m + n
             end
+
+            def add_script(script)
+              @answer += script.inject(&:+)
+            end
           end.new
         end
 
@@ -38,7 +42,7 @@ Feature: sst exec
         end
 
         def add_script(script)
-          script.split.map(&:to_i).inject(&:+)
+          @calculator.add_script(script.split.map(&:to_i))
         end
 
         def assert_answer(r)
@@ -118,4 +122,5 @@ Feature: sst exec
     Then the output should contain exactly:
       """
       ...
+
       """
