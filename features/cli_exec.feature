@@ -124,3 +124,25 @@ Feature: sst exec
       ...
 
       """
+
+  Scenario: Executing two scenarios
+    Given a file named "sst/features/calculator.feature" with:
+      """
+      Feature: Calculator
+        Scenario: Addition
+          Given a calculator
+          When 5 and 4 are added together
+          Then the answer is 9
+
+        Scenario: Multiplication
+          Given a calculator
+          When 8 and 4 are multiplied
+          Then the answer is 32
+
+      """
+    When I successfully run `sst exec sst/features/calculator.feature`
+    Then the output should contain exactly:
+      """
+      ......
+
+      """
