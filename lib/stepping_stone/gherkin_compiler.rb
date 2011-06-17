@@ -13,8 +13,8 @@ module SteppingStone
         @test_cases = []
       end
 
-      def record(name)
-        @current = name
+      def record(uri)
+        @current = uri
       end
 
       def replay
