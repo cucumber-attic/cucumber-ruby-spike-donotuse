@@ -1,29 +1,65 @@
 require 'gherkin'
-
 require 'stepping_stone/model/test_case'
 
 module SteppingStone
   class GherkinCompiler
+    class Builder
+      attr_reader :test_cases
+
+      def initialize
+        @pre_actions = []
+        @tc_actions = []
+        @current = nil
+        @test_cases = []
+      end
+
+      def record(name)
+        @current = name
+      end
+
+      def replay
+        if @current
+          actions = @pre_actions.dup + @tc_actions
+          @test_cases.push(Model::TestCase.new(*actions))
+          @tc_actions = []
+          @current = nil
+        end
+      end
+
+      def add_action(parts)
+        if @current
+          @tc_actions.push(parts)
+        else
+          @pre_actions.push(parts)
+        end
+      end
+    end
+
     def initialize
       @parser = ::Gherkin::Parser::Parser.new(self, true, "root", false)
+      @builder = Builder.new
     end
 
     def compile(content)
       uri_location = ""
       line_offset = 0
       @parser.parse(content, uri_location, line_offset)
-      @test_case
+      @builder.test_cases
+    end
+
+    def scenario(scenario)
+      @builder.replay
+      @builder.record(scenario.name)
     end
 
     def step(step)
-      @actions ||= []
       action = [step.name]
       action << step.multiline_arg.value if step.multiline_arg
-      @actions << action
+      @builder.add_action(action)
     end
 
     def eof
-      @test_case = Model::TestCase.new(*@actions)
+      @builder.replay
     end
 
     def method_missing(name, *args, &blk)

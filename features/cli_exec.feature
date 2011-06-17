@@ -17,6 +17,7 @@ Feature: sst exec
         def_map "a calculator"                                  => :create
         def_map /(\d+) and (\d+) are added together/            => [:add, Integer, Integer]
         def_map ["these numbers are added together:", String]   => :add_script
+        def_map /(\d+) and (\d+) are multiplied/                => [:multiply, Integer, Integer]
         def_map /the answer is (\d+)/                           => :assert_answer
 
         def create
@@ -31,6 +32,10 @@ Feature: sst exec
               @answer += m + n
             end
 
+            def multiply(m, n)
+              @answer += m * n
+            end
+
             def add_script(script)
               @answer += script.inject(&:+)
             end
@@ -43,6 +48,10 @@ Feature: sst exec
 
         def add_script(script)
           @calculator.add_script(script.split.map(&:to_i))
+        end
+
+        def multiply(m, n)
+          @calculator.multiply(m, n)
         end
 
         def assert_answer(r)

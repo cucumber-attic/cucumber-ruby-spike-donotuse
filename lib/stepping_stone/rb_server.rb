@@ -2,17 +2,17 @@ require 'stepping_stone/text_mapper/context'
 
 module SteppingStone
   class RbServer
-    attr_reader :results
+    attr_reader :reporter
     attr_accessor :context
 
-    def initialize(results)
-      @results = results
+    def initialize(reporter)
+      @reporter = reporter
     end
 
     def execute(test_case)
       with_start_and_end(test_case) do
         test_case.each do |action|
-          results[action] = apply(action)
+          reporter.add_result(action, apply(action))
         end
       end
     end

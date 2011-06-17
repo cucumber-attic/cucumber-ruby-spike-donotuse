@@ -1,15 +1,15 @@
 module SteppingStone
   class Results
     def initialize
-      @results = {}
+      @results = []
     end
 
-    def []=(action, result)
-      @results[action] = result
+    def add_result(action, result)
+      @results << [action, result]
     end
 
     def to_s
-      @results.values.collect do |result|
+      @results.map do |_, result|
         case result
         when :pending
           "P"

@@ -50,10 +50,11 @@ module SteppingStone
 
         compiler = GherkinCompiler.new
 
+        # Do this properly: no need to flatten
         test_cases = @locations.collect do |location|
           content = File.read(location)
           compiler.compile(content)
-        end
+        end.flatten
 
         results = Results.new
         server = RbServer.new(results)
