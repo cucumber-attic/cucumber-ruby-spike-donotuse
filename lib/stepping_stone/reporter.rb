@@ -1,5 +1,5 @@
 module SteppingStone
-  class Results
+  class Reporter
     def initialize
       @results = []
     end
