@@ -1,18 +1,15 @@
 require 'stepping_stone/text_mapper/context'
 
 module SteppingStone
+  # The server's responsibility is to execute a test case and communicate
+  # the result of each action to its client via the supplied callback.
   class RbServer
-    attr_reader :reporter
     attr_accessor :context
-
-    def initialize(reporter)
-      @reporter = reporter
-    end
 
     def execute(test_case)
       with_start_and_end(test_case) do
         test_case.each do |action|
-          reporter.add_result(action, apply(action))
+          yield action, apply(action)
         end
       end
     end
