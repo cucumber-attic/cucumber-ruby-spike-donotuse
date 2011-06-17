@@ -6,10 +6,10 @@ module SteppingStone
   class RbServer
     attr_accessor :context
 
-    def execute(test_case)
+    def execute(test_case, &blk)
       with_start_and_end(test_case) do
         test_case.each do |action|
-          yield action, apply(action)
+          blk.call(action, apply(action))
         end
       end
     end
