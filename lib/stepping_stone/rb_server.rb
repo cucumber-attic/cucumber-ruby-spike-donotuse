@@ -4,23 +4,22 @@ module SteppingStone
   # The server's responsibility is to execute a test case and communicate
   # the result of each action to its client via the supplied callback.
   class RbServer
-    attr_accessor :context
+    class Result
+      attr_reader :action, :result
+      def initialize(action, result)
+        @action, @result = action, result
+      end
 
-    def execute(test_case, &blk)
-      with_start_and_end(test_case) do
-        test_case.each do |action|
-          blk.call(action, apply(action))
-        end
+      def ==(other)
+        result == other
       end
     end
 
+    attr_accessor :context, :last_action
+
     def apply(action)
-      if @last_result == :missing
-        :pending
-      else
-        @last_result = this_result = context.dispatch(action)
-        this_result
-      end
+      return Result.new(action, :pending) if @last_action == :missing
+      @last_action = Result.new(action, context.dispatch(action))
     end
 
     def start_test(test_case)
@@ -31,12 +30,12 @@ module SteppingStone
       # no-op for the moment
     end
 
-    private
-
-    def with_start_and_end(test_case, &block)
-      unless test_case.empty?
+    def execute(test_case, &blk)
+      if !test_case.empty?
         start_test(test_case)
-        block.call
+        test_case.each do |action|
+          blk.call(apply(action))
+        end
         end_test(test_case)
       end
     end

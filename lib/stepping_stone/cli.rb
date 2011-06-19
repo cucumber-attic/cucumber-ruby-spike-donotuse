@@ -60,8 +60,8 @@ module SteppingStone
         server = RbServer.new
 
         test_cases.each do |test_case|
-          server.execute(test_case) do |action, result|
-            reporter.add_result(action, result)
+          server.execute(test_case) do |result|
+            reporter.add_result(result)
           end
         end
 

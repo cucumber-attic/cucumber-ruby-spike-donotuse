@@ -4,13 +4,13 @@ module SteppingStone
       @results = []
     end
 
-    def add_result(action, result)
-      @results << [action, result]
+    def add_result(result)
+      @results << result
     end
 
     def to_s
-      @results.map do |_, result|
-        case result
+      @results.map do |result|
+        case result.result
         when :pending
           "P"
         when :passed
