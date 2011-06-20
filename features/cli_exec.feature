@@ -94,14 +94,14 @@ Feature: sst exec
 
       """
 
-  Scenario: Executing a scenario with a missing mapping
+  Scenario: Executing a scenario with an undefined mapping
     Given a file named "sst/features/calculator.feature" with:
       """
       Feature: Calculator
         Scenario: Pending Addition
           Given a calculator
           When 6 and 10 are added together
-          # This next step is missing a mapping
+          # This next step's mapping is undefined
           And 5 is added to the result
           Then the answer is 20
 
@@ -109,7 +109,7 @@ Feature: sst exec
     When I successfully run `sst exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
-      ..MP
+      ..UP
 
       """
 

@@ -19,12 +19,12 @@ module SteppingStone
 
     # rename missing to undefined
     def apply(action)
-      return Result.new(action, :pending) if @last_action == :missing
+      return Result.new(action, :pending) if @last_action == :undefined
       @last_action = Result.new(action, :passed, context.dispatch(action))
     rescue RSpec::Expectations::ExpectationNotMetError => e
       @last_action = Result.new(action, :failed, e)
     rescue TextMapper::Context::UndefinedMappingError
-      @last_action = Result.new(action, :missing)
+      @last_action = Result.new(action, :undefined)
     end
 
     def start_test(test_case)
