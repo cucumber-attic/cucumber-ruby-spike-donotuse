@@ -17,7 +17,6 @@ module SteppingStone
 
     attr_accessor :context, :last_action
 
-    # rename missing to undefined
     def apply(action)
       return Result.new(action, :skipped) if @last_action == :undefined
       @last_action = Result.new(action, :passed, context.dispatch(action))
