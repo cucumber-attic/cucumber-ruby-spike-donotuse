@@ -19,6 +19,8 @@ module SteppingStone
           "F"
         when :undefined
           "U"
+        when :skipped
+          "S"
         else
           raise "This should never happen"
         end

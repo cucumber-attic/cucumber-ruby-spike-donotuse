@@ -109,7 +109,7 @@ Feature: sst exec
     When I successfully run `sst exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
-      ..UP
+      ..US
 
       """
 
