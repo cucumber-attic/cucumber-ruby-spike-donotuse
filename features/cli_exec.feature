@@ -19,6 +19,7 @@ Feature: sst exec
         def_map ["these numbers are added together:", String]   => :add_script
         def_map /(\d+) and (\d+) are multiplied/                => [:multiply, Integer, Integer]
         def_map /the answer is (\d+)/                           => :assert_answer
+        def_map /the answer is not (\d+)/                       => :assert_not_answer
 
         def create
           @calculator = Class.new do
@@ -57,6 +58,10 @@ Feature: sst exec
         def assert_answer(r)
           @calculator.answer.should == r.to_i
         end
+
+        def assert_not_answer(r)
+          @calculator.answer.should_not == r.to_i
+        end
       end
       """
 
@@ -85,12 +90,13 @@ Feature: sst exec
           Given a calculator
           When 6 and 10 are added together
           Then the answer is 20
+          And the answer is not 16
 
       """
     When I successfully run `sst exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
-      ..F
+      ..FS
 
       """
 

@@ -18,7 +18,7 @@ module SteppingStone
     attr_accessor :context, :last_action
 
     def apply(action)
-      return Result.new(action, :skipped) if @last_action == :undefined
+      return Result.new(action, :skipped) if skip_action?
       @last_action = Result.new(action, :passed, context.dispatch(action))
     rescue RSpec::Expectations::ExpectationNotMetError => e
       @last_action = Result.new(action, :failed, e)
@@ -42,6 +42,12 @@ module SteppingStone
         end
         end_test(test_case)
       end
+    end
+
+    private
+
+    def skip_action?
+      @last_action == :undefined or @last_action == :failed
     end
   end
 end
