@@ -16,11 +16,8 @@ module SteppingStone
       end
 
       def dispatch(action)
-        if mapping = @mappings.find { |mapping| mapping.match(action) }
-          mapping.dispatch(self, action)
-        else
-          raise UndefinedMappingError.new
-        end
+        mapping = @mappings.find { |mapping| mapping.match(action) } or raise UndefinedMappingError.new
+        mapping.dispatch(self, action)
       end
     end
   end
