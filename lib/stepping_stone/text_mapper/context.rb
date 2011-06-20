@@ -16,6 +16,7 @@ module SteppingStone
       end
 
       def dispatch(action)
+        # A proper mapping collection could support a find! method that would raise on its own
         mapping = @mappings.find { |mapping| mapping.match(action) } or raise UndefinedMappingError.new
         mapping.dispatch(self, action)
       end
