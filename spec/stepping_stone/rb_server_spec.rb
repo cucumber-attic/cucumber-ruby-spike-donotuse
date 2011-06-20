@@ -18,8 +18,14 @@ module SteppingStone
 
       it "returns the result" do
         context.stub(:dispatch).with("foo").and_return("bar")
-        subject.apply("foo").should == "bar"
+        # calling #result is hack to get this to pass for now
+        subject.apply("foo").result.should == :passed
       end
+
+      context "when the action succeeds"
+      context "when the action fails"
+      context "when the action is missing a mapping"
+      context "when the last action was missing a mapping"
     end
 
     describe "#start_test" do

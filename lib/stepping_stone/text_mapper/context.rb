@@ -1,6 +1,8 @@
 module SteppingStone
   module TextMapper
     class Context
+      UndefinedMappingError = Class.new(NameError)
+
       def self.include_mappers(mappers)
         mappers.each { |mapper| send(:include, mapper) }
       end
@@ -15,14 +17,9 @@ module SteppingStone
 
       def dispatch(action)
         if mapping = @mappings.find { |mapping| mapping.match(action) }
-          begin
-            mapping.dispatch(self, action)
-            :passed
-          rescue RSpec::Expectations::ExpectationNotMetError
-            :failed
-          end
+          mapping.dispatch(self, action)
         else
-          :missing
+          raise UndefinedMappingError.new
         end
       end
     end

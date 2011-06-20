@@ -5,9 +5,9 @@ module SteppingStone
   # the result of each action to its client via the supplied callback.
   class RbServer
     class Result
-      attr_reader :action, :result
-      def initialize(action, result)
-        @action, @result = action, result
+      attr_reader :action, :result, :value
+      def initialize(action, result, value=nil)
+        @action, @result, value = action, result, value
       end
 
       def ==(other)
@@ -17,9 +17,14 @@ module SteppingStone
 
     attr_accessor :context, :last_action
 
+    # rename missing to undefined
     def apply(action)
       return Result.new(action, :pending) if @last_action == :missing
-      @last_action = Result.new(action, context.dispatch(action))
+      @last_action = Result.new(action, :passed, context.dispatch(action))
+    rescue RSpec::Expectations::ExpectationNotMetError => e
+      @last_action = Result.new(action, :failed, e)
+    rescue TextMapper::Context::UndefinedMappingError
+      @last_action = Result.new(action, :missing)
     end
 
     def start_test(test_case)
