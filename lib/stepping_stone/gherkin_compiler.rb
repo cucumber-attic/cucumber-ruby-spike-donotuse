@@ -1,5 +1,6 @@
 require 'gherkin'
 require 'stepping_stone/model/test_case'
+require 'stepping_stone/model/doc_string'
 
 module SteppingStone
   class GherkinCompiler
@@ -54,7 +55,7 @@ module SteppingStone
 
     def step(step)
       action = [step.name]
-      action << step.multiline_arg.value if step.multiline_arg
+      action << Model::DocString.new(step.multiline_arg.value) if step.multiline_arg
       @builder.add_action(action)
     end
 

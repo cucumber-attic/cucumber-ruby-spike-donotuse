@@ -14,12 +14,12 @@ Feature: sst exec
       module CalculatorMapper
         extend SteppingStone::TextMapper
 
-        def_map "a calculator"                                  => :create
-        def_map /(\d+) and (\d+) are added together/            => [:add, Integer, Integer]
-        def_map ["these numbers are added together:", String]   => :add_script
-        def_map /(\d+) and (\d+) are multiplied/                => [:multiply, Integer, Integer]
-        def_map /the answer is (\d+)/                           => :assert_answer
-        def_map /the answer is not (\d+)/                       => :assert_not_answer
+        def_map "a calculator"                                   => :create
+        def_map /(\d+) and (\d+) are added together/             => [:add, Integer, Integer]
+        def_map ["these numbers are added together:", DocString] => :add_script
+        def_map /(\d+) and (\d+) are multiplied/                 => [:multiply, Integer, Integer]
+        def_map /the answer is (\d+)/                            => :assert_answer
+        def_map /the answer is not (\d+)/                        => :assert_not_answer
 
         def create
           @calculator = Class.new do
