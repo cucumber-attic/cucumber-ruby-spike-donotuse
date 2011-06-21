@@ -3,10 +3,6 @@ module SteppingStone
     class Context
       UndefinedMappingError = Class.new(NameError)
 
-      def self.include_mappers(mappers)
-        mappers.each { |mapper| send(:include, mapper) }
-      end
-
       def initialize
         TextMapper.mappers.each do |mapper|
           extend(mapper)
