@@ -11,6 +11,7 @@ module SteppingStone
         @action, @result, value = action, result, value
       end
 
+      # TODO: Is this the correct way to define == equality for a Result?
       def ==(other)
         result == other
       end
