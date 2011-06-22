@@ -5,7 +5,7 @@ module SteppingStone
     let(:context) { TextMapper::Context.new }
 
     subject do
-      server = RbServer.new(double("reporter"))
+      server = RbServer.new
       server.context = context
       server
     end
