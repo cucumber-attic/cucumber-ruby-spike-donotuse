@@ -20,7 +20,7 @@ module SteppingStone
     attr_accessor :context, :last_action
 
     def initialize
-      CodeLoader.require_glob("sst/mappers", "**/*")
+      CodeLoader.require_glob("mappers", "**/*")
     end
 
     # Apply action to the SUT and return the result of the application
