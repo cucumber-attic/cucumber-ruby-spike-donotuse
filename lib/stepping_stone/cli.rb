@@ -45,9 +45,6 @@ module SteppingStone
         RbProject.add_to_load_path('.', 'sst')
         require 'sst/sst_helper'
 
-        # Part of loading the rb server
-        RbProject.require_glob("sst/mappers", "**/*")
-
         compiler = GherkinCompiler.new
 
         # Do this properly: no need to flatten
