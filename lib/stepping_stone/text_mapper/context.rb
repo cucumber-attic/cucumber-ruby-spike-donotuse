@@ -3,12 +3,9 @@ module SteppingStone
     class Context
       UndefinedMappingError = Class.new(NameError)
 
-      def initialize
-        TextMapper.mappers.each do |mapper|
-          extend(mapper)
-        end
-
-        @mappings = TextMapper.mappers.collect(&:mappings).flatten
+      def initialize(mappers=[])
+        mappers.each { |mapper| extend(mapper) }
+        @mappings = mappers.collect(&:mappings).flatten
       end
 
       def dispatch(action)

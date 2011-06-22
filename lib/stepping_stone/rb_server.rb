@@ -34,7 +34,7 @@ module SteppingStone
     end
 
     def start_test(test_case)
-      @context = TextMapper::Context.new
+      @context = TextMapper::Context.new(TextMapper.mappers)
     end
 
     def end_test(test_case)
