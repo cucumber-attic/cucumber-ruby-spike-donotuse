@@ -1,12 +1,15 @@
-# This is borrowed from rspec-core (slightly modified),
-# which in turn was borrowed (slightly modified) from Scott
-# Taylor's project_path project:
+# This is borrowed from rspec-core (renamed from RbProject
+# and slightly modified), which in turn was borrowed (slightly
+# modified) from Scott Taylor's project_path project:
 #   http://github.com/smtlaissezfaire/project_path
 
 require 'pathname'
 
 module SteppingStone
-  module RbProject
+  # One of the services Cucumber provides to the servers and reporters.
+  # CodeLoader is responsible for loading code from Cucumber's file
+  # system location (e.g. the cukes directory or similar)
+  module CodeLoader
     def require_glob(dir, pattern)
       Dir[File.join(root, dir, pattern)].each do |file|
         require File.join(dir, File.basename(file, '.rb'))

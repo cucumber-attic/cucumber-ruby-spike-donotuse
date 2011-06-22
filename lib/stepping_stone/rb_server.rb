@@ -1,5 +1,5 @@
 require 'stepping_stone/text_mapper/context'
-require 'stepping_stone/rb_project'
+require 'stepping_stone/code_loader'
 
 module SteppingStone
   # The server's responsibility is to execute a test case and communicate
@@ -20,7 +20,7 @@ module SteppingStone
     attr_accessor :context, :last_action
 
     def initialize
-      RbProject.require_glob("sst/mappers", "**/*")
+      CodeLoader.require_glob("sst/mappers", "**/*")
     end
 
     # Apply action to the SUT and return the result of the application
