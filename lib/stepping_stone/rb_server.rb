@@ -17,6 +17,7 @@ module SteppingStone
 
     attr_accessor :context, :last_action
 
+    # Apply action to the SUT and return the result of the application
     def apply(action)
       return Result.new(action, :skipped) if skip_action?
       @last_action = Result.new(action, :passed, context.dispatch(action))
