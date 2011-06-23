@@ -44,12 +44,12 @@ module SteppingStone
 
         context "with many mappers" do
           before do
-            build_mapper(:mapper_a)
-            build_mapper(:mapper_b)
+            build_mapper(:mapper_a, subject)
+            build_mapper(:mapper_b, subject)
           end
 
           describe "#all_mappings" do
-            xit "exports mappings" do
+            it "exports mappings" do
               subject.all_mappings.collect(&:name).should == [:from_mapper_a, :from_mapper_b]
             end
           end
