@@ -7,6 +7,12 @@ module SteppingStone
       @mappers ||= []
     end
 
+    def self.all_mappings
+      mappers.inject([]) do |acc, mapper|
+        acc << mapper.mappings
+      end.flatten
+    end
+
     def self.extended(mapper)
       mapper.extend(Dsl)
       mapper.const_set(:DocString, Model::DocString)

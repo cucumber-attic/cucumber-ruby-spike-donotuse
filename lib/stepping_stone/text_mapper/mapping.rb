@@ -9,9 +9,10 @@ module SteppingStone
         new(from, meth_name, types)
       end
 
-      attr_reader :from, :to
+      attr_reader :from, :to, :name
 
       def initialize(from, to, types=[])
+        @name = from
         @from = Pattern[*from]
         @to = to # MethodSignature.new(to) ???
         @types = types

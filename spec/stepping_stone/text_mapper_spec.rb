@@ -1,23 +1,35 @@
 require 'spec_helper'
 
 module SteppingStone
-  module TextMapper
-    describe "a mapper" do
-      subject do
-        Module.new do
-          extend TextMapper
-          def_map :from_action => :to_method
-          def to_method
-            :to_method
-          end
+  describe TextMapper do
+    def build_mapper(name)
+      from = :"from_#{name}"
+      to   = :"to_#{name}"
+
+      Module.new do
+        extend TextMapper
+        def_map from => to
+        define_method(to) { to }
+      end
+    end
+
+    context "with one mapper" do
+      before { build_mapper(:mapper_a) }
+
+      describe "#all_mappings" do
+        it "exports mappings" do
+          subject.all_mappings.collect(&:name).should == [:from_mapper_a]
         end
       end
 
-      it "exports its mappings" do
-        subject.mappings.should have(1).mapping
-      end
+      it "exports the helper module"
+      it "exports hooks"
+    end
 
-      it "exports its hooks"
+    context "with many mappers" do
+      it "exports mappings"
+      it "exports the helper module"
+      it "exports hooks"
     end
   end
 end
