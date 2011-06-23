@@ -1,3 +1,4 @@
+require 'stepping_stone/text_mapper/namespace'
 require 'stepping_stone/text_mapper/context'
 require 'stepping_stone/code_loader'
 
@@ -20,6 +21,8 @@ module SteppingStone
     attr_accessor :context, :last_action
 
     def initialize
+      @root = TextMapper::Namespace.root
+      SteppingStone.const_set(:Mapper, @root)
       CodeLoader.require_glob("mappers", "**/*")
     end
 
@@ -34,7 +37,7 @@ module SteppingStone
     end
 
     def start_test(test_case)
-      @context = TextMapper::Context.new(TextMapper.mappers)
+      @context = TextMapper::Context.new(@root.mappers)
     end
 
     def end_test(test_case)

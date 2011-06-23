@@ -12,7 +12,7 @@ Feature: sst exec
       require 'sst_helper'
 
       module CalculatorMapper
-        extend SteppingStone::TextMapper
+        extend SteppingStone::Mapper
 
         def_map "a calculator"                                   => :create
         def_map /(\d+) and (\d+) are added together/             => [:add, Integer, Integer]
