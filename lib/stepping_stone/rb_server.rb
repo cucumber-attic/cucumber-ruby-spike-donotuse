@@ -21,7 +21,7 @@ module SteppingStone
     attr_accessor :context, :last_action
 
     def initialize
-      @root = TextMapper::Namespace.root
+      @root = TextMapper::Namespace.build
       SteppingStone.const_set(:Mapper, @root)
       CodeLoader.require_glob("mappers", "**/*")
     end

@@ -3,20 +3,20 @@ require 'spec_helper'
 module SteppingStone
   module TextMapper
     describe Namespace do
-      describe ".root" do
+      describe ".build" do
         it "builds a unique namespace" do
-          ns1 = Namespace.root
-          ns2 = Namespace.root
+          ns1 = Namespace.build
+          ns2 = Namespace.build
           ns1.should_not be(ns2)
         end
 
         it "returns a module" do
-          Namespace.root.should be_an_instance_of(Module)
+          Namespace.build.should be_an_instance_of(Module)
         end
       end
 
       describe "enclosing mappers within a namespace" do
-        subject { Namespace.root }
+        subject { Namespace.build }
 
         def build_mapper(name, namespace)
           from = :"from_#{name}"

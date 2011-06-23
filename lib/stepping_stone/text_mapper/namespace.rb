@@ -1,7 +1,7 @@
 module SteppingStone
   module TextMapper
     module Namespace
-      def self.root
+      def self.build
         Module.new do
           def self.mappers
             @mappers ||= []
