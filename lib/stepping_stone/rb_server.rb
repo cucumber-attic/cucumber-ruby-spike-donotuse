@@ -18,12 +18,17 @@ module SteppingStone
       end
     end
 
-    attr_accessor :context, :last_action
+    def self.boot!
+      server = self.new
+      SteppingStone.const_set(:Mapper, server.root_namespace)
+      CodeLoader.require_glob("mappers", "**/*")
+      server
+    end
+
+    attr_accessor :root_namespace, :context, :last_action
 
     def initialize
-      @root = TextMapper::Namespace.build
-      SteppingStone.const_set(:Mapper, @root)
-      CodeLoader.require_glob("mappers", "**/*")
+      @root_namespace = TextMapper::Namespace.build
     end
 
     # Apply action to the SUT and return the result of the application
@@ -37,7 +42,7 @@ module SteppingStone
     end
 
     def start_test(test_case)
-      @context = TextMapper::Context.new(@root.mappers)
+      @context = TextMapper::Context.new(root_namespace.mappers)
     end
 
     def end_test(test_case)

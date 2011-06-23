@@ -54,7 +54,7 @@ module SteppingStone
         end.flatten
 
         reporter = Reporter.new
-        server = RbServer.new
+        server = RbServer.boot!
 
         test_cases.each do |test_case|
           server.execute(test_case) do |result|
