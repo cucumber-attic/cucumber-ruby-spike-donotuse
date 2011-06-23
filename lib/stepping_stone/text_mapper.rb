@@ -15,11 +15,14 @@ module SteppingStone
 
     def self.extended(mapper)
       mapper.extend(Dsl)
-      mapper.const_set(:DocString, Model::DocString)
       mappers << mapper
     end
 
     module Dsl
+      def self.extended(mapper)
+        mapper.const_set(:DocString, Model::DocString)
+      end
+
       def mappings
         @mappings ||= []
       end
