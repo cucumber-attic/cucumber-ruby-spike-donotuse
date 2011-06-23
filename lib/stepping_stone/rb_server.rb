@@ -1,3 +1,4 @@
+require 'stepping_stone/model/result'
 require 'stepping_stone/text_mapper/namespace'
 require 'stepping_stone/text_mapper/context'
 require 'stepping_stone/code_loader'
@@ -6,18 +7,8 @@ module SteppingStone
   # The server's responsibility is to execute a test case and communicate
   # the result of each action to its client via the supplied callback.
   class RbServer
-    class Result
-      attr_reader :action, :result, :value
-      def initialize(action, result, value=nil)
-        @action, @result, value = action, result, value
-      end
-
-      # TODO: Is this the correct way to define == equality for a Result?
-      def ==(other)
-        result == other
-      end
-    end
-
+    # Called by Cucumber when it's time to start executing features. Non-idempotent,
+    # invasive and environment-related startup code should go here.
     def self.boot!
       server = self.new
       SteppingStone.const_set(:Mapper, server.root_namespace)
@@ -33,12 +24,12 @@ module SteppingStone
 
     # Apply action to the SUT and return the result of the application
     def apply(action)
-      return Result.new(action, :skipped) if skip_action?
-      @last_action = Result.new(action, :passed, context.dispatch(action))
+      return Model::Result.new(action, :skipped) if skip_action?
+      @last_action = Model::Result.new(action, :passed, context.dispatch(action))
     rescue RSpec::Expectations::ExpectationNotMetError => e
-      @last_action = Result.new(action, :failed, e)
+      @last_action = Model::Result.new(action, :failed, e)
     rescue TextMapper::Context::UndefinedMappingError
-      @last_action = Result.new(action, :undefined)
+      @last_action = Model::Result.new(action, :undefined)
     end
 
     def start_test(test_case)
