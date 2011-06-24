@@ -54,7 +54,6 @@ module SteppingStone
             end
           end
 
-          it "exports mappings"
           it "exports the helper module"
           it "exports hooks"
         end
