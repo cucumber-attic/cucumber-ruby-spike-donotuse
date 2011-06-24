@@ -30,6 +30,10 @@ module SteppingStone
         end
 
         context "with one mapper" do
+          # create the enclosing namespace
+          # extend it with mappers
+          # build the context
+          # verify that the context dispatches actions correctly
           before { build_mapper(:mapper_a, subject) }
 
           describe "#all_mappings" do
