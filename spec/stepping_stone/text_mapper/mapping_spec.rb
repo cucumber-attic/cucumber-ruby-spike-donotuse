@@ -39,6 +39,10 @@ module SteppingStone
         it "can anchor all strings and regexen"
         it "can set debug level"
       end
+
+      describe "#source_location" do
+        it "says where the mapping was defined"
+      end
     end
   end
 end
