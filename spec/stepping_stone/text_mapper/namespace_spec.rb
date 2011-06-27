@@ -50,10 +50,19 @@ module SteppingStone
         "helper methods can access the class instance attributes defined in the context"
 
         it "builds an execution context" do
+          # Move dispatch assertion to Context spec, use a mock to ensure the Context Factory's new method
+          # is called with the correct arguments
           namespace = Namespace.build
           build_mapper(:mapper_a, namespace)
           context = namespace.build_context
           context.dispatch([:from_mapper_a]).should eq(:to_mapper_a)
+        end
+
+        it "context raises an error if asked to dispatch a pattern with no matching mapper" do
+          # move to Context spec
+          namespace = Namespace.build
+          context = namespace.build_context
+          expect { context.dispatch([:does_not_exist]) }.to raise_error(Context::UndefinedMappingError)
         end
 
         describe "#all_mappings" do
