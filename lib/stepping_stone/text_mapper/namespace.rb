@@ -20,6 +20,10 @@ module SteppingStone
             mapper.extend(Dsl)
             mappers << mapper
           end
+
+          def self.build_context
+            TextMapper::Context.new(mappers)
+          end
         end
       end
 

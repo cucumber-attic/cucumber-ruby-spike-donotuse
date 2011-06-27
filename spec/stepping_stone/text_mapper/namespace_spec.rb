@@ -15,7 +15,10 @@ module SteppingStone
         end
       end
 
-      describe "enclosing mappers within a namespace" do
+      it "creates a collection of mappings"
+      it "creates a context with the proper helpers and attributes"
+
+      describe "#build_context" do
         subject { Namespace.build }
 
         def build_mapper(name, namespace)
@@ -29,38 +32,38 @@ module SteppingStone
           end
         end
 
-        context "with one mapper" do
-          # create the enclosing namespace
-          # extend it with mappers
-          # build the context
-          # verify that the context dispatches actions correctly
-          before { build_mapper(:mapper_a, subject) }
-
-          describe "#all_mappings" do
-            it "exports mappings" do
-              subject.all_mappings.collect(&:name).should == [:from_mapper_a]
-            end
-          end
-
-          it "exports the helper module"
-          it "exports hooks"
+        before do
+          build_mapper(:mapper_a, subject)
+          build_mapper(:mapper_b, subject)
         end
 
-        context "with many mappers" do
-          before do
-            build_mapper(:mapper_a, subject)
-            build_mapper(:mapper_b, subject)
-          end
+        # create the enclosing namespace
+        # extend it with mappers
+        # build the context
+        # verify that the context dispatches actions correctly
 
-          describe "#all_mappings" do
-            it "exports mappings" do
-              subject.all_mappings.collect(&:name).should == [:from_mapper_a, :from_mapper_b]
-            end
-          end
+        "a context built from a module has the modules helper methods"
+        "a context built from a class has an attribute referencing an instance of that class"
+        "a context built from two modules has both modules' helper methods"
+        "a context built from two classes has two attributes, each referencing an instance of that class"
+        "a context built from a module and a class has the helper methods and the class instance"
+        "helper methods can access the class instance attributes defined in the context"
 
-          it "exports the helper module"
-          it "exports hooks"
+        it "builds an execution context" do
+          namespace = Namespace.build
+          build_mapper(:mapper_a, namespace)
+          context = namespace.build_context
+          context.dispatch([:from_mapper_a]).should eq(:to_mapper_a)
         end
+
+        describe "#all_mappings" do
+          it "exports mappings" do
+            subject.all_mappings.collect(&:name).should eq([:from_mapper_a, :from_mapper_b])
+          end
+        end
+
+        it "exports the helper module"
+        it "exports hooks"
       end
     end
   end
