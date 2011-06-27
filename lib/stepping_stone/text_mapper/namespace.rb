@@ -3,7 +3,23 @@ require 'stepping_stone/text_mapper/mapping'
 
 module SteppingStone
   module TextMapper
-    module Namespace
+    class Namespace
+      UndefinedMappingError = Class.new(NameError)
+
+      attr_reader :mappings
+
+      def initialize
+        @mappings = []
+      end
+
+      def add_mapping(mapping)
+        mappings << mapping
+      end
+
+      def find_mapping(from)
+        mappings.find { |mapping| mapping.match(from) } or raise(UndefinedMappingError.new)
+      end
+
       def self.build
         Module.new do
           def self.mappers
