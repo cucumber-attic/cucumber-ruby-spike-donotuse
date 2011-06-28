@@ -24,14 +24,21 @@ Feature: Hooks into the test case lifecycle
   e.g. tags.
 
   Scenario: Event hooks
-    Given a scenario "Basic Arithmetic" with:
+    Given a passing scenario "Basic Arithmetic" with:
       """
       When I add 4 and 5
       Then the result is 9
       """
-    Given these hooks:
-      | event | when | result |
+    Given these passing hooks:
+      | When   | Event    |
+      | before | setup    |
+      | after  | teardown |
     When Cucumber executes the scenario "Basic Arithmetic"
+    Then the hooks and steps are executed in this order:
+      | before :setup   |
+      | I add 4 and 5   |
+      | the result is 9 |
+      | after :setup    |
 
   Scenario: Failing hook skips the rest of the test case
   Scenario: Observing results
