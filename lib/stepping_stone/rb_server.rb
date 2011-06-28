@@ -11,15 +11,14 @@ module SteppingStone
     # invasive and environment-related startup code should go here.
     def self.boot!
       server = self.new
-      SteppingStone.const_set(:Mapper, server.root_namespace)
+      SteppingStone.const_set(:Mapper, server.mapper_namespace.to_extension_module)
       CodeLoader.require_glob("mappers", "**/*")
       server
     end
-
-    attr_accessor :root_namespace, :context, :last_action
+    attr_accessor :mapper_namespace, :context, :last_action
 
     def initialize
-      @root_namespace = TextMapper::Namespace.build
+      @mapper_namespace = TextMapper::Namespace.new
     end
 
     # Apply action to the SUT and return the result of the application
@@ -28,12 +27,12 @@ module SteppingStone
       @last_action = Model::Result.new(action, :passed, context.dispatch(action))
     rescue RSpec::Expectations::ExpectationNotMetError => e
       @last_action = Model::Result.new(action, :failed, e)
-    rescue TextMapper::Context::UndefinedMappingError
+    rescue TextMapper::Namespace::UndefinedMappingError
       @last_action = Model::Result.new(action, :undefined)
     end
 
     def start_test(test_case)
-      @context = TextMapper::Context.new(root_namespace.mappers)
+      @context = mapper_namespace.build_context
     end
 
     def end_test(test_case)

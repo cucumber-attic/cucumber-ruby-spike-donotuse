@@ -1,16 +1,15 @@
 module SteppingStone
   module TextMapper
     class Context
-      UndefinedMappingError = Class.new(NameError)
+      attr_reader :mappings
 
-      def initialize(mappers=[])
+      def initialize(mappings, mappers=[])
         mappers.each { |mapper| extend(mapper) }
-        @mappings = mappers.collect(&:mappings).flatten
+        @mappings = mappings
       end
 
       def dispatch(action)
-        # A proper mapping collection could support a find! method that would raise on its own
-        mapping = @mappings.find { |mapping| mapping.match(action) } or raise UndefinedMappingError.new
+        mapping = mappings.find_mapping(action)
         mapping.call(self, action)
       end
     end

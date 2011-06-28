@@ -4,12 +4,41 @@ require 'stepping_stone/text_mapper/mapping'
 module SteppingStone
   module TextMapper
     class Namespace
-      UndefinedMappingError = Class.new(NameError)
+      class UndefinedMappingError < NameError
+        def initialize(missing)
+          @missing = missing
+        end
 
-      attr_reader :mappings
+        def to_s
+          "No mapping found that matches: #{@missing}"
+        end
+      end
+
+      class MappingPool
+        attr_reader :mappings
+
+        def initialize
+          @mappings = []
+        end
+
+        def add_mapping(mapping)
+          mappings << mapping
+        end
+
+        def find_mapping(from)
+          mappings.find { |mapping| mapping.match(from) } or raise(UndefinedMappingError.new(from))
+        end
+      end
+
+      attr_reader :mappings, :mappers
 
       def initialize
         @mappings = []
+        @mappers = []
+      end
+
+      def add_mapper(mapper)
+        mappers << mapper
       end
 
       def add_mapping(mapping)
@@ -17,44 +46,28 @@ module SteppingStone
       end
 
       def find_mapping(from)
-        mappings.find { |mapping| mapping.match(from) } or raise(UndefinedMappingError.new)
+        mappings.find { |mapping| mapping.match(from) } or raise(UndefinedMappingError.new(from))
       end
 
-      def self.build
-        Module.new do
-          def self.mappers
-            @mappers ||= []
-          end
-
-          def self.all_mappings
-            mappers.inject([]) do |acc, mapper|
-              acc << mapper.mappings
-            end.flatten
-          end
-
-          def self.extended(mapper)
-            mapper.extend(Dsl)
-            mappers << mapper
-          end
-
-          def self.build_context
-            TextMapper::Context.new(mappers)
-          end
-        end
+      def build_context
+        TextMapper::Context.new(self, mappers)
       end
 
-      module Dsl
-        def self.extended(mapper)
-          mapper.const_set(:DocString, Model::DocString)
-        end
+      def to_extension_module
+        lambda do |mappings|
+          Module.new do
+            metaclass = (class << self; self; end)
 
-        def mappings
-          @mappings ||= []
-        end
+            metaclass.send(:define_method, :extended) do |mapper|
+              mapper.const_set(:DocString, Model::DocString)
+              mappings.add_mapper(mapper)
+            end
 
-        def def_map(mapping)
-          mappings << Mapping.from_fluent(mapping)
-        end
+            define_method(:def_map) do |dsl_args|
+              mappings.add_mapping(Mapping.from_fluent(dsl_args))
+            end
+          end
+        end.call(self)
       end
     end
   end

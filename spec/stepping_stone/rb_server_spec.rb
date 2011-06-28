@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module SteppingStone
   describe RbServer do
-    let(:context) { TextMapper::Context.new }
+    let(:context) { TextMapper::Context.new(double("mappings container")) }
 
     subject do
       server = RbServer.new
