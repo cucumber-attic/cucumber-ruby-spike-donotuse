@@ -3,7 +3,7 @@ require 'spec_helper'
 module SteppingStone
   module TextMapper
     describe Namespace do
-      describe "#to_module" do
+      describe "#to_extension_module" do
         it "returns a module" do
           Namespace.new.to_extension_module.should be_an_instance_of(Module)
         end
