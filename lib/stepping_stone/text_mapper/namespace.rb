@@ -14,22 +14,6 @@ module SteppingStone
         end
       end
 
-      class MappingPool
-        attr_reader :mappings
-
-        def initialize
-          @mappings = []
-        end
-
-        def add_mapping(mapping)
-          mappings << mapping
-        end
-
-        def find_mapping(from)
-          mappings.find { |mapping| mapping.match(from) } or raise(UndefinedMappingError.new(from))
-        end
-      end
-
       attr_reader :mappings, :mappers
 
       def initialize
