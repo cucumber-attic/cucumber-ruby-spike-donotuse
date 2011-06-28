@@ -34,11 +34,14 @@ Feature: Hooks into the test case lifecycle
       | before | setup    |
       | after  | teardown |
     When Cucumber executes the scenario "Basic Arithmetic"
-    Then the hooks and steps are executed in this order:
-      | before :setup   |
-      | I add 4 and 5   |
-      | the result is 9 |
-      | after :setup    |
+    # not quite there yet
+    Then the test case life cycle events are fired in this order:
+      | hook     | before setup     |
+      | setup    | Basic Arithmetic |
+      | dispatch | I add 4 and 5    |
+      | dispatch | the result is 9  |
+      | after    | Basic Arithmetic |
+      | hook     | after teardown   |
 
   Scenario: Failing hook skips the rest of the test case
   Scenario: Observing results
