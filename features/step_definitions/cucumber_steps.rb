@@ -4,7 +4,7 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
   @namespace.add_mapping(SteppingStone::TextMapper::Mapping.new("I add 4 and 5", :add))
   @namespace.add_mapping(SteppingStone::TextMapper::Mapping.new("the result is 9", :assert_result))
   calculator_mod = Module.new do
-    include RSpec::Matchers
+    include RSpec::Matchers # should be a way to add this module into context automagically
 
     def add
       @result = 4 + 5
