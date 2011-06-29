@@ -14,11 +14,12 @@ module SteppingStone
         end
       end
 
-      attr_reader :mappings, :mappers
+      attr_reader :mappings, :mappers, :hooks
 
       def initialize
         @mappings = []
         @mappers = []
+        @hooks = []
       end
 
       def add_mapper(mapper)
@@ -31,6 +32,10 @@ module SteppingStone
 
       def find_mapping(from)
         mappings.find { |mapping| mapping.match(from) } or raise(UndefinedMappingError.new(from))
+      end
+
+      def add_hook(hook)
+        hooks << hook
       end
 
       def build_context
