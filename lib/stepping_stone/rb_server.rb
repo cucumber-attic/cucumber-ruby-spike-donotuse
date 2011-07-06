@@ -20,6 +20,7 @@ module SteppingStone
       @mapper_namespace = TextMapper::Namespace.new
     end
 
+    # TODO: extract #apply and #execute into Model::Executor
     # Apply action to the SUT and return the result of the application
     def apply(action)
       return Model::Result.new(action, :skipped) if skip_action?

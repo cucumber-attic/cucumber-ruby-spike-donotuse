@@ -31,6 +31,7 @@ module SteppingStone
         mappings << mapping
       end
 
+      # TODO find_mapping and find_hook should become find! and find(&when_missing)
       def find_mapping(from)
         mappings.find { |mapping| mapping.match(from) } or raise(UndefinedMappingError.new(from))
       end
