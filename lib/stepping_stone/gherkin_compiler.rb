@@ -21,7 +21,7 @@ module SteppingStone
       def replay
         if @current
           actions = @pre_actions.dup + @tc_actions
-          @test_cases.push(Model::TestCase.new(*actions))
+          @test_cases.push(Model::TestCase.new(@current, *actions))
           @tc_actions = []
           @current = nil
         end

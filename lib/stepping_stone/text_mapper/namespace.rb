@@ -1,5 +1,6 @@
 require 'stepping_stone/model/doc_string'
 require 'stepping_stone/text_mapper/mapping'
+require 'stepping_stone/text_mapper/context'
 
 module SteppingStone
   module TextMapper
@@ -32,6 +33,10 @@ module SteppingStone
 
       def find_mapping(from)
         mappings.find { |mapping| mapping.match(from) } or raise(UndefinedMappingError.new(from))
+      end
+
+      def find_hook(from)
+        hooks.find { |hook| hook.match(from) }
       end
 
       def add_hook(hook)

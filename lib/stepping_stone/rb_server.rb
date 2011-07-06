@@ -1,6 +1,5 @@
 require 'stepping_stone/model/result'
 require 'stepping_stone/text_mapper/namespace'
-require 'stepping_stone/text_mapper/context'
 require 'stepping_stone/code_loader'
 
 module SteppingStone
@@ -33,6 +32,7 @@ module SteppingStone
 
     def start_test(test_case)
       @context = mapper_namespace.build_context
+      @context.setup(test_case)
     end
 
     def end_test(test_case)

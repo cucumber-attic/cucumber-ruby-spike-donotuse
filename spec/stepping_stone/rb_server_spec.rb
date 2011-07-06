@@ -30,7 +30,7 @@ module SteppingStone
 
     describe "#start_test" do
       it "ensures there is a new context" do
-        subject.start_test(double("test case"))
+        subject.start_test(double("test case", :name => "test case"))
         subject.context.should_not == context
       end
     end

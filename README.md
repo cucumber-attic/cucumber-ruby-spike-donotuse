@@ -202,6 +202,11 @@ this?:
 
 Good news: you can! But please keep in mind these are only the basics.
 
+## Architecture
+
+Frontend: compilers
+Backend: servers
+
 ## FAQ
 
 ### BDD?

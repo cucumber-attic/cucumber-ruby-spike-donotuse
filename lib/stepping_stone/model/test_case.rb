@@ -3,14 +3,15 @@ module SteppingStone
     class TestCase
       include Enumerable
 
-      attr_reader :actions
+      attr_reader :name, :actions
 
       # uri: TestCase identifier. URI fragments are allowed.
       # actions: list of actions to be applied to the SUT for this test case
       #
       # def initialize(uri, actions)
       #   @uri = uri
-      def initialize(*actions)
+      def initialize(name, *actions)
+        @name = name
         @actions = actions
       end
 

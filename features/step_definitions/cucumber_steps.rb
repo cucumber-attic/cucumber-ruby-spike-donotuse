@@ -26,13 +26,17 @@ end
 
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
   context = @namespace.build_context
-  @test_case.each do |action|
+  @events = []
+  @events << [:before, context.setup(@test_case)]
+  @test_case.inject(@events) do |events, action|
     context.dispatch(action)
+    events << [:dispatch, action[0]]
   end
+  @events << [:after, context.teardown(@test_case)]
 end
 
 Then /^the life cycle events are:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
+  table.map_column!(:event) { |event| event.to_sym }
+  @events.should eq(table.rows)
 end
 

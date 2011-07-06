@@ -34,6 +34,7 @@ Feature: Hooks into the test case lifecycle
       | after  | test case |
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle events are:
+      | event    | element          |
       | before   | Basic Arithmetic |
       | dispatch | I add 4 and 5    |
       | dispatch | the result is 9  |
