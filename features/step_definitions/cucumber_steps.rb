@@ -1,5 +1,8 @@
 Given /^a passing scenario "(.+)" with:$/ do |name, body|
   @test_case = SteppingStone::GherkinCompiler.new.compile("Feature: test\nScenario: #{name}\n" << body)[0]
+  # @test_sut = TestSut.new
+  # @test_sut.add_mapping
+  # @test_sut.add_mapper(calculator_mod)
   @namespace = SteppingStone::TextMapper::Namespace.new
   @namespace.add_mapping(SteppingStone::TextMapper::Mapping.new("I add 4 and 5", :add))
   @namespace.add_mapping(SteppingStone::TextMapper::Mapping.new("the result is 9", :assert_result))
@@ -25,6 +28,8 @@ Given /^these passing hooks:$/ do |hooks|
 end
 
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
+  # executor = SteppingStone::Model::Executor.new(sut)
+  # executor.execute(test_case)
   context = @namespace.build_context
   @events = []
   @events << [:before, context.setup(@test_case)]
