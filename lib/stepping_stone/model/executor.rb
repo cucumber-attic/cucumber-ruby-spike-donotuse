@@ -11,7 +11,7 @@ module SteppingStone
       def execute(test_case)
         event(:before, sut.start_test(test_case))
         test_case.each do |action|
-          sut.apply(action)
+          sut.dispatch(action)
           event(:dispatch, action[0])
         end
         event(:after, sut.end_test(test_case))

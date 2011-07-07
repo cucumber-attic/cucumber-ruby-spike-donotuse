@@ -43,7 +43,7 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
       @context.teardown(test_case)
     end
 
-    def apply(action)
+    def dispatch(action)
       @context.dispatch(action)
     end
   end
