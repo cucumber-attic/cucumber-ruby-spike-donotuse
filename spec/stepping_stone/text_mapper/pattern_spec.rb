@@ -108,6 +108,14 @@ module SteppingStone
           subject.===([:def]).should be(false)
         end
       end
+
+      describe ".new" do
+        it "requires an array-ish argument" do
+          expect {
+            Pattern.new(:foo)
+          }.to raise_error(TypeError)
+        end
+      end
     end
   end
 end

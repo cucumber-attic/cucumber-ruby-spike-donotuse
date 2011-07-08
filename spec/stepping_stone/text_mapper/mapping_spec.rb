@@ -8,7 +8,7 @@ module SteppingStone
 
         it "invokes the correct method name" do
           target.should_receive(:to)
-          mapping = Mapping.new("from", :to)
+          mapping = Mapping.new([:from], :to)
           mapping.dispatch(target)
         end
 

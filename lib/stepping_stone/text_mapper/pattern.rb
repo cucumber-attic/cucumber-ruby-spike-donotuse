@@ -4,7 +4,8 @@ module SteppingStone
       attr_reader :parts
 
       def initialize(parts)
-        @parts = parts
+        ensure_arrayish(parts)
+        @parts = parts.to_a
       end
 
       def match(targets)
@@ -35,6 +36,12 @@ module SteppingStone
             captures.push(*part.match(target).captures)
           end
           compare(parts[1..-1], targets[1..-1], current_result, captures)
+        end
+      end
+
+      def ensure_arrayish(obj)
+        if !obj.respond_to?(:to_a)
+          raise TypeError.new("can't convert #{obj.class} into Array")
         end
       end
     end
