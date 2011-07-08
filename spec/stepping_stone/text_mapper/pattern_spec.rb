@@ -15,7 +15,7 @@ module SteppingStone
         end
 
         context 'matching "/argle$/"' do
-          subject { Pattern[/argle$/] }
+          subject { Pattern.new([/argle$/]) }
 
           it { should match(["blargle"]) }
           it { should match(["flargle"]) }
@@ -65,7 +65,7 @@ module SteppingStone
         end
 
         context 'matching Class, :sym, [1,2,3]' do
-          subject { Pattern[Class, :sym, [1,2,3]] }
+          subject { Pattern.new([Class, :sym, [1,2,3]]) }
           let(:constant) { Constant = 2112; Constant }
 
           it { should match([String, :sym, [1,2,3]]) }
@@ -76,29 +76,29 @@ module SteppingStone
 
         context "extracting captures from the target" do
           it "extracts class captures" do
-            pattern = Pattern[String, "A", 3]
+            pattern = Pattern.new([String, "A", 3])
             pattern.match(["hello", "A", 3]).should == ["hello"]
           end
 
           it "extracts regex captures" do
-            pattern = Pattern[:foo, /dog (\w+)/, [1,2]]
+            pattern = Pattern.new([:foo, /dog (\w+)/, [1,2]])
             pattern.match([:foo, "dog cat", [1,2]]).should == ["cat"]
           end
 
           it "extracts multiple capture-regex captures" do
-            pattern = Pattern[/(\d+) and (\d+) are added/]
+            pattern = Pattern.new([/(\d+) and (\d+) are added/])
             pattern.match(["4 and 10 are added"]).should == ["4", "10"]
           end
 
           it "extracts compound captures" do
-            pattern = Pattern[:foo, Hash, 1, /Cucumis (\w+)/]
+            pattern = Pattern.new([:foo, Hash, 1, /Cucumis (\w+)/])
             pattern.match([:foo, { oh: 'hai' }, 1, "Cucumis sativus"]).should == [{oh: 'hai'}, "sativus"]
           end
         end
       end
 
       describe "#===" do
-        subject { Pattern[:abc] }
+        subject { Pattern.new([:abc]) }
 
         it "returns true when there is a match" do
           subject.===([:abc]).should be(true)
