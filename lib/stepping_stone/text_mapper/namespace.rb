@@ -1,5 +1,6 @@
 require 'stepping_stone/model/doc_string'
 require 'stepping_stone/text_mapper/mapping'
+require 'stepping_stone/text_mapper/mapping_pool'
 require 'stepping_stone/text_mapper/context'
 
 module SteppingStone
