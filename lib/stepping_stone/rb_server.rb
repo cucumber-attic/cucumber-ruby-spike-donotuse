@@ -27,7 +27,7 @@ module SteppingStone
       @last_action = Model::Result.new(action, :passed, context.dispatch(action))
     rescue RSpec::Expectations::ExpectationNotMetError => e
       @last_action = Model::Result.new(action, :failed, e)
-    rescue TextMapper::Namespace::UndefinedMappingError
+    rescue TextMapper::UndefinedMappingError
       @last_action = Model::Result.new(action, :undefined)
     end
 

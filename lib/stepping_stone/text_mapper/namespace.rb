@@ -6,20 +6,10 @@ require 'stepping_stone/text_mapper/context'
 module SteppingStone
   module TextMapper
     class Namespace
-      class UndefinedMappingError < NameError
-        def initialize(missing)
-          @missing = missing
-        end
-
-        def to_s
-          "No mapping found that matches: #{@missing}"
-        end
-      end
-
       attr_reader :mappings, :mappers, :hooks
 
       def initialize
-        @mappings = []
+        @mappings = MappingPool.new
         @mappers = []
         @hooks = []
       end
@@ -29,12 +19,11 @@ module SteppingStone
       end
 
       def add_mapping(mapping)
-        mappings << mapping
+        mappings.add(mapping)
       end
 
-      # TODO find_mapping and find_hook should become find! and find(&when_missing)
       def find_mapping(from)
-        mappings.find { |mapping| mapping.match(from) } or raise(UndefinedMappingError.new(from))
+        mappings.find!(from)
       end
 
       def find_hook(from)

@@ -9,24 +9,6 @@ module SteppingStone
         end
       end
 
-      describe "#add_mapping"
-
-      describe "#find_mapping" do
-        subject do
-          ns = Namespace.new
-          ns.add_mapping(Mapping.new(:foo, :bar))
-          ns
-        end
-
-        it "returns a mapping with a matching 'from' pattern" do
-          subject.find_mapping([:foo]).name.should == :foo
-        end
-
-        it "raises if no mapping is found" do
-          expect { subject.find_mapping([:does, :not, :exist]) }.to raise_error(Namespace::UndefinedMappingError)
-        end
-      end
-
       it "creates a context with the proper helpers and attributes"
 
       describe "#build_context" do
