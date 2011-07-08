@@ -5,7 +5,7 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
     attr_reader :mappings, :hooks, :helpers
 
     def initialize
-      @mappings = []
+      @mappings = SteppingStone::TextMapper::MappingPool.new
       @hooks = []
       @helpers = Module.new do
         def add
@@ -19,7 +19,7 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
     end
 
     def add_mapping(from, to)
-      mappings << SteppingStone::TextMapper::Mapping.new(from, to)
+      mappings.add(SteppingStone::TextMapper::Mapping.new(from, to))
     end
 
     def add_hook(signature, &blk)
@@ -27,7 +27,7 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
     end
 
     def find_mapping(from)
-      mappings.find { |mapping| mapping.match(from) } or raise(SteppingStone::TextMapper::Namespace::UndefinedMappingError.new(from))
+      mappings.find!(from)
     end
 
     def find_hook(from)
