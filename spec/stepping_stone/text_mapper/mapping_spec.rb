@@ -14,13 +14,13 @@ module SteppingStone
 
         it "invokes a method with arguments" do
           target.should_receive(:hair).with("red")
-          mapping = Mapping.new(/(.+) hair/, :hair)
+          mapping = Mapping.new([/(.+) hair/], :hair)
           mapping.dispatch(target, ["red hair"])
         end
 
         it "converts captured arguments into the specified type" do
           target.should_receive(:add).with(1, 2.0)
-          mapping = Mapping.new(/(\d+) and (\d+)/, :add, [Integer, Float])
+          mapping = Mapping.new([/(\d+) and (\d+)/], :add, [Integer, Float])
           mapping.dispatch(target, ["1 and 2.0"])
         end
 

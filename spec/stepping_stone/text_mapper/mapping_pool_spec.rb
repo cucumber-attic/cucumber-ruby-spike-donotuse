@@ -5,7 +5,7 @@ module SteppingStone
     describe MappingPool do
       subject { MappingPool.new }
 
-      let(:mapping) { Mapping.new(:foo, :bar) }
+      let(:mapping) { Mapping.new([:foo], :bar) }
 
       describe "#find" do
         it "returns nil" do

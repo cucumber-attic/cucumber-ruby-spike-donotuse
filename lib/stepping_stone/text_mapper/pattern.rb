@@ -1,10 +1,6 @@
 module SteppingStone
   module TextMapper
     class Pattern
-      def self.[](*parts)
-        new(parts)
-      end
-
       attr_reader :parts
 
       def initialize(parts)

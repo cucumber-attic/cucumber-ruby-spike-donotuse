@@ -6,14 +6,16 @@ module SteppingStone
       def self.from_fluent(dsl_args)
         from, to = dsl_args.shift
         meth_name, *types = to
-        new(from, meth_name, types)
+        pattern = [from].flatten
+        new(pattern, meth_name, types)
       end
 
       attr_reader :from, :to, :name
 
       def initialize(from, to, types=[])
         @name = from
-        @from = Pattern[*from]
+        #@from = Pattern[*from]
+        @from = Pattern.new(from)
         @to = to # MethodSignature.new(to) ???
         @types = types
       end

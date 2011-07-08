@@ -49,8 +49,8 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
   end
 
   @sut = FakeSut.new
-  @sut.add_mapping("I add 4 and 5", :add)
-  @sut.add_mapping("the result is 9", :assert_result)
+  @sut.add_mapping(["I add 4 and 5"], :add)
+  @sut.add_mapping(["the result is 9"], :assert_result)
 end
 
 Given /^these passing hooks:$/ do |hooks|
