@@ -8,3 +8,8 @@ end
 task :spec do
   sh "rspec spec"
 end
+
+task :doc do
+  ENV['ARUBA_REPORT_DIR'] = 'doc'
+  sh "cucumber"
+end
