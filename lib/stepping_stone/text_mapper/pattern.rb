@@ -4,12 +4,12 @@ module SteppingStone
       attr_reader :parts
 
       def initialize(parts)
-        ensure_arrayish(parts)
+        ensure_array_like(parts)
         @parts = parts.to_a
       end
 
       def match(targets)
-        return false unless targets.respond_to?(:to_a)
+        return false unless array_like?(targets)
         result, bindings = compare(parts, targets.to_a)
         return bindings if result
       end
@@ -39,8 +39,12 @@ module SteppingStone
         end
       end
 
-      def ensure_arrayish(obj)
-        if !obj.respond_to?(:to_a)
+      def array_like?(obj)
+        obj.respond_to?(:to_a)
+      end
+
+      def ensure_array_like(obj)
+        unless array_like?(obj)
           raise TypeError.new("can't convert #{obj.class} into Array")
         end
       end
