@@ -14,18 +14,17 @@ module SteppingStone
 
       def initialize(from, to, types=[])
         @name = from
-        #@from = Pattern[*from]
         @from = Pattern.new(from)
         @to = to # MethodSignature.new(to) ???
         @types = types
       end
 
       def match(pattern)
-        @from === pattern
+        from === pattern
       end
 
       def captures_from(pattern)
-        if captures = @from.match(pattern)
+        if captures = from.match(pattern)
           if @types.empty?
             captures
           else
