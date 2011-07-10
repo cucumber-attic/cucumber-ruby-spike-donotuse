@@ -1,7 +1,22 @@
 module SteppingStone
   class Reporter
-    def initialize
+    attr_reader :server
+
+    def initialize(server)
+      @server = server
       @results = []
+    end
+
+    def start_test(test_case)
+      server.start_test(test_case)
+    end
+
+    def end_test(test_case)
+      server.end_test(test_case)
+    end
+
+    def dispatch(action, &block)
+      server.dispatch(action, &block)
     end
 
     def add_result(result)

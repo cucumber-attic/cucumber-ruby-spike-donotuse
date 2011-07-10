@@ -54,10 +54,9 @@ module SteppingStone
           compiler.compile(content)
         end.flatten
 
-        reporter = Reporter.new
         server = RbServer.boot!
-
-        executor = Model::Executor.new(server)
+        reporter = Reporter.new(server)
+        executor = Model::Executor.new(reporter)
 
         test_cases.each do |test_case|
           executor.execute(test_case) do |result|
