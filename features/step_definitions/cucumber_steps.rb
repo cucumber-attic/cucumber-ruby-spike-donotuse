@@ -61,9 +61,10 @@ Given /^these passing hooks:$/ do |hooks|
 end
 
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
-  executor = SteppingStone::Model::Executor.new(@sut)
+  reporter = SteppingStone::Reporter.new(@sut)
+  executor = SteppingStone::Model::Executor.new(reporter)
   executor.execute(@test_case)
-  @events = executor.events
+  @events = reporter.events
 end
 
 Then /^the life cycle events are:$/ do |table|

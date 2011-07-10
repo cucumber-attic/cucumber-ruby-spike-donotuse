@@ -1,22 +1,24 @@
 module SteppingStone
   class Reporter
-    attr_reader :server
+    attr_reader :server, :events
 
     def initialize(server)
       @server = server
       @results = []
+      @events = []
     end
 
     def start_test(test_case)
-      server.start_test(test_case)
+      event(:before, server.start_test(test_case))
     end
 
     def end_test(test_case)
-      server.end_test(test_case)
+      event(:after, server.end_test(test_case))
     end
 
     def dispatch(action, &block)
       server.dispatch(action, &block)
+      event(:dispatch, action[0])
     end
 
     def add_result(result)
@@ -40,6 +42,12 @@ module SteppingStone
           raise "This should never happen"
         end
       end.join
+    end
+
+    private
+
+    def event(name, value)
+      events << [name, value]
     end
   end
 end

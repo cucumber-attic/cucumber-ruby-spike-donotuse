@@ -1,28 +1,20 @@
 module SteppingStone
   module Model
     class Executor
-      attr_reader :sut, :events
+      attr_reader :server
 
-      def initialize(sut)
-        @sut = sut
-        @events = []
+      def initialize(server)
+        @server = server
       end
 
       def execute(test_case, &block)
         if !test_case.empty?
-          event(:before, sut.start_test(test_case))
+          server.start_test(test_case)
           test_case.each do |action|
-            sut.dispatch(action, &block)
-            event(:dispatch, action[0])
+            server.dispatch(action, &block)
           end
-          event(:after, sut.end_test(test_case))
+          server.end_test(test_case)
         end
-      end
-
-      private
-
-      def event(name, value)
-        @events << [name, value]
       end
     end
   end
