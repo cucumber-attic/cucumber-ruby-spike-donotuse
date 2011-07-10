@@ -8,13 +8,15 @@ module SteppingStone
         @events = []
       end
 
-      def execute(test_case)
-        event(:before, sut.start_test(test_case))
-        test_case.each do |action|
-          sut.dispatch(action)
-          event(:dispatch, action[0])
+      def execute(test_case, &block)
+        if !test_case.empty?
+          event(:before, sut.start_test(test_case))
+          test_case.each do |action|
+            sut.dispatch(action, &block)
+            event(:dispatch, action[0])
+          end
+          event(:after, sut.end_test(test_case))
         end
-        event(:after, sut.end_test(test_case))
       end
 
       private

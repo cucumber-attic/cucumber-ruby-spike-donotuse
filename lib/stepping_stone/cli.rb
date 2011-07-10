@@ -3,6 +3,7 @@ require 'kerplutz'
 require 'stepping_stone'
 require 'stepping_stone/gherkin_compiler'
 require 'stepping_stone/reporter'
+require 'stepping_stone/model/executor'
 
 module SteppingStone
   module Cli
@@ -56,8 +57,10 @@ module SteppingStone
         reporter = Reporter.new
         server = RbServer.boot!
 
+        executor = Model::Executor.new(server)
+
         test_cases.each do |test_case|
-          server.execute(test_case) do |result|
+          executor.execute(test_case) do |result|
             reporter.add_result(result)
           end
         end

@@ -20,7 +20,7 @@ module SteppingStone
       @mapper_namespace = TextMapper::Namespace.new
     end
 
-    # TODO: extract #apply and #execute into Model::Executor
+    # TODO: extract #apply into Model::Executor
     # Apply action to the SUT and return the result of the application
     def apply(action)
       return Model::Result.new(action, :skipped) if skip_action?
@@ -31,6 +31,10 @@ module SteppingStone
       @last_action = Model::Result.new(action, :undefined)
     end
 
+    def dispatch(action, &block)
+      block.call(apply(action))
+    end
+
     def start_test(test_case)
       @context = mapper_namespace.build_context
       @context.setup(test_case)
@@ -38,16 +42,6 @@ module SteppingStone
 
     def end_test(test_case)
       # no-op for the moment
-    end
-
-    def execute(test_case, &blk)
-      if !test_case.empty?
-        start_test(test_case)
-        test_case.each do |action|
-          blk.call(apply(action))
-        end
-        end_test(test_case)
-      end
     end
 
     private
