@@ -31,8 +31,8 @@ module SteppingStone
       @last_action = Model::Result.new(action, :undefined)
     end
 
-    def dispatch(action, &block)
-      block.call(apply(action))
+    def dispatch(action)
+      apply(action)
     end
 
     def start_test(test_case)

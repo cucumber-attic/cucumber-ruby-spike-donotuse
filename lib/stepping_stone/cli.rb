@@ -59,9 +59,7 @@ module SteppingStone
         executor = Model::Executor.new(reporter)
 
         test_cases.each do |test_case|
-          executor.execute(test_case) do |result|
-            reporter.add_result(result)
-          end
+          executor.execute(test_case)
         end
 
         puts reporter.to_s

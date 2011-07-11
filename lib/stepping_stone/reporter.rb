@@ -16,8 +16,8 @@ module SteppingStone
       event(:after, server.end_test(test_case))
     end
 
-    def dispatch(action, &block)
-      server.dispatch(action, &block)
+    def dispatch(action)
+      add_result(server.dispatch(action))
       event(:dispatch, action[0])
     end
 
