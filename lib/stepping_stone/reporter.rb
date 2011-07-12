@@ -1,28 +1,50 @@
+require 'stepping_stone/model/result'
+
 module SteppingStone
   class Reporter
-    attr_reader :server, :events
+    attr_reader :server
 
     def initialize(server)
       @server = server
       @results = []
-      @events = []
     end
 
     def start_test(test_case)
-      event(:before, server.start_test(test_case))
+      build_result(:before, :event, server.start_test(test_case))
     end
 
     def end_test(test_case)
-      event(:after, server.end_test(test_case))
+      build_result(:after, :event, server.end_test(test_case))
     end
 
     def dispatch(action)
-      add_result(server.dispatch(action))
-      event(:dispatch, action[0])
+      result = server.dispatch(action)
+      if Model::Result === result
+        add_result(result)
+      else
+        build_result(:dispatch, :event, [action, result])
+      end
     end
 
     def add_result(result)
       @results << result
+    end
+
+    def build_result(action, status, value)
+      @results << Model::Result.new(action, status, value)
+    end
+
+    # FIXME: Remove this shit alongside the Action primitive obsession
+    def events
+      @results.map do |result|
+        if result.status == :event
+          if result.action == :dispatch
+            [result.action, result.value[0][0]]
+          else
+            [result.action, result.value]
+          end
+        end
+      end
     end
 
     def to_s
@@ -38,16 +60,12 @@ module SteppingStone
           "U"
         when :skipped
           "S"
+        when :event
+          # no-op while we refactor
         else
           raise "This should never happen"
         end
       end.join
-    end
-
-    private
-
-    def event(name, value)
-      events << [name, value]
     end
   end
 end
