@@ -19,7 +19,7 @@ module SteppingStone
       it "returns the result" do
         context.stub(:dispatch).with("foo").and_return("bar")
         # calling #result is hack to get this to pass for now
-        subject.apply("foo").result.should == :passed
+        subject.apply("foo").status.should == :passed
       end
 
       context "when the action succeeds"

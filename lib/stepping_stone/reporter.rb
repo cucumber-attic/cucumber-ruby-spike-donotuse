@@ -27,7 +27,7 @@ module SteppingStone
 
     def to_s
       @results.map do |result|
-        case result.result
+        case result.status
         when :pending
           "P"
         when :passed
