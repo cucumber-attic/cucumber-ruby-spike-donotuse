@@ -7,11 +7,11 @@ module SteppingStone
         @server = server
       end
 
-      def execute(test_case, &block)
+      def execute(test_case)
         if !test_case.empty?
           server.start_test(test_case)
           test_case.each do |action|
-            server.dispatch(action, &block)
+            server.dispatch(action)
           end
           server.end_test(test_case)
         end
