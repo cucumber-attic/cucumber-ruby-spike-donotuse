@@ -1,4 +1,4 @@
-require 'stepping_stone/model/result'
+require 'stepping_stone/model/event'
 
 module SteppingStone
   class Reporter
@@ -19,7 +19,7 @@ module SteppingStone
 
     def dispatch(action)
       result = server.dispatch(action)
-      if Model::Result === result
+      if Model::Event === result
         add_result(result)
       else
         build_result(:dispatch, :event, [action, result])
@@ -31,7 +31,7 @@ module SteppingStone
     end
 
     def build_result(action, status, value)
-      @results << Model::Result.new(action, status, value)
+      @results << Model::Event.new(action, status, value)
     end
 
     # FIXME: Remove this shit alongside the Action primitive obsession

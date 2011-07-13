@@ -1,4 +1,3 @@
-require 'stepping_stone/model/result'
 require 'stepping_stone/text_mapper/namespace'
 require 'stepping_stone/code_loader'
 
@@ -23,12 +22,12 @@ module SteppingStone
     # TODO: extract #apply into Model::Executor
     # Apply action to the SUT and return the result of the application
     def apply(action)
-      return Model::Result.new(action, :skipped) if skip_action?
-      @last_action = Model::Result.new(action, :passed, context.dispatch(action))
+      return Model::Event.new(action, :skipped) if skip_action?
+      @last_action = Model::Event.new(action, :passed, context.dispatch(action))
     rescue RSpec::Expectations::ExpectationNotMetError => e
-      @last_action = Model::Result.new(action, :failed, e)
+      @last_action = Model::Event.new(action, :failed, e)
     rescue TextMapper::UndefinedMappingError
-      @last_action = Model::Result.new(action, :undefined)
+      @last_action = Model::Event.new(action, :undefined)
     end
 
     def dispatch(action)
