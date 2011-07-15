@@ -44,7 +44,7 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
     end
 
     def dispatch(action)
-      @context.dispatch(action)
+      SteppingStone::Model::Event.new(action, :passed, @context.dispatch(action))
     end
   end
 

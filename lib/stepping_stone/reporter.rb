@@ -18,12 +18,7 @@ module SteppingStone
     end
 
     def dispatch(action)
-      result = server.dispatch(action)
-      if Model::Event === result
-        add_result(result)
-      else
-        build_result(:dispatch, :event, [action, result])
-      end
+      add_result(server.dispatch(action))
     end
 
     def add_result(result)
@@ -38,11 +33,9 @@ module SteppingStone
     def events
       @results.map do |result|
         if result.status == :event
-          if result.action == :dispatch
-            [result.action, result.value[0][0]]
-          else
-            [result.action, result.value]
-          end
+          [result.action, result.value]
+        elsif result.status == :passed
+          [:dispatch, result.action[0]]
         end
       end
     end
