@@ -60,6 +60,10 @@ Given /^these passing hooks:$/ do |hooks|
   end
 end
 
+Given "there are no hooks" do
+  # no-op
+end
+
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
   reporter = SteppingStone::Reporter.new(@sut)
   executor = SteppingStone::Model::Executor.new(reporter)

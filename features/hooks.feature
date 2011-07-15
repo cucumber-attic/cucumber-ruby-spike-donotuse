@@ -22,12 +22,22 @@ Feature: Hooks into the test case lifecycle
   In addition to this, hooks can be associated with metadata,
   e.g. tags.
 
-  Scenario: Before and after test case
+  Background:
     Given a passing scenario "Basic Arithmetic" with:
       """
       When I add 4 and 5
       Then the result is 9
       """
+
+  Scenario: No hooks
+    Given there are no hooks
+    When Cucumber executes the scenario "Basic Arithmetic"
+    Then the life cycle events are:
+      | event    | element         |
+      | dispatch | I add 4 and 5   |
+      | dispatch | the result is 9 |
+
+  Scenario: Before and after test case
     Given these passing hooks:
       | when   | what      |
       | before | test case |
