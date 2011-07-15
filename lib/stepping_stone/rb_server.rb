@@ -36,11 +36,11 @@ module SteppingStone
 
     def start_test(test_case)
       @context = mapper_namespace.build_context
-      @context.setup(test_case)
+      Model::Event.new(:before, :event, @context.setup(test_case))
     end
 
     def end_test(test_case)
-      # no-op for the moment
+      Model::Event.new(:after, :event, @context.teardown(test_case))
     end
 
     private

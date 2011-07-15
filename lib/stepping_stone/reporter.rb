@@ -10,11 +10,11 @@ module SteppingStone
     end
 
     def start_test(test_case)
-      build_result(:before, :event, server.start_test(test_case))
+      add_result(server.start_test(test_case))
     end
 
     def end_test(test_case)
-      build_result(:after, :event, server.end_test(test_case))
+      add_result(server.end_test(test_case))
     end
 
     def dispatch(action)
@@ -23,10 +23,6 @@ module SteppingStone
 
     def add_result(result)
       @results << result
-    end
-
-    def build_result(action, status, value)
-      @results << Model::Event.new(action, status, value)
     end
 
     # FIXME: Remove this shit alongside the Action primitive obsession

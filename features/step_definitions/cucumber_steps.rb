@@ -36,11 +36,11 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
 
     def start_test(test_case)
       @context = SteppingStone::TextMapper::Context.new(self, [RSpec::Matchers, helpers])
-      @context.setup(test_case)
+      SteppingStone::Model::Event.new(:before, :event, @context.setup(test_case))
     end
 
     def end_test(test_case)
-      @context.teardown(test_case)
+      SteppingStone::Model::Event.new(:after, :event, @context.teardown(test_case))
     end
 
     def dispatch(action)
