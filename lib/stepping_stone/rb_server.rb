@@ -52,7 +52,7 @@ module SteppingStone
     end
 
     def dsl_module
-      mapper_namespace.to_extension_module
+      @dsl_module ||= mapper_namespace.to_extension_module
     end
 
     private
