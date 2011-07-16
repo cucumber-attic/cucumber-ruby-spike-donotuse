@@ -32,6 +32,12 @@ module SteppingStone
       @last_action = Model::Event.new(action, :undefined)
     end
 
+    def action(action)
+      dispatch(:before, :action, action.to_a)
+      dispatch(:action, action.to_a)
+      dispatch(:after, :action, action.to_a)
+    end
+
     def start_test(test_case)
       @context = mapper_namespace.build_context
       Model::Event.new(:before, :event, @context.setup(test_case))

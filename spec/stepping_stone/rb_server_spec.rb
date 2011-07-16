@@ -36,6 +36,17 @@ module SteppingStone
 			end
 		end
 
+    describe "#action" do
+      let(:action) { double("action", :to_a => ["a step"]) }
+
+      it "dispatches the action with before and after hooks" do
+        subject.should_receive(:dispatch).with(:before, :action, ["a step"]).ordered
+        subject.should_receive(:dispatch).with(:action, ["a step"]).ordered
+        subject.should_receive(:dispatch).with(:after, :action, ["a step"]).ordered
+        subject.action(action)
+      end
+    end
+
     describe "#start_test" do
       it "resets the context state" do
 				subject.start_test(double("first test case"))
@@ -44,12 +55,18 @@ module SteppingStone
 				state = subject.apply { @state }
 				state.should be(nil)
       end
+			
+      it "dispatches the before test case setup"
+      it "dispatches the after test case setup"
     end
 
     describe "#end_test" do
       it "doesn't do anything yet" do
         subject.should respond_to(:end_test)
       end
+
+      it "dispatches the before test case teardown"
+      it "dispatches the after test case teardown"
     end
   end
 end
