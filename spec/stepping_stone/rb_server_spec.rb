@@ -10,16 +10,16 @@ module SteppingStone
       server
     end
 
-    describe "#apply" do
+    describe "#dispatch" do
       it "sends the action to the context" do
         context.should_receive(:dispatch).with("foo")
-        subject.apply("foo")
+        subject.dispatch("foo")
       end
 
       it "returns the result" do
         context.stub(:dispatch).with("foo").and_return("bar")
         # calling #result is hack to get this to pass for now
-        subject.apply("foo").status.should == :passed
+        subject.dispatch("foo").status.should == :passed
       end
 
       context "when the action succeeds"

@@ -19,19 +19,15 @@ module SteppingStone
       @mapper_namespace = TextMapper::Namespace.new
     end
 
-    # TODO: extract #apply into Model::Executor
+    # TODO: extract the flow control into Model::Executor
     # Apply action to the SUT and return the result of the application
-    def apply(action)
+    def dispatch(action)
       return Model::Event.new(action, :skipped) if skip_action?
       @last_action = Model::Event.new(action, :passed, context.dispatch(action))
     rescue RSpec::Expectations::ExpectationNotMetError => e
       @last_action = Model::Event.new(action, :failed, e)
     rescue TextMapper::UndefinedMappingError
       @last_action = Model::Event.new(action, :undefined)
-    end
-
-    def dispatch(action)
-      apply(action)
     end
 
     def start_test(test_case)
