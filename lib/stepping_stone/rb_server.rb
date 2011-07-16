@@ -13,10 +13,12 @@ module SteppingStone
       CodeLoader.require_glob("mappers", "**/*")
       server
     end
+
     attr_accessor :mapper_namespace, :context, :last_action
 
     def initialize
       @mapper_namespace = TextMapper::Namespace.new
+      @context = @mapper_namespace.build_context
     end
 
     # TODO: extract the flow control into Model::Executor
@@ -37,6 +39,10 @@ module SteppingStone
 
     def end_test(test_case)
       Model::Event.new(:after, :event, @context.teardown(test_case))
+    end
+
+    def apply(&block)
+      context.instance_eval(&block)
     end
 
     private

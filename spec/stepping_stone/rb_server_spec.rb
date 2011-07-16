@@ -28,10 +28,21 @@ module SteppingStone
       context "when the last action was missing a mapping"
     end
 
+		describe "#apply" do
+			it "evaluates a block within the context" do
+				subject.apply { @state = :state }
+				state = subject.apply { @state }
+				state.should eq(:state)
+			end
+		end
+
     describe "#start_test" do
-      it "ensures there is a new context" do
-        subject.start_test(double("test case", :name => "test case"))
-        subject.context.should_not == context
+      it "resets the context state" do
+				subject.start_test(double("first test case"))
+				subject.apply { @state = :state }
+				subject.start_test(double("second est case"))
+				state = subject.apply { @state }
+				state.should be(nil)
       end
     end
 
