@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module SteppingStone
   describe RbServer do
-    let(:context) { TextMapper::Context.new(double("mappings container")) }
+		let(:context) { TextMapper::Context.new(double("mappings container")) }
 
     subject do
       server = RbServer.new
@@ -40,7 +40,7 @@ module SteppingStone
       it "resets the context state" do
 				subject.start_test(double("first test case"))
 				subject.apply { @state = :state }
-				subject.start_test(double("second est case"))
+				subject.start_test(double("second test case"))
 				state = subject.apply { @state }
 				state.should be(nil)
       end

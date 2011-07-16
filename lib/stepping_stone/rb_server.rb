@@ -9,7 +9,7 @@ module SteppingStone
     # invasive and environment-related startup code should go here.
     def self.boot!
       server = self.new
-      SteppingStone.const_set(:Mapper, server.mapper_namespace.to_extension_module)
+      SteppingStone.const_set(:Mapper, server.dsl_module)
       CodeLoader.require_glob("mappers", "**/*")
       server
     end
@@ -43,6 +43,10 @@ module SteppingStone
 
     def apply(&block)
       context.instance_eval(&block)
+    end
+
+    def dsl_module
+      mapper_namespace.to_extension_module
     end
 
     private
