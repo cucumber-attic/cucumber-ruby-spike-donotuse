@@ -29,16 +29,6 @@ module SteppingStone
           subject.execute(test_case)
         end
 
-        it "stops executing when an action fails" do
-          test_case = build_tc(:fail, :pass)
-          server.should_receive(:start_test).with(test_case).and_yield(session)
-          session.should_receive(:setup).ordered
-          session.stub(:apply) { |arg| arg }
-          session.should_not_receive(:apply).with(:pass)
-          session.should_receive(:teardown).ordered
-          subject.execute(test_case)
-        end
-
         class FakeSession
           attr_reader :actions
 
@@ -65,7 +55,7 @@ module SteppingStone
           end
         end
 
-        it "executes with a fake session implementation" do
+        it "stops executing when an action fails" do
           sess = FakeSession.new
           serv = FakeServer.new(sess)
           executor = Executor.new(serv)
