@@ -6,62 +6,45 @@ module SteppingStone
       let(:server) { double("sut server") }
       subject { Executor.new(server) }
 
+      def build_tc(*actions)
+        TestCase.new("test case", *actions)
+      end
+
+      class FakeSession
+        attr_reader :events
+
+        def initialize
+          @events = []
+        end
+
+        def setup
+          @events << :setup
+        end
+
+        def teardown
+          @events << :teardown
+        end
+
+        def apply(action)
+          @events << action
+          action
+        end
+      end
+
       describe "#execute" do
-        def build_tc(*actions)
-          TestCase.new("test case", *actions)
-        end
-
-        class TestSession
-          def apply(action)
-            action
-          end
-        end
-
-        let(:session) { TestSession.new }
+        let(:session) { FakeSession.new }
 
         it "executes the test case" do
-          test_case = build_tc("one", "two")
+          test_case = build_tc(:one, :two)
           server.should_receive(:start_test).with(test_case).and_yield(session)
-          session.should_receive(:setup).ordered
-          session.should_receive(:apply).with("one").ordered
-          session.should_receive(:apply).with("two").ordered
-          session.should_receive(:teardown).ordered
           subject.execute(test_case)
-        end
-
-        class FakeSession
-          attr_reader :actions
-
-          def initialize
-            @actions = []
-          end
-
-          def setup; end
-          def teardown; end
-
-          def apply(action)
-            @actions << action
-            action
-          end
-        end
-
-        class FakeServer
-          def initialize(session)
-            @session = session
-          end
-
-          def start_test(test_case)
-            yield @session
-          end
+          session.events.should eq([:setup, :one, :two, :teardown])
         end
 
         it "stops executing when an action fails" do
-          sess = FakeSession.new
-          serv = FakeServer.new(sess)
-          executor = Executor.new(serv)
-          test_case = build_tc(:fail, :pass)
-          executor.execute(test_case)
-          sess.actions.should eq([:fail])
+          server.should_receive(:start_test).and_yield(session)
+          subject.execute(build_tc(:fail, :pass))
+          session.events.should eq([:setup, :fail, :teardown])
         end
       end
     end
