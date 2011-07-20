@@ -11,7 +11,7 @@ module SteppingStone
         server.start_test(test_case) do |session|
           session.setup
           test_case.each do |action|
-            break if session.apply(action) == :fail
+            break if session.apply(action).failed?
           end
           session.teardown
         end

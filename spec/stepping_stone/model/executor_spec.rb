@@ -18,16 +18,21 @@ module SteppingStone
         end
 
         def setup
-          @events << :setup
+          @events << Event.new(:setup, :passed)
         end
 
         def teardown
-          @events << :teardown
+          @events << Event.new(:teardown, :passed)
         end
 
         def apply(action)
-          @events << action
-          action
+          event = Event.new(action, action)
+          @events << event
+          event
+        end
+
+        def events
+          @events.map(&:action)
         end
       end
 
@@ -43,8 +48,8 @@ module SteppingStone
 
         it "stops executing when an action fails" do
           server.should_receive(:start_test).and_yield(session)
-          subject.execute(build_tc(:fail, :pass))
-          session.events.should eq([:setup, :fail, :teardown])
+          subject.execute(build_tc(:failed, :passed))
+          session.events.should eq([:setup, :failed, :teardown])
         end
       end
     end
