@@ -8,12 +8,12 @@ module SteppingStone
       end
 
       def execute(test_case)
-        if !test_case.empty?
-          server.start_test(test_case)
+        server.start_test(test_case) do |session|
+          session.setup
           test_case.each do |action|
-            server.dispatch(action)
+            break if session.apply(action) == :fail
           end
-          server.end_test(test_case)
+          session.teardown
         end
       end
     end
