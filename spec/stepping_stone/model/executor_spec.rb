@@ -40,10 +40,10 @@ module SteppingStone
         let(:session) { FakeSession.new }
 
         it "executes the test case" do
-          test_case = build_tc(:one, :two)
+          test_case = build_tc(:action1, :action2)
           server.should_receive(:start_test).with(test_case).and_yield(session)
           subject.execute(test_case)
-          session.events.should eq([:setup, :one, :two, :teardown])
+          session.events.should eq([:setup, :action1, :action2, :teardown])
         end
 
         it "stops executing when an action fails" do
