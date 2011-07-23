@@ -64,8 +64,8 @@ module SteppingStone
 
         it "skips actions after a failing action" do
           server.should_receive(:start_test).and_yield(session)
-          subject.execute(build_tc(:failed, :passed))
-          session.statuses.should eq([:passed, :failed, :skipped, :passed])
+          subject.execute(build_tc(:passed, :failed, :passed))
+          session.statuses.should eq([:passed, :passed, :failed, :skipped, :passed])
         end
       end
     end
