@@ -90,7 +90,6 @@ module SteppingStone
         context "when setup fails" do
           let(:session) { FakeSession.new(:setup => :failed) }
 
-          # TODO: Should it skip the teardown?
           it "skips everything else" do
             server.should_receive(:start_test).and_yield(session)
             subject.execute(build_tc(:pass))
