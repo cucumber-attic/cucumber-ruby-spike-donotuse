@@ -9,7 +9,7 @@ module SteppingStone
 
       def execute(test_case)
         server.start_test(test_case) do |session|
-          session.setup
+          @last_event = session.setup
           test_case.each do |action|
             if skip?
               session.skip(action)

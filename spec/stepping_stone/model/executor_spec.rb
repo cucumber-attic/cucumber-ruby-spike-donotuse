@@ -11,14 +11,21 @@ module SteppingStone
       end
 
       class FakeSession
-        attr_reader :events
+        attr_reader :events, :action_to_status
 
-        def initialize
+        def initialize(action_to_status={})
           @events = []
+          @action_to_status = {
+            :pass      => :passed,
+            :fail      => :failed,
+            :undefined => :undefined
+          }.merge(action_to_status)
         end
 
         def setup
-          @events << Event.new(:setup, :passed)
+          event = Event.new(:setup, status_for(:setup))
+          @events << event
+          event
         end
 
         def teardown
@@ -26,7 +33,7 @@ module SteppingStone
         end
 
         def apply(action)
-          event = Event.new(action, action)
+          event = Event.new(action, status_for(action))
           @events << event
           event
         end
@@ -44,6 +51,12 @@ module SteppingStone
         def statuses
           @events.map(&:status)
         end
+
+        private
+
+        def status_for(action)
+          action_to_status.fetch(action, :passed)
+        end
       end
 
       describe "#execute" do
@@ -58,20 +71,31 @@ module SteppingStone
 
         it "executes passing actions" do
           server.should_receive(:start_test).and_yield(session)
-          subject.execute(build_tc(:passed, :passed))
+          subject.execute(build_tc(:pass, :pass))
           session.statuses.should eq([:passed, :passed, :passed, :passed])
         end
 
         it "skips actions after a failing action" do
           server.should_receive(:start_test).and_yield(session)
-          subject.execute(build_tc(:passed, :failed, :passed))
+          subject.execute(build_tc(:pass, :fail, :pass))
           session.statuses.should eq([:passed, :passed, :failed, :skipped, :passed])
         end
 
         it "skips actions after an undefined action" do
           server.should_receive(:start_test).and_yield(session)
-          subject.execute(build_tc(:passed, :undefined, :passed))
+          subject.execute(build_tc(:pass, :undefined, :pass))
           session.statuses.should eq([:passed, :passed, :undefined, :skipped, :passed])
+        end
+
+        context "when setup fails" do
+          let(:session) { FakeSession.new(:setup => :failed) }
+
+          # TODO: Should it skip the teardown?
+          it "skips everything else" do
+            server.should_receive(:start_test).and_yield(session)
+            subject.execute(build_tc(:pass))
+            session.statuses.should eq([:failed, :skipped, :passed])
+          end
         end
       end
     end
