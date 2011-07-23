@@ -43,52 +43,18 @@ module SteppingStone
       server
     end
 
-    attr_accessor :mapper_namespace, :context, :last_action
+    attr_accessor :mapper_namespace
 
     def initialize
       @mapper_namespace = TextMapper::Namespace.new
-      @context = @mapper_namespace.build_context
-    end
-
-    # TODO: extract the flow control into Model::Executor
-    # Apply action to the SUT and return the result of the application
-    def dispatch(action)
-      return Model::Event.new(action, :skipped) if skip_action?
-      @last_action = Model::Event.new(action, :passed, context.dispatch(action))
-    rescue RSpec::Expectations::ExpectationNotMetError => e
-      @last_action = Model::Event.new(action, :failed, e)
-    rescue TextMapper::UndefinedMappingError
-      @last_action = Model::Event.new(action, :undefined)
-    end
-
-    def action(action)
-      dispatch(:before, :action, action.to_a)
-      dispatch(:action, action.to_a)
-      dispatch(:after, :action, action.to_a)
     end
 
     def start_test(test_case)
-      #@context = mapper_namespace.build_context
-      #Model::Event.new(:before, :event, @context.setup(test_case))
       yield Session.new(mapper_namespace.build_context, test_case)
-    end
-
-    def end_test(test_case)
-      Model::Event.new(:after, :event, @context.teardown(test_case))
-    end
-
-    def apply(&block)
-      context.instance_eval(&block)
     end
 
     def dsl_module
       @dsl_module ||= mapper_namespace.to_extension_module
-    end
-
-    private
-
-    def skip_action?
-      @last_action == :undefined or @last_action == :failed
     end
   end
 end

@@ -39,18 +39,9 @@ module SteppingStone
     end
 
     def start_test(test_case, &execution_script)
-      #add_result(server.start_test(test_case))
       server.start_test(test_case) do |session|
         execution_script.call(SessionRecorder.new(session, self))
       end
-    end
-
-    def end_test(test_case)
-      #add_result(server.end_test(test_case))
-    end
-
-    def dispatch(action)
-      #add_result(server.dispatch(action))
     end
 
     def add_result(result)
