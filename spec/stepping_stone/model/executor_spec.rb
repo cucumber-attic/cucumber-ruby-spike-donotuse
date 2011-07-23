@@ -31,8 +31,12 @@ module SteppingStone
           event
         end
 
-        def events
+        def names
           @events.map(&:name)
+        end
+
+        def statuses
+          @events.map(&:status)
         end
       end
 
@@ -43,19 +47,19 @@ module SteppingStone
           test_case = build_tc(:action1, :action2)
           server.should_receive(:start_test).with(test_case).and_yield(session)
           subject.execute(test_case)
-          session.events.should eq([:setup, :action1, :action2, :teardown])
+          session.names.should eq([:setup, :action1, :action2, :teardown])
         end
 
         it "executes passing actions" do
           server.should_receive(:start_test).and_yield(session)
           subject.execute(build_tc(:passed, :passed))
-          session.events.should eq([:setup, :passed, :passed, :teardown])
+          session.statuses.should eq([:passed, :passed, :passed, :passed])
         end
 
         it "stops executing when an action fails" do
           server.should_receive(:start_test).and_yield(session)
           subject.execute(build_tc(:failed, :passed))
-          session.events.should eq([:setup, :failed, :teardown])
+          session.statuses.should eq([:passed, :failed, :passed])
         end
       end
     end
