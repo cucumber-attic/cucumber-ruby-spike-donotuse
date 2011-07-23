@@ -5,6 +5,35 @@ module SteppingStone
   # The server's responsibility is to execute a test case and communicate
   # the result of each action to its client via the supplied callback.
   class RbServer
+    class Session
+      attr_reader :context, :test_case
+
+      def initialize(context, test_case)
+        @context = context
+        @test_case = test_case
+      end
+
+      def setup
+        Model::Event.new(:before, :event, context.setup(test_case))
+      end
+
+      def teardown
+        Model::Event.new(:after, :event, context.teardown(test_case))
+      end
+
+      def apply(action)
+        Model::Event.new(action, :passed, context.dispatch(action))
+      rescue RSpec::Expectations::ExpectationNotMetError => e
+        Model::Event.new(action, :failed, e)
+      rescue TextMapper::UndefinedMappingError => e
+        Model::Event.new(action, :undefined, e)
+      end
+
+      def skip(action)
+        Model::Event.new(action, :skipped)
+      end
+    end
+
     # Called by Cucumber when it's time to start executing features. Non-idempotent,
     # invasive and environment-related startup code should go here.
     def self.boot!
@@ -39,8 +68,9 @@ module SteppingStone
     end
 
     def start_test(test_case)
-      @context = mapper_namespace.build_context
-      Model::Event.new(:before, :event, @context.setup(test_case))
+      #@context = mapper_namespace.build_context
+      #Model::Event.new(:before, :event, @context.setup(test_case))
+      yield Session.new(mapper_namespace.build_context, test_case)
     end
 
     def end_test(test_case)
