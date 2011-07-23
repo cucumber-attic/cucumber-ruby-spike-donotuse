@@ -31,6 +31,12 @@ module SteppingStone
           event
         end
 
+        def skip(action)
+          event = Event.new(action, :skipped)
+          @events << event
+          event
+        end
+
         def names
           @events.map(&:name)
         end
@@ -56,10 +62,10 @@ module SteppingStone
           session.statuses.should eq([:passed, :passed, :passed, :passed])
         end
 
-        it "stops executing when an action fails" do
+        it "skips actions after a failing action" do
           server.should_receive(:start_test).and_yield(session)
           subject.execute(build_tc(:failed, :passed))
-          session.statuses.should eq([:passed, :failed, :passed])
+          session.statuses.should eq([:passed, :failed, :skipped, :passed])
         end
       end
     end
