@@ -32,7 +32,7 @@ module SteppingStone
         end
 
         def events
-          @events.map(&:action)
+          @events.map(&:name)
         end
       end
 

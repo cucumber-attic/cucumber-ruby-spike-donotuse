@@ -1,7 +1,7 @@
 module SteppingStone
   module Model
     class Event
-      attr_reader :action, :status, :value
+      attr_reader :name, :status, :value
 
       [:passed, :failed].each do |status|
         define_method("#{status}?") do
@@ -9,8 +9,8 @@ module SteppingStone
         end
       end
 
-      def initialize(action, status, value=nil)
-        @action, @status, @value = action, status, value
+      def initialize(name, status, value=nil)
+        @name, @status, @value = name, status, value
       end
 
       # TODO: Is this the correct way to define == equality for an Event?
