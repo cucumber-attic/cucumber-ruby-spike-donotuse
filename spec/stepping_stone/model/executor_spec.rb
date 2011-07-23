@@ -46,6 +46,12 @@ module SteppingStone
           session.events.should eq([:setup, :action1, :action2, :teardown])
         end
 
+        it "executes passing actions" do
+          server.should_receive(:start_test).and_yield(session)
+          subject.execute(build_tc(:passed, :passed))
+          session.events.should eq([:setup, :passed, :passed, :teardown])
+        end
+
         it "stops executing when an action fails" do
           server.should_receive(:start_test).and_yield(session)
           subject.execute(build_tc(:failed, :passed))
