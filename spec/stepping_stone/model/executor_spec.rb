@@ -67,6 +67,12 @@ module SteppingStone
           subject.execute(build_tc(:passed, :failed, :passed))
           session.statuses.should eq([:passed, :passed, :failed, :skipped, :passed])
         end
+
+        it "skips actions after an undefined action" do
+          server.should_receive(:start_test).and_yield(session)
+          subject.execute(build_tc(:passed, :undefined, :passed))
+          session.statuses.should eq([:passed, :passed, :undefined, :skipped, :passed])
+        end
       end
     end
   end

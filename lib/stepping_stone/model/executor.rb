@@ -22,7 +22,7 @@ module SteppingStone
       end
 
       def skip?
-        @last_event == :failed
+        @last_event == :failed or @last_event == :undefined
       end
     end
   end
