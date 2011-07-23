@@ -90,10 +90,10 @@ module SteppingStone
         context "when setup fails" do
           let(:session) { FakeSession.new(:setup => :failed) }
 
-          it "skips everything else" do
+          it "skips the actions that follow it" do
             server.should_receive(:start_test).and_yield(session)
-            subject.execute(build_tc(:pass))
-            session.statuses.should eq([:failed, :skipped, :passed])
+            subject.execute(build_tc(:pass, :pass))
+            session.statuses.should eq([:failed, :skipped, :skipped, :passed])
           end
         end
       end
