@@ -10,7 +10,7 @@ Given /^these passing hooks:$/ do |hooks|
 end
 
 Given "there are no hooks" do
-  # no-op
+  sut.hooks.should be_empty
 end
 
 When /^Cucumber executes the scenario "(.+)"$/ do |name|

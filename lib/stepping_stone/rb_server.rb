@@ -58,6 +58,10 @@ module SteppingStone
       mapper_namespace.add_hook(hook)
     end
 
+    def hooks
+      mapper_namespace.hooks
+    end
+
     def dsl_module
       @dsl_module ||= mapper_namespace.to_extension_module
     end
