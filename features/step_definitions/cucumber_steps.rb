@@ -1,13 +1,9 @@
 Given /^a passing scenario "(.+)" with:$/ do |name, body|
   @test_case = SteppingStone::GherkinCompiler.new.compile("Feature: test\nScenario: #{name}\n" << body)[0]
-  @sut = SteppingStone::RbServer.new
+  sut = SteppingStone::RbServer.new
 
-  unless defined?(Dsl)
-    Dsl = @sut.dsl_module
-  end
-
-  module TestMapper
-    extend Dsl
+  Module.new do
+    extend sut.dsl_module
     include RSpec::Matchers
 
     def_map "I add 4 and 5" => :add
@@ -21,6 +17,8 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
       @result.should eq(9)
     end
   end
+
+  @sut = sut
 end
 
 Given /^these passing hooks:$/ do |hooks|
