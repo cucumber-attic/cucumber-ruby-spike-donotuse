@@ -6,7 +6,7 @@ module SteppingStone
       let(:server) { double("sut server") }
       subject { Executor.new(server) }
 
-      def build_tc(*actions)
+      def tc(*actions)
         TestCase.new("test case", *actions)
       end
 
@@ -63,7 +63,7 @@ module SteppingStone
         let(:session) { FakeSession.new }
 
         it "executes the test case" do
-          test_case = build_tc(:action1, :action2)
+          test_case = tc(:action1, :action2)
           server.should_receive(:start_test).with(test_case).and_yield(session)
           subject.execute(test_case)
           session.names.should eq([:setup, :action1, :action2, :teardown])
@@ -71,19 +71,19 @@ module SteppingStone
 
         it "executes passing actions" do
           server.should_receive(:start_test).and_yield(session)
-          subject.execute(build_tc(:pass, :pass))
+          subject.execute(tc(:pass, :pass))
           session.statuses.should eq([:passed, :passed, :passed, :passed])
         end
 
         it "skips actions after a failing action" do
           server.should_receive(:start_test).and_yield(session)
-          subject.execute(build_tc(:pass, :fail, :pass))
+          subject.execute(tc(:pass, :fail, :pass))
           session.statuses.should eq([:passed, :passed, :failed, :skipped, :passed])
         end
 
         it "skips actions after an undefined action" do
           server.should_receive(:start_test).and_yield(session)
-          subject.execute(build_tc(:pass, :undefined, :pass))
+          subject.execute(tc(:pass, :undefined, :pass))
           session.statuses.should eq([:passed, :passed, :undefined, :skipped, :passed])
         end
 
@@ -92,7 +92,7 @@ module SteppingStone
 
           it "skips the actions that follow it" do
             server.should_receive(:start_test).and_yield(session)
-            subject.execute(build_tc(:pass, :pass))
+            subject.execute(tc(:pass, :pass))
             session.statuses.should eq([:failed, :skipped, :skipped, :passed])
           end
         end
