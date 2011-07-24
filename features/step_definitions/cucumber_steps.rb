@@ -18,7 +18,8 @@ When /^Cucumber executes the scenario "(.+)"$/ do |name|
 end
 
 Then /^the life cycle events are:$/ do |table|
-  table.map_column!(:event) { |event| event.to_sym }
+  table.map_column!(:event, &:to_sym)
+  table.map_column!(:status, &:to_sym)
   life_cycle_events.should eq(table.rows)
 end
 

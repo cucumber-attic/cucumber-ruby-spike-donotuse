@@ -53,9 +53,9 @@ module SteppingStone
     def events
       @results.map do |result|
         if result.status == :event and !result.value.nil?
-          [result.name, result.value]
+          [result.name, result.value, :passed]
         elsif result.status == :passed
-          [:apply, result.name[0]]
+          [:apply, result.name[0], result.status]
         end
       end.reject(&:nil?)
     end

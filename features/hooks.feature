@@ -33,9 +33,9 @@ Feature: Hooks into the test case lifecycle
     Given there are no hooks
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle events are:
-      | event | name            |
-      | apply | I add 4 and 5   |
-      | apply | the result is 9 |
+      | event | name            | status |
+      | apply | I add 4 and 5   | passed |
+      | apply | the result is 9 | passed |
 
   Scenario: Before and after test case
     Given these passing hooks:
@@ -44,11 +44,11 @@ Feature: Hooks into the test case lifecycle
       | after  | test case |
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle events are:
-      | event  | name             |
-      | before | Basic Arithmetic |
-      | apply  | I add 4 and 5    |
-      | apply  | the result is 9  |
-      | after  | Basic Arithmetic |
+      | event  | name             | status |
+      | before | Basic Arithmetic | passed |
+      | apply  | I add 4 and 5    | passed |
+      | apply  | the result is 9  | passed |
+      | after  | Basic Arithmetic | passed |
 
   Scenario: Before and after dispatch
   Scenario: Failing hook skips the rest of the test case
