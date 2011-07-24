@@ -54,6 +54,10 @@ module SteppingStone
       yield Session.new(mapper_namespace.build_context, test_case)
     end
 
+    def add_hook(hook)
+      mapper_namespace.add_hook(hook)
+    end
+
     def dsl_module
       @dsl_module ||= mapper_namespace.to_extension_module
     end
