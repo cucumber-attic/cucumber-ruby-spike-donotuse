@@ -52,12 +52,12 @@ module SteppingStone
     # FIXME: Remove this shit alongside the Action primitive obsession
     def events
       @results.map do |result|
-        if result.status == :event
+        if result.status == :event and !result.value.nil?
           [result.name, result.value]
         elsif result.status == :passed
-          [:dispatch, result.name[0]]
+          [:apply, result.name[0]]
         end
-      end
+      end.reject(&:nil?)
     end
 
     def to_s
