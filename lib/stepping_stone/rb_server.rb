@@ -30,6 +30,14 @@ module SteppingStone
         Model::Event.new(action, :undefined, e)
       end
 
+      def before_apply(action)
+        Model::Event.new(:before_apply, :no_op)
+      end
+
+      def after_apply(action)
+        Model::Event.new(:after_apply, :no_op)
+      end
+
       def skip(action)
         Model::Event.new(action, :skipped)
       end

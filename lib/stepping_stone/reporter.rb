@@ -22,6 +22,14 @@ module SteppingStone
         add(session.apply(action))
       end
 
+      def before_apply(action)
+        add(session.before_apply(action))
+      end
+
+      def after_apply(action)
+        add(session.before_apply(action))
+      end
+
       def skip(action)
         add(session.skip(action))
       end
@@ -73,7 +81,7 @@ module SteppingStone
           "U"
         when :skipped
           "S"
-        when :event
+        when :event, :no_op
           # no-op while we refactor
         else
           raise "This should never happen"
