@@ -14,7 +14,9 @@ module SteppingStone
             if skip?
               session.skip(action)
             else
+              session.before_apply(action)
               @last_event = session.apply(action)
+              session.after_apply(action)
             end
           end
           session.teardown
