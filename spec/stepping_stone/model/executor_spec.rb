@@ -23,41 +23,41 @@ module SteppingStone
         end
 
         def setup
-          event = Event.new(:setup, status_for(:setup))
+          event = Event.new(:setup, :name, status_for(:setup))
           @events << event
           event
         end
 
         def teardown
-          @events << Event.new(:teardown, :passed)
+          @events << Event.new(:teardown, :name, :passed)
         end
 
         def before_apply(action)
-          event = Event.new(:before_apply, :no_op)
+          event = Event.new(:before_apply, :name, :no_op)
           @events << event
           event
         end
 
         def after_apply(action)
-          event = Event.new(:after_apply, :no_op)
+          event = Event.new(:after_apply, :name, :no_op)
           @events << event
           event
         end
 
         def apply(action)
-          event = Event.new(action, status_for(action))
+          event = Event.new(:apply, action, status_for(action))
           @events << event
           event
         end
 
         def skip(action)
-          event = Event.new(action, :skipped)
+          event = Event.new(:skip, action, :skipped)
           @events << event
           event
         end
 
-        def names
-          @events.map(&:name)
+        def types
+          @events.map(&:type)
         end
 
         def statuses
@@ -78,9 +78,9 @@ module SteppingStone
           test_case = tc(:action1, :action2)
           server.should_receive(:start_test).with(test_case).and_yield(session)
           subject.execute(test_case)
-          session.names.should eq([:setup,
-                                   :before_apply, :action1, :after_apply,
-                                   :before_apply, :action2, :after_apply,
+          session.types.should eq([:setup,
+                                   :before_apply, :apply, :after_apply,
+                                   :before_apply, :apply, :after_apply,
                                    :teardown])
         end
 

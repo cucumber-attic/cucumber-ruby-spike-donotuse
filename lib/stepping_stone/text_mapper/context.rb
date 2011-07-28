@@ -14,14 +14,18 @@ module SteppingStone
       end
 
       def setup(test_case)
-        if mapping = mappings.find_hook([:before, :test_case])
+        if mapping = mappings.find_hook([:setup, :test_case])
           mapping.call(self, test_case)
+        else
+          raise UndefinedMappingError.new([:setup, :test_case])
         end
       end
 
       def teardown(test_case)
-        if mapping = mappings.find_hook([:after, :test_case])
+        if mapping = mappings.find_hook([:teardown, :test_case])
           mapping.call(self, test_case)
+        else
+          raise UndefinedMappingError.new([:teardown, :test_case])
         end
       end
     end

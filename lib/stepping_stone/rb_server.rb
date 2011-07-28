@@ -15,31 +15,41 @@ module SteppingStone
       end
 
       def setup
-        Model::Event.new(:before, :event, context.setup(test_case))
+        Model::Event.new(:setup, test_case_name, :passed, context.setup(test_case))
+      rescue TextMapper::UndefinedMappingError
+        Model::Event.new(:setup, test_case_name, :no_op)
       end
 
       def teardown
-        Model::Event.new(:after, :event, context.teardown(test_case))
+        Model::Event.new(:teardown, test_case_name, :passed, context.teardown(test_case))
+      rescue TextMapper::UndefinedMappingError
+        Model::Event.new(:setup, test_case_name, :no_op)
       end
 
       def apply(action)
-        Model::Event.new(action, :passed, context.dispatch(action))
+        Model::Event.new(:apply, action, :passed, context.dispatch(action))
       rescue RSpec::Expectations::ExpectationNotMetError => e
-        Model::Event.new(action, :failed, e)
+        Model::Event.new(:apply, action, :failed, e)
       rescue TextMapper::UndefinedMappingError => e
-        Model::Event.new(action, :undefined, e)
+        Model::Event.new(:apply, action, :undefined, e)
       end
 
       def before_apply(action)
-        Model::Event.new(:before_apply, :no_op)
+        Model::Event.new(:before_apply, test_case_name, :no_op)
       end
 
       def after_apply(action)
-        Model::Event.new(:after_apply, :no_op)
+        Model::Event.new(:after_apply, test_case_name, :no_op)
       end
 
       def skip(action)
-        Model::Event.new(action, :skipped)
+        Model::Event.new(:skip, action, :skipped)
+      end
+
+      private
+
+      def test_case_name
+        test_case.name
       end
     end
 

@@ -20,6 +20,7 @@ end
 Then /^the life cycle events are:$/ do |table|
   table.map_column!(:event, &:to_sym)
   table.map_column!(:status, &:to_sym)
+  table.map_column!(:name) { |name| [name] }
   life_cycle_events.should eq(table.rows)
 end
 
