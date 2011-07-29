@@ -5,7 +5,7 @@ end
 
 Given /^these passing hooks:$/ do |hooks|
   hooks.rows.each do |aspect, subject|
-    add_hook(aspect, subject)
+    add_hook(aspect, subject, :pass)
   end
 end
 
@@ -51,9 +51,9 @@ module CucumberWorld
     end
   end
 
-  def add_hook(aspect, subject)
+  def add_hook(aspect, subject, result)
     hook_signature = [aspect.to_sym, subject.tr(' ', '_').to_sym]
-    hook = SteppingStone::TextMapper::Hook.new(hook_signature) { |test_case| test_case.name }
+    hook = SteppingStone::TextMapper::Hook.new(hook_signature) { |test_case| result }
     sut.add_hook(hook)
   end
 
