@@ -57,16 +57,8 @@ module SteppingStone
       result
     end
 
-    # FIXME: Remove this shit alongside the Action primitive obsession
     def events
-      #@results.map do |result|
-        #if result.status == :event and !result.value.nil?
-          #[result.name, result.value, :passed]
-        #elsif result.status == :passed
-          #[:apply, result.name, result.status]
-        #end
-      #end.reject(&:nil?)
-
+      # TODO: Add a #to_a or #to_sexp method to Event
       @results.reject(&:no_op?).map do |result|
         [result.type, result.name, result.status]
       end

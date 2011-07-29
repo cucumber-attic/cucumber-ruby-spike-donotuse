@@ -23,6 +23,7 @@ module SteppingStone
         end
 
         def setup
+          # Event.hook([:setup, test_case], status_for(:setup))
           event = Event.new(:setup, :name, status_for(:setup))
           @events << event
           event
