@@ -24,7 +24,15 @@ module SteppingStone
       end
 
       def skip?
-        @last_event == :failed or @last_event == :undefined
+        failed? or undefined_action?
+      end
+
+      def failed?
+        @last_event.failed?
+      end
+
+      def undefined_action?
+        @last_event.undefined? and @last_event.type == :apply
       end
     end
   end

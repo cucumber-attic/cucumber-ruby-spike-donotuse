@@ -17,13 +17,13 @@ module SteppingStone
       def setup
         Model::Event.new(:setup, test_case_name, :passed, context.setup(test_case))
       rescue TextMapper::UndefinedMappingError
-        Model::Event.new(:setup, test_case_name, :no_op)
+        Model::Event.new(:setup, test_case_name, :undefined)
       end
 
       def teardown
         Model::Event.new(:teardown, test_case_name, :passed, context.teardown(test_case))
       rescue TextMapper::UndefinedMappingError
-        Model::Event.new(:setup, test_case_name, :no_op)
+        Model::Event.new(:setup, test_case_name, :undefined)
       end
 
       def apply(action)
@@ -35,11 +35,11 @@ module SteppingStone
       end
 
       def before_apply(action)
-        Model::Event.new(:before_apply, test_case_name, :no_op)
+        Model::Event.new(:before_apply, test_case_name, :undefined)
       end
 
       def after_apply(action)
-        Model::Event.new(:after_apply, test_case_name, :no_op)
+        Model::Event.new(:after_apply, test_case_name, :undefined)
       end
 
       def skip(action)

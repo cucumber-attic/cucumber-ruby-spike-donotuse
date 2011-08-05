@@ -59,13 +59,15 @@ module SteppingStone
 
     def events
       # TODO: Add a #to_a or #to_sexp method to Event
-      @results.reject(&:no_op?).map do |result|
+      @results.reject(&:undefined?).map do |result|
         [result.type, result.name, result.status]
       end
     end
 
     def to_s
-      @results.map do |result|
+      @results.select do |result|
+        [:apply, :skip].include?(result.type)
+      end.map do |result|
         case result.status
         when :pending
           "P"
@@ -77,7 +79,7 @@ module SteppingStone
           "U"
         when :skipped
           "S"
-        when :event, :no_op
+        when :event
           # no-op while we refactor
         else
           raise "This should never happen"

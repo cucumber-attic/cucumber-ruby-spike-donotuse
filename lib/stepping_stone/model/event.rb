@@ -3,7 +3,7 @@ module SteppingStone
     class Event
       attr_reader :type, :name, :status, :value
 
-      [:passed, :failed, :no_op].each do |status|
+      [:passed, :failed, :undefined].each do |status|
         define_method("#{status}?") do
           instance_variable_get(:@status) == status
         end

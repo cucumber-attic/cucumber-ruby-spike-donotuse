@@ -23,7 +23,6 @@ module SteppingStone
         end
 
         def setup
-          # Event.hook([:setup, test_case], status_for(:setup))
           event = Event.new(:setup, :name, status_for(:setup))
           @events << event
           event
@@ -34,13 +33,13 @@ module SteppingStone
         end
 
         def before_apply(action)
-          event = Event.new(:before_apply, :name, :no_op)
+          event = Event.new(:before_apply, :name, :undefined)
           @events << event
           event
         end
 
         def after_apply(action)
-          event = Event.new(:after_apply, :name, :no_op)
+          event = Event.new(:after_apply, :name, :undefined)
           @events << event
           event
         end
@@ -62,7 +61,10 @@ module SteppingStone
         end
 
         def statuses
-          @events.reject(&:no_op?).map(&:status)
+          @events.reject do |event|
+            event.undefined? and
+              [:setup, :teardown, :before_apply, :after_apply].include?(event.type)
+          end.map(&:status)
         end
 
         private
