@@ -7,49 +7,54 @@ module SteppingStone
   # the result of each action to its client via the supplied callback.
   class RbServer
     class Session
-      attr_reader :context, :test_case
+      attr_reader :context, :test_case, :event_builder
 
-      def initialize(context, test_case)
+      def initialize(context, test_case, event_builder = Model::Event)
         @context = context
         @test_case = test_case
+        @event_builder = event_builder
       end
 
       def setup
-        Model::Event.new(:setup, test_case_name, :passed, context.setup(test_case))
+        build_event(:setup, test_case_name, :passed, context.setup(test_case))
       rescue TextMapper::UndefinedMappingError
-        Model::Event.new(:setup, test_case_name, :undefined)
+        build_event(:setup, test_case_name, :undefined)
       end
 
       def teardown
-        Model::Event.new(:teardown, test_case_name, :passed, context.teardown(test_case))
+        build_event(:teardown, test_case_name, :passed, context.teardown(test_case))
       rescue TextMapper::UndefinedMappingError
-        Model::Event.new(:setup, test_case_name, :undefined)
+        build_event(:teardown, test_case_name, :undefined)
       end
 
       def apply(action)
-        Model::Event.new(:apply, action, :passed, context.dispatch(action))
+        build_event(:apply, action, :passed, context.dispatch(action))
       rescue RSpec::Expectations::ExpectationNotMetError => e
-        Model::Event.new(:apply, action, :failed, e)
+        build_event(:apply, action, :failed, e)
       rescue TextMapper::UndefinedMappingError => e
-        Model::Event.new(:apply, action, :undefined, e)
+        build_event(:apply, action, :undefined, e)
       end
 
       def before_apply(action)
-        Model::Event.new(:before_apply, test_case_name, :undefined)
+        build_event(:before_apply, test_case_name, :undefined)
       end
 
       def after_apply(action)
-        Model::Event.new(:after_apply, test_case_name, :undefined)
+        build_event(:after_apply, test_case_name, :undefined)
       end
 
       def skip(action)
-        Model::Event.new(:skip, action, :skipped)
+        build_event(:skip, action, :skipped)
       end
 
       private
 
       def test_case_name
         test_case.name
+      end
+
+      def build_event(type, *args)
+        event_builder.send(type, *args)
       end
     end
 
