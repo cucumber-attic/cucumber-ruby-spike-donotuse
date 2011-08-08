@@ -17,10 +17,20 @@ module SteppingStone
         failed? or undefined_action?
       end
 
-      private
-
       def undefined_action?
-        undefined? and type == :apply
+        undefined? and action?
+      end
+
+      def action?
+        [:apply, :skip].include?(type)
+      end
+
+      def undefined_hook?
+        undefined? and hook?
+      end
+
+      def hook?
+        [:setup, :teardown, :before_apply, :after_apply].include?(type)
       end
     end
   end

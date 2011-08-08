@@ -61,10 +61,7 @@ module SteppingStone
         end
 
         def statuses
-          @events.reject do |event|
-            event.undefined? and
-              [:setup, :teardown, :before_apply, :after_apply].include?(event.type)
-          end.map(&:status)
+          @events.reject(&:undefined_hook?).map(&:status)
         end
 
         private
