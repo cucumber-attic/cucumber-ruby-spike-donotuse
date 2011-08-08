@@ -11,7 +11,7 @@ module SteppingStone
         server.start_test(test_case) do |session|
           @last_event = session.setup
           test_case.each do |action|
-            if skip?
+            if @last_event.skip?
               session.skip(action)
             else
               session.before_apply(action)
@@ -21,18 +21,6 @@ module SteppingStone
           end
           session.teardown
         end
-      end
-
-      def skip?
-        failed? or undefined_action?
-      end
-
-      def failed?
-        @last_event.failed?
-      end
-
-      def undefined_action?
-        @last_event.undefined? and @last_event.type == :apply
       end
     end
   end

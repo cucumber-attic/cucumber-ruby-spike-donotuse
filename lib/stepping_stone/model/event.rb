@@ -13,9 +13,14 @@ module SteppingStone
         @type, @name, @status, @value = type, [name].flatten, status, value
       end
 
-      # TODO: Is this the correct way to define == equality for an Event?
-      def ==(other)
-        status == other
+      def skip?
+        failed? or undefined_action?
+      end
+
+      private
+
+      def undefined_action?
+        undefined? and type == :apply
       end
     end
   end
