@@ -1,6 +1,23 @@
 module SteppingStone
   module Model
     class Event
+      HOOKS   = [:setup, :teardown, :before_apply, :after_apply]
+      ACTIONS = [:apply, :skip]
+
+      class << self
+        HOOKS.each do |factory|
+          define_method(factory) do |*args|
+            new(factory, *args)
+          end
+        end
+
+        ACTIONS.each do |factory|
+          define_method(factory) do |*args|
+            new(factory, *args)
+          end
+        end
+      end
+
       attr_reader :type, :name, :status, :value
 
       [:passed, :failed, :undefined].each do |status|

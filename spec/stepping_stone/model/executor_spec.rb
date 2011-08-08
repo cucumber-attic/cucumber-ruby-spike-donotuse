@@ -23,35 +23,35 @@ module SteppingStone
         end
 
         def setup
-          event = Event.new(:setup, :name, status_for(:setup))
+          event = Event.setup(:name, status_for(:setup))
           @events << event
           event
         end
 
         def teardown
-          @events << Event.new(:teardown, :name, :passed)
+          @events << Event.teardown(:name, :passed)
         end
 
         def before_apply(action)
-          event = Event.new(:before_apply, :name, :undefined)
+          event = Event.before_apply(:name, :undefined)
           @events << event
           event
         end
 
         def after_apply(action)
-          event = Event.new(:after_apply, :name, :undefined)
+          event = Event.after_apply(:name, :undefined)
           @events << event
           event
         end
 
         def apply(action)
-          event = Event.new(:apply, action, status_for(action))
+          event = Event.apply(action, status_for(action))
           @events << event
           event
         end
 
         def skip(action)
-          event = Event.new(:skip, action, :skipped)
+          event = Event.skip(action, :skipped)
           @events << event
           event
         end
