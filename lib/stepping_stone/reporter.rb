@@ -77,8 +77,6 @@ module SteppingStone
           "U"
         when :skipped
           "S"
-        when :event
-          # no-op while we refactor
         else
           raise "This should never happen"
         end
