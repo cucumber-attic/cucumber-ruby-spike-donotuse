@@ -65,9 +65,7 @@ module SteppingStone
     end
 
     def to_s
-      @results.select do |result|
-        [:apply, :skip].include?(result.type)
-      end.map do |result|
+      @results.select(&:action?).map do |result|
         case result.status
         when :pending
           "P"
