@@ -1,3 +1,5 @@
+require 'stepping_stone/model/events'
+
 module SteppingStone
   module Model
     class EventLog
@@ -17,7 +19,10 @@ module SteppingStone
       end
 
       def statuses
-        events.reject(&:undefined_hook?).map(&:status)
+        events.reject do |event|
+          Events::HookEvent === event and
+            event.undefined?
+        end.map(&:status)
       end
 
       def executed_events

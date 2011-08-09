@@ -37,14 +37,6 @@ module SteppingStone
           failed?
         end
 
-        def action?
-          false
-        end
-
-        def undefined_hook?
-          undefined?
-        end
-
         def to_s
           ""
         end
@@ -53,14 +45,6 @@ module SteppingStone
       class ActionEvent < Event
         def skip?
           failed? or undefined?
-        end
-
-        def undefined_hook?
-          false
-        end
-
-        def action?
-          true
         end
 
         def to_s
