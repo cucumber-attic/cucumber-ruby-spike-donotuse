@@ -37,42 +37,39 @@ module SteppingStone
           failed?
         end
 
-        def undefined_action?
-          undefined? and action?
-        end
-
         def action?
           false
         end
 
         def undefined_hook?
-          undefined? and hook?
+          undefined?
         end
 
-        def hook?
-          true
+        def to_s
+          ""
         end
       end
 
       class ActionEvent < Event
         def skip?
-          failed? or undefined_action?
+          failed? or undefined?
         end
 
-        def undefined_action?
-          undefined? and action?
+        def undefined_hook?
+          false
         end
 
         def action?
           true
         end
 
-        def undefined_hook?
-          undefined? and hook?
-        end
-
-        def hook?
-          false
+        def to_s
+          {
+            :passed    => ".",
+            :failed    => "F",
+            :undefined => "U",
+            :skipped   => "S"
+          }[status]
         end
       end
     end

@@ -104,7 +104,7 @@ Feature: sst exec
     Given a file named "sst/features/calculator.feature" with:
       """
       Feature: Calculator
-        Scenario: Pending Addition
+        Scenario: Undefined Mapping
           Given a calculator
           When 6 and 10 are added together
           # This next step's mapping is undefined

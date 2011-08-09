@@ -63,22 +63,7 @@ module SteppingStone
     end
 
     def to_s
-      @results.select(&:action?).map do |result|
-        case result.status
-        when :pending
-          "P"
-        when :passed
-          "."
-        when :failed
-          "F"
-        when :undefined
-          "U"
-        when :skipped
-          "S"
-        else
-          raise "This should never happen"
-        end
-      end.join
+      @results.map(&:to_s).join
     end
   end
 end
