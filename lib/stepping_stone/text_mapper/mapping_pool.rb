@@ -30,6 +30,10 @@ module SteppingStone
       def add(mapping)
         mappings << mapping
       end
+
+      def empty?
+        mappings.empty?
+      end
     end
   end
 end

@@ -10,8 +10,8 @@ module SteppingStone
 
       def initialize
         @mappings = MappingPool.new
+        @hooks = MappingPool.new
         @mappers = []
-        @hooks = []
       end
 
       def add_mapper(mapper)
@@ -26,12 +26,12 @@ module SteppingStone
         mappings.find!(from)
       end
 
-      def find_hook(from)
-        hooks.find { |hook| hook.match(from) }
+      def add_hook(hook)
+        hooks.add(hook)
       end
 
-      def add_hook(hook)
-        hooks << hook
+      def find_hook(from)
+        hooks.find!(from)
       end
 
       def build_context

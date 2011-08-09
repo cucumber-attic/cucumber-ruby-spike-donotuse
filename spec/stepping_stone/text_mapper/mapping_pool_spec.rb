@@ -28,6 +28,12 @@ module SteppingStone
         end
       end
 
+      describe "#empty?" do
+        it "says that the pool is empty" do
+          subject.should be_empty
+        end
+      end
+
       context "with mappings" do
         subject { MappingPool.new(mapping) }
 
@@ -38,6 +44,12 @@ module SteppingStone
 
           it "returns nil if no mapping matches" do
             subject.find([:bar]).should eq(nil)
+          end
+        end
+
+        describe "#empty?" do
+          it "says that the pool is not empty" do
+            subject.should_not be_empty
           end
         end
       end
