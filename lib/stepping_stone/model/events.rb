@@ -1,6 +1,6 @@
 module SteppingStone
   module Model
-    module Event
+    module Events
       HOOKS   = [:setup, :teardown, :before_apply, :after_apply]
       ACTIONS = [:apply, :skip]
 
@@ -21,7 +21,7 @@ module SteppingStone
       class HookEvent
         attr_reader :type, :name, :status, :value
 
-        [:passed, :failed, :undefined].each do |status|
+        [:passed, :failed, :undefined, :skipped].each do |status|
           define_method("#{status}?") do
             instance_variable_get(:@status) == status
           end
@@ -55,7 +55,7 @@ module SteppingStone
       class ActionEvent
         attr_reader :type, :name, :status, :value
 
-        [:passed, :failed, :undefined].each do |status|
+        [:passed, :failed, :undefined, :skipped].each do |status|
           define_method("#{status}?") do
             instance_variable_get(:@status) == status
           end

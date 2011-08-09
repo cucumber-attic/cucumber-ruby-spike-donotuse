@@ -1,5 +1,3 @@
-require 'stepping_stone/model/event'
-
 module SteppingStone
   class Reporter
     class SessionRecorder

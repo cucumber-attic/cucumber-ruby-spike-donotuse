@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module SteppingStone
   module Model
-    module Event
+    module Events
       describe ActionEvent do
         context "when passed" do
           subject { ActionEvent.new(:apply, :from, :passed) }
@@ -10,6 +10,7 @@ module SteppingStone
           it { should be_passed }
           it { should_not be_failed }
           it { should_not be_undefined }
+          it { should_not be_skipped }
 
           its(:skip?) { should be_false }
         end

@@ -1,4 +1,4 @@
-require 'stepping_stone/model/event'
+require 'stepping_stone/model/events'
 require 'stepping_stone/text_mapper/namespace'
 require 'stepping_stone/code_loader'
 
@@ -9,7 +9,7 @@ module SteppingStone
     class Session
       attr_reader :context, :test_case, :event_builder
 
-      def initialize(context, test_case, event_builder = Model::Event)
+      def initialize(context, test_case, event_builder = Model::Events)
         @context = context
         @test_case = test_case
         @event_builder = event_builder
