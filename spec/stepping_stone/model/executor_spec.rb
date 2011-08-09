@@ -14,7 +14,7 @@ module SteppingStone
         attr_reader :events, :action_to_status
 
         def initialize(action_to_status={})
-          @events = []
+          @events = EventLog.new
           @action_to_status = {
             :pass      => :passed,
             :fail      => :failed,
@@ -23,45 +23,35 @@ module SteppingStone
         end
 
         def setup
-          event = Events.setup(:name, status_for(:setup))
-          @events << event
-          event
+          events.add(Events.setup(:name, status_for(:setup)))
         end
 
         def teardown
-          @events << Events.teardown(:name, :passed)
+          events.add(Events.teardown(:name, :passed))
         end
 
         def before_apply(action)
-          event = Events.before_apply(:name, :undefined)
-          @events << event
-          event
+          events.add(Events.before_apply(:name, :undefined))
         end
 
         def after_apply(action)
-          event = Events.after_apply(:name, :undefined)
-          @events << event
-          event
+          events.add(Events.after_apply(:name, :undefined))
         end
 
         def apply(action)
-          event = Events.apply(action, status_for(action))
-          @events << event
-          event
+          events.add(Events.apply(action, status_for(action)))
         end
 
         def skip(action)
-          event = Events.skip(action, :skipped)
-          @events << event
-          event
+          events.add(Events.skip(action, :skipped))
         end
 
         def types
-          @events.map(&:type)
+          events.types
         end
 
         def statuses
-          @events.reject(&:undefined_hook?).map(&:status)
+          events.statuses
         end
 
         private

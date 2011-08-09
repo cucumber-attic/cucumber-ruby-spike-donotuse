@@ -5,7 +5,6 @@ module SteppingStone
     module Events
       # TODO: Extract state specs into spec of parent Event class
       #       Rename #skip? to #skip_remaining_actions?
-
       describe ActionEvent do
         context "when passed" do
           subject { ActionEvent.new(:apply, :from, :passed) }
