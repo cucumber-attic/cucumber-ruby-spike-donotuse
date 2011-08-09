@@ -1,3 +1,5 @@
+require 'stepping_stone/model/event_log'
+
 module SteppingStone
   class Reporter
     class SessionRecorder
@@ -37,11 +39,11 @@ module SteppingStone
       end
     end
 
-    attr_reader :server
+    attr_reader :server, :results
 
     def initialize(server)
       @server = server
-      @results = []
+      @results = Model::EventLog.new
     end
 
     def start_test(test_case, &execution_script)
@@ -51,19 +53,15 @@ module SteppingStone
     end
 
     def add_result(result)
-      @results << result
-      result
+      results.add(result)
     end
 
     def events
-      # TODO: Add a #to_a or #to_sexp method to Event
-      @results.reject(&:undefined?).map do |result|
-        [result.type, result.name, result.status]
-      end
+      results.executed_events
     end
 
     def to_s
-      @results.map(&:to_s).join
+      results.to_s
     end
   end
 end

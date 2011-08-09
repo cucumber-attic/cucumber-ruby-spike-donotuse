@@ -27,7 +27,17 @@ module SteppingStone
         )
       end
 
-      it "builds a string representation"
+      it "creates a table of executed events" do
+        subject.executed_events.should eq([
+          [:setup, [:name], :passed],
+          [:apply, [:name], :passed],
+          [:teardown, [:name], :passed]
+        ])
+      end
+
+      it "builds a string representation" do
+        subject.to_s.should eq(".")
+      end
 
       describe "#add" do
         let(:event) { Events.apply(:from, :passed) }
