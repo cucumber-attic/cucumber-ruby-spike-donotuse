@@ -15,6 +15,7 @@ module SteppingStone
               const_aliases.each_pair do |const, const_alias|
                 mapper.const_set(const_alias, const)
               end
+
               mappings.add_mapper(mapper)
             end
 
