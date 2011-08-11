@@ -4,28 +4,33 @@ module SteppingStone
   module TextMapper
     describe Mapping do
       describe "#call" do
-        let(:target) { double("dispatch target") }
+        let(:receiver) { double("dispatch receiver") }
 
         it "invokes the correct method name" do
-          target.should_receive(:to)
+          receiver.should_receive(:to)
           mapping = Mapping.new([:from], :to)
-          mapping.call(target)
+          mapping.call(receiver)
         end
 
         it "invokes a method with arguments" do
-          target.should_receive(:hair).with("red")
+          receiver.should_receive(:hair).with("red")
           mapping = Mapping.new([/(.+) hair/], :hair)
-          mapping.call(target, ["red hair"])
+          mapping.call(receiver, ["red hair"])
         end
 
         it "converts captured arguments into the specified type" do
-          target.should_receive(:add).with(1, 2.0)
+          receiver.should_receive(:add).with(1, 2.0)
           mapping = Mapping.new([/(\d+) and (\d+)/], :add, [Integer, Float])
-          mapping.call(target, ["1 and 2.0"])
+          mapping.call(receiver, ["1 and 2.0"])
+        end
+
+        it "raises an error when 'to' cannot be resolved" do
+          receiver.should_receive(:to).and_raise(NoMethodError)
+          mapping = Mapping.new([:from], :to)
+          expect { mapping.call(receiver) }.to raise_error(NoMethodError)
         end
 
         it "raises an error when the from does not match"
-        it "raises an error when the to cannot be resolved"
         it "invokes a method on a different subject"
         it "rearranges argument order"
       end

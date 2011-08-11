@@ -44,9 +44,9 @@ module SteppingStone
         end
       end
 
-      def call(target, action=[])
+      def call(receiver, action=[])
         args = captures_from(action)
-        target.send(to, *args)
+        receiver.send(to, *args)
       end
     end
   end
