@@ -24,13 +24,13 @@ module SteppingStone
           mapping.call(receiver, ["1 and 2.0"])
         end
 
-        it "raises an error when 'to' does not exist" do
+        it "raises NoMethodError when 'to' does not exist on the receiver" do
           receiver.should_receive(:to).and_raise(NoMethodError)
           mapping = Mapping.new([:from], :to)
           expect { mapping.call(receiver) }.to raise_error(NoMethodError)
         end
 
-        it "raises an error when the from does not match"
+        it "raises an error when the action does not contain enough information to satisfy the 'from'"
         it "invokes a method on a different subject"
         it "rearranges argument order"
       end
