@@ -24,7 +24,7 @@ module SteppingStone
           mapping.call(receiver, ["1 and 2.0"])
         end
 
-        it "raises an error when 'to' cannot be resolved" do
+        it "raises an error when 'to' does not exist" do
           receiver.should_receive(:to).and_raise(NoMethodError)
           mapping = Mapping.new([:from], :to)
           expect { mapping.call(receiver) }.to raise_error(NoMethodError)
@@ -33,11 +33,6 @@ module SteppingStone
         it "raises an error when the from does not match"
         it "invokes a method on a different subject"
         it "rearranges argument order"
-      end
-
-      describe "#matches?" do
-        it "returns true if the mapping matches"
-        it "returns false if the mapping does not match"
       end
 
       describe ".from_fluent" do
