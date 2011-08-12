@@ -47,6 +47,10 @@ module SteppingStone
         build_event(:skip, action, :skipped)
       end
 
+      def end_test
+        # no-op
+      end
+
       private
 
       def test_case_name
@@ -74,7 +78,9 @@ module SteppingStone
     end
 
     def start_test(test_case)
-      yield Session.new(mapper_namespace.build_context, test_case)
+      session = Session.new(mapper_namespace.build_context, test_case)
+      yield session
+      session.end_test
     end
 
     def add_hook(hook)
