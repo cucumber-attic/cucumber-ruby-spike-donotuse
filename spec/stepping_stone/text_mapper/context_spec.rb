@@ -16,7 +16,8 @@ module SteppingStone
           end
         end
 
-        context = Context.new(double("mappings"), [helper_a, helper_b])
+        context = Context.new
+        context.mappers = [helper_a, helper_b]
         context.helper_a.should eq(:helper_a)
         context.helper_b.should eq(:helper_b)
       end

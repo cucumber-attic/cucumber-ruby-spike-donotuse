@@ -1,11 +1,10 @@
 module SteppingStone
   module TextMapper
     class Context
-      attr_reader :mappings
+      attr_accessor :mappings
 
-      def initialize(mappings, mappers=[])
+      def mappers=(mappers)
         mappers.each { |mapper| extend(mapper) }
-        @mappings = mappings
       end
 
       def dispatch(action)

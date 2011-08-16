@@ -78,7 +78,7 @@ module SteppingStone
     end
 
     def start_test(test_case)
-      session = Session.new(mapper_namespace.build_context, test_case)
+      session = Session.new(build_context, test_case)
       yield session
       session.end_test
     end
@@ -89,6 +89,10 @@ module SteppingStone
 
     def hooks
       mapper_namespace.hooks
+    end
+
+    def build_context
+      mapper_namespace.build_context(TextMapper::Context.new)
     end
 
     def dsl_module

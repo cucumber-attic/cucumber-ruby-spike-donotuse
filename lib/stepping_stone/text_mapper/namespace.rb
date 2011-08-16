@@ -35,8 +35,10 @@ module SteppingStone
         hooks.find!(from)
       end
 
-      def build_context
-        TextMapper::Context.new(self, mappers)
+      def build_context(context)
+        context.mappings = self
+        context.mappers = mappers
+        context
       end
 
       def to_extension_module
