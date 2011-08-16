@@ -1,6 +1,7 @@
 require 'stepping_stone/model/events'
 require 'stepping_stone/text_mapper/namespace'
 require 'stepping_stone/code_loader'
+require 'stepping_stone/servers/rb/context'
 
 module SteppingStone
   # The server's responsibility is to execute a test case and communicate
@@ -92,7 +93,7 @@ module SteppingStone
     end
 
     def build_context
-      mapper_namespace.build_context(TextMapper::Context.new)
+      mapper_namespace.build_context(Servers::Rb::Context.new)
     end
 
     def dsl_module
