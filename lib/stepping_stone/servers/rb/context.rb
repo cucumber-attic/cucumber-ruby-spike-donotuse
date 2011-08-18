@@ -8,9 +8,9 @@ module SteppingStone
           mappers.each { |mapper| extend(mapper) }
         end
 
-        def dispatch(action)
-          mapping = mappings.find_mapping(action)
-          mapping.call(self, action)
+        def dispatch(pattern)
+          mapping = mappings.find_mapping(pattern)
+          mapping.call(self, pattern)
         end
 
         def setup(test_case)
