@@ -28,6 +28,10 @@ module SteppingStone
         build_event(:teardown, test_case_name, :undefined)
       end
 
+      def new_apply(action)
+        event_builder.send(:apply, action, context.dispatch(action))
+      end
+
       def apply(action)
         build_event(:apply, action, :passed, context.dispatch(action))
       rescue RSpec::Expectations::ExpectationNotMetError => e
