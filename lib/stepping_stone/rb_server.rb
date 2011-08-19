@@ -28,16 +28,8 @@ module SteppingStone
         build_event(:teardown, test_case_name, :undefined)
       end
 
-      def new_apply(action)
-        event_builder.send(:apply, action, context.dispatch(action))
-      end
-
       def apply(action)
-        build_event(:apply, action, :passed, context.dispatch(action))
-      rescue RSpec::Expectations::ExpectationNotMetError => e
-        build_event(:apply, action, :failed, e)
-      rescue TextMapper::UndefinedMappingError => e
-        build_event(:apply, action, :undefined, e)
+        event_builder.apply(action, context.dispatch(action))
       end
 
       def before_apply(action)
@@ -49,7 +41,7 @@ module SteppingStone
       end
 
       def skip(action)
-        build_event(:skip, action, :skipped)
+        event_builder.skip(action, Model::Result.new(:skipped))
       end
 
       def end_test

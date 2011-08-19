@@ -39,11 +39,11 @@ module SteppingStone
         end
 
         def apply(action)
-          events.add(Events.apply(action, status_for(action)))
+          events.add(Events.apply(action, Result.new(status_for(action))))
         end
 
         def skip(action)
-          events.add(Events.skip(action, :skipped))
+          events.add(Events.skip(action, Result.new(:skipped)))
         end
 
         def types

@@ -6,8 +6,13 @@ module SteppingStone
       # TODO: Extract state specs into spec of parent Event class
       #       Rename #skip? to #skip_remaining_actions?
       describe ActionEvent do
+        let(:passed) { Result.new(:passed) }
+        let(:failed) { Result.new(:failed) }
+        let(:undefined) { Result.new(:undefined) }
+        let(:skipped) { Result.new(:skipped) }
+
         context "when passed" do
-          subject { ActionEvent.new(:apply, :from, :passed) }
+          subject { ActionEvent.new(:apply, :from, passed) }
 
           it { should be_passed }
           it { should_not be_failed }
@@ -19,7 +24,7 @@ module SteppingStone
         end
 
         context "when failed" do
-          subject { ActionEvent.new(:apply, :from, :failed) }
+          subject { ActionEvent.new(:apply, :from, failed) }
 
           it { should be_failed }
           it { should_not be_passed }
@@ -31,7 +36,7 @@ module SteppingStone
         end
 
         context "when undefined" do
-          subject { ActionEvent.new(:apply, :from, :undefined) }
+          subject { ActionEvent.new(:apply, :from, undefined) }
 
           it { should be_undefined }
           it { should_not be_passed }
@@ -43,7 +48,7 @@ module SteppingStone
         end
 
         context "when skipped" do
-          subject { ActionEvent.new(:apply, :from, :skipped) }
+          subject { ActionEvent.new(:apply, :from, skipped) }
 
           it { should be_skipped }
           it { should_not be_passed }
