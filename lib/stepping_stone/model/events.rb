@@ -33,6 +33,32 @@ module SteppingStone
       end
 
       class HookEvent < Event
+        attr_reader :type, :name, :result
+
+        def initialize(type, name, result)
+          @type, @name, @result = type, [name].flatten, result
+        end
+
+        def status
+          result.status
+        end
+
+        def passed?
+          result.passed?
+        end
+
+        def undefined?
+          result.undefined?
+        end
+
+        def failed?
+          result.failed?
+        end
+
+        def skipped?
+          result.skipped?
+        end
+
         def skip?
           failed?
         end

@@ -60,14 +60,17 @@ module SteppingStone
       end
 
       describe HookEvent do
+        let(:failed) { Result.new(:failed) }
+        let(:undefined) { Result.new(:undefined) }
+
         context "when undefined" do
-          subject { HookEvent.new(:setup, :name, :undefined) }
+          subject { HookEvent.new(:setup, :name, undefined) }
           its(:skip?) { should be_false }
           its(:to_s) { should eq("") }
         end
 
         context "when failed" do
-          subject { HookEvent.new(:setup, :name, :failed) }
+          subject { HookEvent.new(:setup, :name, failed) }
           its(:skip?) { should be_true }
           its(:to_s) { should eq("") }
         end

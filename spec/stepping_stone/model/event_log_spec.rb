@@ -6,17 +6,13 @@ module SteppingStone
       before do
         subject.add(ev(:setup, :passed))
         subject.add(ev(:before_apply, :undefined))
-        subject.add(action(:apply, :passed))
+        subject.add(ev(:apply, :passed))
         subject.add(ev(:after_apply, :undefined))
         subject.add(ev(:teardown, :passed))
       end
 
       def ev(type, status)
-        Events.send(type, :name, status)
-      end
-
-      def action(type, status)
-        Events::ActionEvent.new(type, :name, res(status))
+        Events.send(type, :name, res(status))
       end
 
       def res(status)

@@ -23,19 +23,19 @@ module SteppingStone
         end
 
         def setup
-          events.add(Events.setup(:name, status_for(:setup)))
+          events.add(Events.setup(:name, Result.new(status_for(:setup))))
         end
 
         def teardown
-          events.add(Events.teardown(:name, :passed))
+          events.add(Events.teardown(:name, Result.new(:passed)))
         end
 
         def before_apply(action)
-          events.add(Events.before_apply(:name, :undefined))
+          events.add(Events.before_apply(:name, Result.new(:undefined)))
         end
 
         def after_apply(action)
-          events.add(Events.after_apply(:name, :undefined))
+          events.add(Events.after_apply(:name, Result.new(:undefined)))
         end
 
         def apply(action)
