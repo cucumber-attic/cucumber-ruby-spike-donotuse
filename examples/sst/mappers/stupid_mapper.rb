@@ -1,6 +1,6 @@
 require 'sst_helper'
 
-module CalculatorMapper
+module StupidMapper
   extend SteppingStone::Mapper
 
   def_map "a foo" => :foo
