@@ -6,8 +6,6 @@ require 'stepping_stone/servers/rb/session'
 require 'stepping_stone/servers/rb/context'
 
 module SteppingStone
-  # The server's responsibility is to execute a test case and communicate
-  # the result of each action to its client via the supplied callback.
   module Servers
     class Rb
       # Called by Cucumber when it's time to start executing features. Non-idempotent,
