@@ -2,7 +2,7 @@ require 'stepping_stone/model/result'
 
 module SteppingStone
   module Servers
-    module Rb
+    class Rb
       class Context
         attr_accessor :mappings
 

@@ -58,7 +58,7 @@ module CucumberWorld
   end
 
   def sut
-    @sut ||= SteppingStone::RbServer.new
+    @sut ||= SteppingStone::Servers::Rb.new
   end
 
   def reporter
