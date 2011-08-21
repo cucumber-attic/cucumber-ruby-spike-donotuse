@@ -26,7 +26,7 @@ module SteppingStone
       end
 
       def find!(pattern)
-        find(pattern) or raise(UndefinedMappingError.new(pattern))
+        find(pattern) or (raise UndefinedMappingError, pattern)
       end
 
       def add(mapping)
