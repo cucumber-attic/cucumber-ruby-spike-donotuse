@@ -39,9 +39,9 @@ Feature: Hooks into the test case lifecycle
 
   Scenario: Before and after test case
     Given these passing hooks:
-      | when     | what      |
-      | setup    | test case |
-      | teardown | test case |
+      | when     | what          |
+      | setup    | all scenarios |
+      | teardown | all scenarios |
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle events are:
       | event    | name             | status |

@@ -52,8 +52,8 @@ module CucumberWorld
   end
 
   def add_hook(aspect, subject, result)
-    hook_signature = [aspect.to_sym, subject.tr(' ', '_').to_sym]
-    hook = SteppingStone::TextMapper::Hook.new(hook_signature) { |test_case| result }
+    # subject isn't used for anything yet
+    hook = SteppingStone::TextMapper::Hook.new([aspect.to_sym]) { |test_case| result }
     sut.add_hook(hook)
   end
 
