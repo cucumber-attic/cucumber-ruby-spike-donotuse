@@ -11,6 +11,8 @@ module SteppingStone
     end
 
     class MappingPool
+      include Enumerable
+
       attr_reader :mappings
 
       def initialize(*mappings)
@@ -33,6 +35,10 @@ module SteppingStone
 
       def empty?
         mappings.empty?
+      end
+
+      def each(&block)
+        mappings.each(&block)
       end
     end
   end

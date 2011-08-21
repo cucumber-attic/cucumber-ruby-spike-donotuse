@@ -23,11 +23,11 @@ module SteppingStone
         end
 
         def before_apply(action)
-          build_event(:before_apply, test_case_name, context.before_apply(action))
+          build_event(:before_apply, test_case_name, context.dispatch([:before_apply, action]))
         end
 
         def after_apply(action)
-          build_event(:after_apply, test_case_name, context.after_apply(action))
+          build_event(:after_apply, test_case_name, context.dispatch([:after_apply, action]))
         end
 
         def skip(action)

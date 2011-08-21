@@ -6,7 +6,7 @@ require 'stepping_stone/text_mapper/dsl'
 module SteppingStone
   module TextMapper
     class Namespace
-      attr_reader :mappings, :mappers, :hooks
+      attr_reader :mappings, :mappers
 
       def initialize
         @mappings = MappingPool.new
@@ -26,12 +26,8 @@ module SteppingStone
         mappings.find!(from)
       end
 
-      def add_hook(hook)
-        hooks.add(hook)
-      end
-
-      def find_hook(from)
-        hooks.find!(from)
+      def hooks
+        mappings.select { |mapping| Hook === mapping }
       end
 
       def build_context(context)

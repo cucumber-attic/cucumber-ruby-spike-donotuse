@@ -24,24 +24,6 @@ module SteppingStone
         def skip(pattern)
           Model::Result.new(:skipped)
         end
-
-        def before_apply(pattern)
-          mapping = mappings.find_hook([:before_apply, pattern])
-          Model::Result.new(:passed, mapping.call(self, pattern))
-        rescue TextMapper::UndefinedMappingError => error
-          Model::Result.new(:undefined, error)
-        rescue RSpec::Expectations::ExpectationNotMetError => error
-          Model::Result.new(:failed, error)
-        end
-
-        def after_apply(pattern)
-          mapping = mappings.find_hook([:after_apply, pattern])
-          Model::Result.new(:passed, mapping.call(self, pattern))
-        rescue TextMapper::UndefinedMappingError => error
-          Model::Result.new(:undefined, error)
-        rescue RSpec::Expectations::ExpectationNotMetError => error
-          Model::Result.new(:failed, error)
-        end
       end
     end
   end

@@ -37,6 +37,10 @@ module SteppingStone
         mapper_namespace.hooks
       end
 
+      def mappings
+        mapper_namespace.mappings
+      end
+
       def build_context
         mapper_namespace.build_context(Servers::Rb::Context.new)
       end
