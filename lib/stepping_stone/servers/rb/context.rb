@@ -20,10 +20,6 @@ module SteppingStone
         rescue RSpec::Expectations::ExpectationNotMetError => error
           Model::Result.new(:failed, error)
         end
-
-        def skip(pattern)
-          Model::Result.new(:skipped)
-        end
       end
     end
   end

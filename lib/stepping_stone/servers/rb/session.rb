@@ -1,3 +1,5 @@
+require 'stepping_stone/model/result'
+
 module SteppingStone
   module Servers
     class Rb
@@ -32,6 +34,10 @@ module SteppingStone
 
         def skip(action)
           build_event(:skip, action, context.skip(action))
+        end
+
+        def skip(action)
+          build_event(:skip, action, Model::Result.new(:skipped))
         end
 
         def end_test
