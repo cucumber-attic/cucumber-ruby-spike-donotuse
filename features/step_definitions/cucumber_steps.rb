@@ -1,6 +1,9 @@
 Given /^a passing scenario "(.+)" with:$/ do |name, body|
-  @test_case = compile_scenario(name, body)
-  define_mapper(sut)
+  @test_case = compile_scenario(name, body, @background)
+end
+
+Given /^a passing background with:$/ do |background|
+  @background = background
 end
 
 Given /^these passing hooks:$/ do |hooks|
@@ -25,12 +28,19 @@ Then /^the life cycle events are:$/ do |table|
 end
 
 module CucumberWorld
-  def compile_scenario(name, body)
-    if test_cases = SteppingStone::GherkinCompiler.new.compile("Feature: test\nScenario: #{name}\n" << body)
+  def compile_scenario(name, body, background=nil)
+    feature = build_feature(name, body, background)
+    if test_cases = SteppingStone::GherkinCompiler.new.compile(feature)
       test_cases[0]
     else
       raise "Something when wrong while compiling #{body}"
     end
+  end
+
+  def build_feature(name, body, background=nil)
+    out = "Feature: test\n"
+    out << "Background:\n #{background}\n" if background
+    out << "Scenario: #{name}\n#{body}"
   end
 
   def define_mapper(sut)
@@ -38,8 +48,13 @@ module CucumberWorld
       extend sut.dsl_module
       include RSpec::Matchers
 
+      def_map /I log in as "(\w+)"/ => :login_as
       def_map "I add 4 and 5" => :add
       def_map "the result is 9" => :assert_result
+
+      def login_as(userid)
+        @userid = userid
+      end
 
       def add
         @result = 5 + 4
@@ -76,6 +91,10 @@ module CucumberWorld
   def life_cycle_events
     reporter.events
   end
+end
+
+Before do
+  define_mapper(sut)
 end
 
 World(CucumberWorld)
