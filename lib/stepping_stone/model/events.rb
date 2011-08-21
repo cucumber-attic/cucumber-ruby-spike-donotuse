@@ -1,3 +1,5 @@
+require 'forwardable'
+
 module SteppingStone
   module Model
     module Events
@@ -19,46 +21,18 @@ module SteppingStone
       end
 
       class Event
-        attr_reader :type, :name, :status, :value
+        extend Forwardable
 
-        [:passed, :failed, :undefined, :skipped].each do |status|
-          define_method("#{status}?") do
-            instance_variable_get(:@status) == status
-          end
-        end
-
-        def initialize(type, name, status, value=nil)
-          @type, @name, @status, @value = type, [name].flatten, status, value
-        end
-      end
-
-      class HookEvent < Event
         attr_reader :type, :name, :result
 
         def initialize(type, name, result)
           @type, @name, @result = type, [name].flatten, result
         end
 
-        def status
-          result.status
-        end
+        def_delegators :@result, :passed?, :failed?, :undefined?, :skipped?, :status
+      end
 
-        def passed?
-          result.passed?
-        end
-
-        def undefined?
-          result.undefined?
-        end
-
-        def failed?
-          result.failed?
-        end
-
-        def skipped?
-          result.skipped?
-        end
-
+      class HookEvent < Event
         def skip?
           failed?
         end
@@ -69,32 +43,6 @@ module SteppingStone
       end
 
       class ActionEvent < Event
-        attr_reader :type, :name, :result
-
-        def initialize(type, name, result)
-          @type, @name, @result = type, [name].flatten, result
-        end
-
-        def status
-          result.status
-        end
-
-        def passed?
-          result.passed?
-        end
-
-        def undefined?
-          result.undefined?
-        end
-
-        def failed?
-          result.failed?
-        end
-
-        def skipped?
-          result.skipped?
-        end
-
         def skip?
           failed? or undefined?
         end
