@@ -51,7 +51,7 @@ module SteppingStone
         end
 
         def test_case_metadata
-          {}
+          test_case.metadata
         end
 
         def build_event(type, *args)

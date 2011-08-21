@@ -22,6 +22,10 @@ module SteppingStone
       def empty?
         @actions.empty?
       end
+
+      def metadata
+        {}
+      end
     end
   end
 end

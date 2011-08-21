@@ -23,6 +23,12 @@ module SteppingStone
           end
         end
       end
+
+      describe "#metadata" do
+        it "is empty" do
+          subject.metadata.should eq({})
+        end
+      end
     end
   end
 end
