@@ -11,11 +11,11 @@ module SteppingStone
         end
 
         def setup
-          build_event(:setup, test_case_name, context.setup(test_case))
+          build_event(:setup, test_case_name, context.dispatch([:setup, test_case_metadata]))
         end
 
         def teardown
-          build_event(:teardown, test_case_name, context.teardown(test_case))
+          build_event(:teardown, test_case_name, context.dispatch([:teardown, test_case_metadata]))
         end
 
         def apply(action)
@@ -42,6 +42,10 @@ module SteppingStone
 
         def test_case_name
           test_case.name
+        end
+
+        def test_case_metadata
+          {}
         end
 
         def build_event(type, *args)

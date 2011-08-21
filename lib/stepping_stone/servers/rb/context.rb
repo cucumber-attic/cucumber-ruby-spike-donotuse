@@ -42,24 +42,6 @@ module SteppingStone
         rescue RSpec::Expectations::ExpectationNotMetError => error
           Model::Result.new(:failed, error)
         end
-
-        def setup(test_case)
-          mapping = mappings.find_hook([:setup])
-          Model::Result.new(:passed, mapping.call(self, test_case))
-        rescue TextMapper::UndefinedMappingError => error
-          Model::Result.new(:undefined, error)
-        rescue RSpec::Expectations::ExpectationNotMetError => error
-          Model::Result.new(:failed, error)
-        end
-
-        def teardown(test_case)
-          mapping = mappings.find_hook([:teardown])
-          Model::Result.new(:passed, mapping.call(self, test_case))
-        rescue TextMapper::UndefinedMappingError => error
-          Model::Result.new(:undefined, error)
-        rescue RSpec::Expectations::ExpectationNotMetError => error
-          Model::Result.new(:failed, error)
-        end
       end
     end
   end

@@ -29,8 +29,8 @@ module SteppingStone
         session.end_test
       end
 
-      def add_hook(hook)
-        mapper_namespace.add_hook(hook)
+      def add_mapping(mapping)
+        mapper_namespace.add_mapping(mapping)
       end
 
       def hooks

@@ -53,8 +53,8 @@ module CucumberWorld
 
   def add_hook(aspect, subject, result)
     # subject isn't used for anything yet
-    hook = SteppingStone::TextMapper::Hook.new([aspect.to_sym]) { |test_case| result }
-    sut.add_hook(hook)
+    hook = SteppingStone::TextMapper::Hook.new([aspect.to_sym, {}]) { |test_case| result }
+    sut.add_mapping(hook)
   end
 
   def sut
