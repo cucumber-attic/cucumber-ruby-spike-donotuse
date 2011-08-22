@@ -55,6 +55,26 @@ module SteppingStone
           subject.add(event).should eq(event)
         end
       end
+
+      describe "#history" do
+        it "does not include undefined hooks" do
+          log = EventLog.new
+
+          log.add(ev(:setup, :passed))
+          log.add(ev(:before_apply, :undefined))
+          log.add(ev(:apply, :undefined))
+          log.add(ev(:after_apply, :undefined))
+          log.add(ev(:before_apply, :undefined))
+          log.add(ev(:apply, :skipped))
+          log.add(ev(:after_apply, :undefined))
+
+          log.history.should eq([
+            [:setup, [:name], :passed],
+            [:apply, [:name], :undefined],
+            [:apply, [:name], :skipped],
+          ])
+        end
+      end
     end
   end
 end

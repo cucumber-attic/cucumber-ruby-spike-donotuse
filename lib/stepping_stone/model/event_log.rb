@@ -32,6 +32,15 @@ module SteppingStone
         end
       end
 
+      def history
+        events.reject do |event|
+          Events::HookEvent === event and
+            event.undefined?
+        end.map do |event|
+          [event.type, event.name, event.status]
+        end
+      end
+
       def to_s
         events.map(&:to_s).join
       end
