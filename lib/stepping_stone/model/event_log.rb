@@ -3,8 +3,6 @@ require 'stepping_stone/model/events'
 module SteppingStone
   module Model
     class EventLog
-      attr_reader :events
-
       def initialize
         @events = []
       end
@@ -29,6 +27,14 @@ module SteppingStone
         events.reject(&:undefined?).map do |result|
           # TODO: Add a #to_a or #to_sexp method to Event
           [result.type, result.name, result.status]
+        end
+      end
+
+      def events(status=nil)
+        if status
+          @events.select { |event| event.status == status }
+        else
+          @events
         end
       end
 

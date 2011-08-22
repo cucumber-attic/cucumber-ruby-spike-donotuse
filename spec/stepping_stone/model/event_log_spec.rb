@@ -43,21 +43,34 @@ module SteppingStone
         subject.to_s.should eq(".")
       end
 
-      describe "#add" do
-        let(:event) { Events.apply(:from, :passed) }
+      describe "#events" do
+        let(:log) { EventLog.new }
 
-        it "adds the event to the log" do
-          subject.add(event)
-          subject.events.should include(event)
+        before do
+          log.add(ev(:setup, :passed))
+          log.add(ev(:before_apply, :undefined))
+          log.add(ev(:apply, :undefined))
+          log.add(ev(:after_apply, :undefined))
+          log.add(ev(:before_apply, :undefined))
+          log.add(ev(:apply, :skipped))
+          log.add(ev(:after_apply, :undefined))
+          log.add(ev(:teardown, :failed))
         end
 
-        it "returns the event" do
-          subject.add(event).should eq(event)
+        it "includes everything that happened" do
+          log.should have(8).events
         end
+
+        it "filters events by status" do
+          log.events(:passed).length.should eq(1)
+          log.events(:undefined).length.should eq(5)
+        end
+
+        it "filters events by type"
       end
 
       describe "#history" do
-        it "does not include undefined hooks" do
+        it "includes only the important stuff that happened" do
           log = EventLog.new
 
           log.add(ev(:setup, :passed))
@@ -73,6 +86,22 @@ module SteppingStone
             [:apply, [:name], :undefined],
             [:apply, [:name], :skipped],
           ])
+        end
+
+        it "filters events by type"
+        it "filters events by attribute"
+      end
+
+      describe "#add" do
+        let(:event) { Events.apply(:from, :passed) }
+
+        it "adds the event to the log" do
+          subject.add(event)
+          subject.events.should include(event)
+        end
+
+        it "returns the event" do
+          subject.add(event).should eq(event)
         end
       end
     end
