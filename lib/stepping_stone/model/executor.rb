@@ -11,7 +11,7 @@ module SteppingStone
         server.start_test(test_case) do |session|
           @last_event = session.setup
           test_case.each do |action|
-            if @last_event.skip?
+            if @last_event.skip_next?
               session.skip(action)
             else
               session.before_apply(action)

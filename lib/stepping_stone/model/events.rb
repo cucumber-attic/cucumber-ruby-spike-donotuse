@@ -33,7 +33,7 @@ module SteppingStone
       end
 
       class HookEvent < Event
-        def skip?
+        def skip_next?
           failed?
         end
 
@@ -43,8 +43,8 @@ module SteppingStone
       end
 
       class ActionEvent < Event
-        def skip?
-          failed? or undefined?
+        def skip_next?
+          failed? or undefined? or skipped?
         end
 
         def to_s
