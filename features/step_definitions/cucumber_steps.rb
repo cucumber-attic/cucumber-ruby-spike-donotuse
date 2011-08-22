@@ -20,7 +20,7 @@ When /^Cucumber executes the scenario "(.+)"$/ do |name|
   execute(@test_case)
 end
 
-Then /^the life cycle events are:$/ do |table|
+Then /^the life cycle history is:$/ do |table|
   table.map_column!(:event, &:to_sym)
   table.map_column!(:status, &:to_sym)
   table.map_column!(:name) { |name| [name] }

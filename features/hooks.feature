@@ -32,7 +32,7 @@ Feature: Hooks into the test case lifecycle
   Scenario: No hooks
     Given there are no hooks
     When Cucumber executes the scenario "Basic Arithmetic"
-    Then the life cycle events are:
+    Then the life cycle history is:
       | event | name            | status |
       | apply | I add 4 and 5   | passed |
       | apply | the result is 9 | passed |
@@ -43,7 +43,7 @@ Feature: Hooks into the test case lifecycle
       | setup    | all scenarios |
       | teardown | all scenarios |
     When Cucumber executes the scenario "Basic Arithmetic"
-    Then the life cycle events are:
+    Then the life cycle history is:
       | event    | name             | status |
       | setup    | Basic Arithmetic | passed |
       | apply    | I add 4 and 5    | passed |
