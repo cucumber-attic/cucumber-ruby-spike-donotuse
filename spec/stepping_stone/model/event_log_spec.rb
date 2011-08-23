@@ -49,6 +49,9 @@ module SteppingStone
         before do
           log.add(ev(:setup, :passed))
           log.add(ev(:before_apply, :undefined))
+          log.add(ev(:apply, :passed))
+          log.add(ev(:after_apply, :passed))
+          log.add(ev(:before_apply, :undefined))
           log.add(ev(:apply, :undefined))
           log.add(ev(:after_apply, :undefined))
           log.add(ev(:before_apply, :undefined))
@@ -58,38 +61,44 @@ module SteppingStone
         end
 
         it "includes all events" do
-          log.should have(8).events
+          log.should have(11).events
         end
 
         it "filters events" do
-          log.events(status: :passed).length.should eq(1)
-          log.events(status: :undefined).length.should eq(5)
-          log.events(type: :apply).length.should eq(2)
-          log.events(status: :undefined, type: :before_apply).length.should eq(2)
+          log.events(status: :passed).length.should eq(3)
+          log.events(type: :apply).length.should eq(3)
+          log.events(status: :undefined, type: :before_apply).length.should eq(3)
         end
       end
 
       describe "#history" do
-        it "includes only the important events" do
-          log = EventLog.new
+        let(:log) { EventLog.new }
 
+        before do
           log.add(ev(:setup, :passed))
+          log.add(ev(:before_apply, :undefined))
+          log.add(ev(:apply, :passed))
+          log.add(ev(:after_apply, :passed))
           log.add(ev(:before_apply, :undefined))
           log.add(ev(:apply, :undefined))
           log.add(ev(:after_apply, :undefined))
           log.add(ev(:before_apply, :undefined))
           log.add(ev(:apply, :skipped))
           log.add(ev(:after_apply, :undefined))
-
-          log.history.should eq([
-            [:setup, [:name], :passed],
-            [:apply, [:name], :undefined],
-            [:apply, [:name], :skipped],
-          ])
+          log.add(ev(:teardown, :failed))
         end
 
-        it "filters events by type"
-        it "filters events by attribute"
+        it "includes only the important events" do
+          log.history.should have(6).events
+        end
+
+        it "does not include undefined hooks" do
+          log.history.each do |event|
+            if Events::HookEvent === event
+              event.should_not be_undefined
+            end
+          end
+        end
       end
 
       describe "#add" do

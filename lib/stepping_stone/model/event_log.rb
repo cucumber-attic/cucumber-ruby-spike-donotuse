@@ -40,11 +40,9 @@ module SteppingStone
       end
 
       def history
-        events.reject do |event|
-          Events::HookEvent === event and
-            event.undefined?
-        end.map do |event|
-          [event.type, event.name, event.status]
+        @events.select do |event|
+          Events::ActionEvent === event or
+            !event.undefined?
         end
       end
 
