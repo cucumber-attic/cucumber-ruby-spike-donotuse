@@ -57,20 +57,20 @@ module SteppingStone
           log.add(ev(:teardown, :failed))
         end
 
-        it "includes everything that happened" do
+        it "includes all events" do
           log.should have(8).events
         end
 
-        it "filters events by status" do
+        it "filters events" do
           log.events(status: :passed).length.should eq(1)
           log.events(status: :undefined).length.should eq(5)
+          log.events(type: :apply).length.should eq(2)
+          log.events(status: :undefined, type: :before_apply).length.should eq(2)
         end
-
-        it "filters events by type"
       end
 
       describe "#history" do
-        it "includes only the important stuff that happened" do
+        it "includes only the important events" do
           log = EventLog.new
 
           log.add(ev(:setup, :passed))

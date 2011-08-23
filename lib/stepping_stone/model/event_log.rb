@@ -8,7 +8,7 @@ module SteppingStone
       end
 
       def add(event)
-        events << event
+        @events << event
         event
       end
 
@@ -31,14 +31,10 @@ module SteppingStone
       end
 
       def events(opts={})
-        defaults = { status: :any, type: :any }
-        filter = defaults.merge(opts)
-
-        if filter == defaults
-          @events
-        else
-          @events.select do |event|
-            event.status == filter[:status]
+        filter = opts.to_a
+        @events.select do |event|
+          filter.all? do |attr, val|
+            event.send(attr) == val
           end
         end
       end
