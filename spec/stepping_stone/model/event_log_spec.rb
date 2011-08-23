@@ -62,8 +62,8 @@ module SteppingStone
         end
 
         it "filters events by status" do
-          log.events(:passed).length.should eq(1)
-          log.events(:undefined).length.should eq(5)
+          log.events(status: :passed).length.should eq(1)
+          log.events(status: :undefined).length.should eq(5)
         end
 
         it "filters events by type"

@@ -30,11 +30,16 @@ module SteppingStone
         end
       end
 
-      def events(status=nil)
-        if status
-          @events.select { |event| event.status == status }
-        else
+      def events(opts={})
+        defaults = { status: :any, type: :any }
+        filter = defaults.merge(opts)
+
+        if filter == defaults
           @events
+        else
+          @events.select do |event|
+            event.status == filter[:status]
+          end
         end
       end
 
