@@ -1,4 +1,4 @@
-Feature: Hooks into the test case lifecycle
+Feature: Test case execution life cycle
 
   Cucumber does not execute anything directly. Instead
   it compiles its input into a set of test cases, each
