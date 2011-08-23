@@ -24,7 +24,7 @@ Then /^the life cycle history is:$/ do |table|
   table.map_column!(:event, &:to_sym)
   table.map_column!(:status, &:to_sym)
   table.map_column!(:name) { |name| [name] }
-  life_cycle_events.should eq(table.rows)
+  life_cycle_history.should eq(table.rows)
 end
 
 module CucumberWorld
@@ -88,8 +88,8 @@ module CucumberWorld
     executor.execute(test_case)
   end
 
-  def life_cycle_events
-    reporter.events
+  def life_cycle_history
+    reporter.history.map(&:to_a)
   end
 end
 

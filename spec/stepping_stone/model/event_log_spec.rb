@@ -3,14 +3,6 @@ require 'spec_helper'
 module SteppingStone
   module Model
     describe EventLog do
-      before do
-        subject.add(ev(:setup, :passed))
-        subject.add(ev(:before_apply, :undefined))
-        subject.add(ev(:apply, :passed))
-        subject.add(ev(:after_apply, :undefined))
-        subject.add(ev(:teardown, :passed))
-      end
-
       def ev(type, status)
         Events.send(type, :name, res(status))
       end
@@ -19,81 +11,39 @@ module SteppingStone
         Result.new(status)
       end
 
-      it "creates a list of event types" do
-        subject.types.should eq(
-          [:setup, :before_apply, :apply, :after_apply, :teardown]
-        )
-      end
-
-      it "creates a list of executed event statuses" do
-        subject.statuses.should eq(
-          [:passed, :passed, :passed]
-        )
-      end
-
-      it "creates a table of executed events" do
-        subject.executed_events.should eq([
-          [:setup, [:name], :passed],
-          [:apply, [:name], :passed],
-          [:teardown, [:name], :passed]
-        ])
-      end
-
-      it "builds a string representation" do
-        subject.to_s.should eq(".")
+      before do
+        subject.add(ev(:setup, :passed))
+        subject.add(ev(:before_apply, :undefined))
+        subject.add(ev(:apply, :passed))
+        subject.add(ev(:after_apply, :passed))
+        subject.add(ev(:before_apply, :undefined))
+        subject.add(ev(:apply, :undefined))
+        subject.add(ev(:after_apply, :undefined))
+        subject.add(ev(:before_apply, :undefined))
+        subject.add(ev(:apply, :skipped))
+        subject.add(ev(:after_apply, :undefined))
+        subject.add(ev(:teardown, :failed))
       end
 
       describe "#events" do
-        let(:log) { EventLog.new }
-
-        before do
-          log.add(ev(:setup, :passed))
-          log.add(ev(:before_apply, :undefined))
-          log.add(ev(:apply, :passed))
-          log.add(ev(:after_apply, :passed))
-          log.add(ev(:before_apply, :undefined))
-          log.add(ev(:apply, :undefined))
-          log.add(ev(:after_apply, :undefined))
-          log.add(ev(:before_apply, :undefined))
-          log.add(ev(:apply, :skipped))
-          log.add(ev(:after_apply, :undefined))
-          log.add(ev(:teardown, :failed))
-        end
-
         it "includes all events" do
-          log.should have(11).events
+          subject.should have(11).events
         end
 
         it "filters events" do
-          log.events(status: :passed).length.should eq(3)
-          log.events(type: :apply).length.should eq(3)
-          log.events(status: :undefined, type: :before_apply).length.should eq(3)
+          subject.events(status: :passed).length.should eq(3)
+          subject.events(type: :apply).length.should eq(3)
+          subject.events(status: :undefined, type: :before_apply).length.should eq(3)
         end
       end
 
       describe "#history" do
-        let(:log) { EventLog.new }
-
-        before do
-          log.add(ev(:setup, :passed))
-          log.add(ev(:before_apply, :undefined))
-          log.add(ev(:apply, :passed))
-          log.add(ev(:after_apply, :passed))
-          log.add(ev(:before_apply, :undefined))
-          log.add(ev(:apply, :undefined))
-          log.add(ev(:after_apply, :undefined))
-          log.add(ev(:before_apply, :undefined))
-          log.add(ev(:apply, :skipped))
-          log.add(ev(:after_apply, :undefined))
-          log.add(ev(:teardown, :failed))
-        end
-
         it "includes only the important events" do
-          log.history.should have(6).events
+          subject.history.should have(6).events
         end
 
         it "does not include undefined hooks" do
-          log.history.each do |event|
+          subject.history.each do |event|
             if Events::HookEvent === event
               event.should_not be_undefined
             end
@@ -111,6 +61,12 @@ module SteppingStone
 
         it "returns the event" do
           subject.add(event).should eq(event)
+        end
+      end
+
+      describe "#to_s" do
+        it "builds a string representation" do
+          subject.to_s.should eq(".US")
         end
       end
     end

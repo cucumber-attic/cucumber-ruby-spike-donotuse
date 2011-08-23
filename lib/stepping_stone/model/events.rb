@@ -30,6 +30,10 @@ module SteppingStone
         end
 
         def_delegators :@result, :passed?, :failed?, :undefined?, :skipped?, :status
+
+        def to_a
+          [type, name, status]
+        end
       end
 
       class HookEvent < Event

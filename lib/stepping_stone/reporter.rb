@@ -56,8 +56,8 @@ module SteppingStone
       results.add(result)
     end
 
-    def events
-      results.executed_events
+    def history
+      results.history
     end
 
     def to_s
