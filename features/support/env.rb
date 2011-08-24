@@ -10,3 +10,4 @@ require 'stepping_stone/text_mapper/hook'
 require 'aruba/cucumber'
 
 require 'rspec/expectations'
+require 'date'

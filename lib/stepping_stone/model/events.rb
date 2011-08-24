@@ -1,4 +1,5 @@
 require 'forwardable'
+require 'date'
 
 module SteppingStone
   module Model
@@ -23,10 +24,11 @@ module SteppingStone
       class Event
         extend Forwardable
 
-        attr_reader :type, :name, :result
+        attr_reader :type, :name, :result, :created_at
 
         def initialize(type, name, result)
           @type, @name, @result = type, [name].flatten, result
+          @created_at = DateTime.now
         end
 
         def_delegators :@result, :passed?, :failed?, :undefined?, :skipped?, :status

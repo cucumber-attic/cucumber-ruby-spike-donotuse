@@ -19,14 +19,17 @@ module SteppingStone
 
       attr_accessor :mapper_namespace
 
-      def initialize
+      def initialize(env_hooks = {})
+        @env_hooks = env_hooks
         @mapper_namespace = TextMapper::Namespace.new
       end
 
       def start_test(test_case)
+        @env_hooks[:before].call
         session = Servers::Rb::Session.new(build_context, test_case)
         yield session
         session.end_test
+        @env_hooks[:after].call
       end
 
       def add_mapping(mapping)

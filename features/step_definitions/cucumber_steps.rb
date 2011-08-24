@@ -16,7 +16,28 @@ Given "there are no hooks" do
   sut.hooks.should be_empty
 end
 
+Given /^a passing before hook$/ do
+  env_hooks[:before] = lambda do
+    @before_hook = lambda do
+      DateTime.now
+    end.call
+  end
+end
+
+Given /^a passing after hook$/ do
+  env_hooks[:after] = lambda do
+    @after_hook = lambda do
+      DateTime.now
+    end.call
+  end
+end
+
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
+  execute(@test_case)
+end
+
+When "Cucumber executes a scenario" do
+  @test_case = compile_scenario("Test Scenario", "Given a passing step")
   execute(@test_case)
 end
 
@@ -25,6 +46,14 @@ Then /^the life cycle history is:$/ do |table|
   table.map_column!(:status, &:to_sym)
   table.map_column!(:name) { |name| [name] }
   life_cycle_history.should eq(table.rows)
+end
+
+Then /^the before hook is fired before the scenario$/ do
+  @before_hook.should be < test_case_start_time
+end
+
+Then /^the after hook is fired after the scenario$/ do
+  @after_hook.should be > test_case_end_time
 end
 
 module CucumberWorld
@@ -51,6 +80,7 @@ module CucumberWorld
       def_map /I log in as "(\w+)"/ => :login_as
       def_map "I add 4 and 5" => :add
       def_map "the result is 9" => :assert_result
+      def_map "a passing step" => :passing
 
       def login_as(userid)
         @userid = userid
@@ -63,6 +93,10 @@ module CucumberWorld
       def assert_result
         @result.should eq(9)
       end
+
+      def passing
+        @passing = true
+      end
     end
   end
 
@@ -72,8 +106,12 @@ module CucumberWorld
     sut.add_mapping(hook)
   end
 
+  def env_hooks
+    @env_hooks ||= {}
+  end
+
   def sut
-    @sut ||= SteppingStone::Servers::Rb.new
+    @sut ||= SteppingStone::Servers::Rb.new(env_hooks)
   end
 
   def reporter
@@ -90,6 +128,14 @@ module CucumberWorld
 
   def life_cycle_history
     reporter.history.map(&:to_a)
+  end
+
+  def test_case_start_time
+    reporter.history.first.created_at
+  end
+
+  def test_case_end_time
+    reporter.history.last.created_at
   end
 end
 
