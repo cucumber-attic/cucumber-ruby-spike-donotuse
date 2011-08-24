@@ -11,5 +11,9 @@ Feature: Environment Hooks
     And the after hook is fired after the scenario
 
   Scenario: Around
+    Given a passing around hook
+    When Cucumber executes a scenario
+    Then the around hook fires around the scenario
+
   Scenario: Tagged hooks
 

@@ -25,11 +25,18 @@ module SteppingStone
       end
 
       def start_test(test_case)
-        @env_hooks[:before].call
-        session = Servers::Rb::Session.new(build_context, test_case)
-        yield session
-        session.end_test
-        @env_hooks[:after].call
+        @env_hooks[:before].call if @env_hooks[:before]
+        executor = lambda do
+          session = Servers::Rb::Session.new(build_context, test_case)
+          yield session
+          session.end_test
+        end
+        if @env_hooks[:around]
+          @env_hooks[:around].call(executor)
+        else
+          executor.call
+        end
+        @env_hooks[:after].call if @env_hooks[:after]
       end
 
       def add_mapping(mapping)

@@ -32,6 +32,14 @@ Given /^a passing after hook$/ do
   end
 end
 
+Given /^a passing around hook$/ do
+  env_hooks[:around] = lambda do |execution|
+    @around_hook_pre = lambda { DateTime.now }.call
+    execution.call
+    @around_hook_post = lambda { DateTime.now }.call
+  end
+end
+
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
   execute(@test_case)
 end
@@ -54,6 +62,11 @@ end
 
 Then /^the after hook is fired after the scenario$/ do
   @after_hook.should be > test_case_end_time
+end
+
+Then /^the around hook fires around the scenario$/ do
+  @around_hook_pre.should be < test_case_start_time
+  @around_hook_post.should be > test_case_end_time
 end
 
 module CucumberWorld
