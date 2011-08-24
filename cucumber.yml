@@ -1,1 +1,1 @@
-default: features/hooks.feature features/cli_exec.feature
+default: features/hooks.feature features/life_cycle.feature features/cli_exec.feature --tags ~@wip
