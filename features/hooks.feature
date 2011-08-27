@@ -32,13 +32,11 @@ Feature: Environment Hooks
     When Cucumber executes a scenario tagged with "@bar"
     Then the hook is not fired
 
-  @wip
   Scenario: Tagged hook with untagged scenario
-    Given a passing hook tagged with "foo"
+    Given a hook tagged with "@foo"
     When Cucumber executes a scenario with no tags
     Then the hook is not fired
 
-  @wip
   Scenario: Untagged hook with tagged scenario
     Given an untagged hook
     When Cucumber executes a scenario tagged with "bar"

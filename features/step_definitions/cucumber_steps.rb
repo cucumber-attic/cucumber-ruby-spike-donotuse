@@ -36,6 +36,10 @@ Given /^a hook tagged with "(.+)"$/ do |tag|
   env_hooks.add_before(tag) { @before_time = -> { DateTime.now }.call }
 end
 
+Given /^an untagged hook$/ do
+  env_hooks.add_before { @before_time = -> { DateTime.now }.call }
+end
+
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
   execute(@test_case)
 end
@@ -47,6 +51,11 @@ end
 
 When /^Cucumber executes a scenario tagged with "(.+)"$/ do |tag|
   @test_case = compile_scenario("Test Scenario", "Given a passing step", background=nil, tags=tag)
+  execute(@test_case)
+end
+
+When /^Cucumber executes a scenario with no tags$/ do
+  @test_case = compile_scenario("Test Scenario", "Given a passing step", backgroung=nil, tags=[])
   execute(@test_case)
 end
 
