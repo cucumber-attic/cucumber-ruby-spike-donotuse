@@ -10,7 +10,7 @@ module SteppingStone
         it "yields the new session to the given block"
 
         it "ends the session when invoked with a block" do
-          subject.start_test(double("test_case")) do |session|
+          subject.start_test(double("test_case", :tags => [])) do |session|
             session.should_receive(:end_test)
           end
         end
