@@ -17,19 +17,23 @@ Given "there are no hooks" do
 end
 
 Given /^a passing before hook$/ do
-  env_hooks.before { @before_time = -> { DateTime.now }.call }
+  env_hooks.add_before { @before_time = -> { DateTime.now }.call }
 end
 
 Given /^a passing after hook$/ do
-  env_hooks.after { @after_time = -> { DateTime.now }.call }
+  env_hooks.add_after { @after_time = -> { DateTime.now }.call }
 end
 
 Given /^a passing around hook$/ do
-  env_hooks.around do |execution|
+  env_hooks.add_around do |execution|
     @around_pre_time = -> { DateTime.now }.call
     execution.call
     @around_post_time = -> { DateTime.now }.call
   end
+end
+
+Given /^a hook tagged with "(\w+)"$/ do |tag|
+  env_hooks.add_before(tag) { @before_time = -> { DateTime.now }.call }
 end
 
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
@@ -38,6 +42,11 @@ end
 
 When "Cucumber executes a scenario" do
   @test_case = compile_scenario("Test Scenario", "Given a passing step")
+  execute(@test_case)
+end
+
+When /^Cucumber executes a scenario tagged with "(.+)"$/ do |tag|
+  @test_case = compile_scenario("Test Scenario", "Given a passing step", background=nil, tags=tag)
   execute(@test_case)
 end
 
@@ -66,9 +75,13 @@ Then /^the around hook is fired around the other hooks$/ do
   chronological.should eq([@around_pre_time, @before_time, @after_time, @around_post_time])
 end
 
+Then /^the hook is fired$/ do
+  defined?(@before_time).should eq("instance-variable")
+end
+
 module CucumberWorld
-  def compile_scenario(name, body, background=nil)
-    feature = build_feature(name, body, background)
+  def compile_scenario(name, body, background=nil, tags=nil)
+    feature = build_feature(name, body, background, tags)
     if test_cases = SteppingStone::GherkinCompiler.new.compile(feature)
       test_cases[0]
     else
@@ -76,9 +89,11 @@ module CucumberWorld
     end
   end
 
-  def build_feature(name, body, background=nil)
+  def build_feature(name, body, background=nil, tags=nil)
     out = "Feature: test\n"
     out << "Background:\n #{background}\n" if background
+    out << "\n"
+    out << "@#{tags}\n" if tags
     out << "Scenario: #{name}\n#{body}"
   end
 

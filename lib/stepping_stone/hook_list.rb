@@ -1,23 +1,23 @@
 module SteppingStone
   class HookList
-    attr_reader :hooks
+    attr_reader :around, :before, :after
 
     def initialize
-      @hooks = { :around => [],
-                 :before => [],
-                 :after  => [] }
+      @around = []
+      @before = []
+      @after  = []
     end
 
-    def around(&hook)
-      hooks[:around].push(hook)
+    def add_around(&hook)
+      around.push(hook)
     end
 
-    def before(&hook)
-      hooks[:before].push(hook)
+    def add_before(*tags, &hook)
+      before.push(hook)
     end
 
-    def after(&hook)
-      hooks[:after].push(hook)
+    def add_after(&hook)
+      after.push(hook)
     end
 
     def invoke(&run)
@@ -27,16 +27,16 @@ module SteppingStone
     private
 
     def compose_around(&run)
-      hooks[:around].inject(run) do |inside, outside|
+      around.inject(run) do |inside, outside|
         lambda { outside.call(inside) }
       end
     end
 
     def compose_before_and_after(&run)
       lambda do
-        hooks[:before].each { |hook| hook.call }
+        before.each { |hook| hook.call }
         run.call
-        hooks[:after].each { |hook| hook.call }
+        after.each { |hook| hook.call }
       end
     end
   end

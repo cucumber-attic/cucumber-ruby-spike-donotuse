@@ -14,16 +14,20 @@ module SteppingStone
         @test_cases = []
       end
 
-      def record(uri)
+      def record(uri, tags)
         @current = uri
+        @current_tags = tags
       end
 
       def replay
         if @current
           actions = @pre_actions.dup + @tc_actions
-          @test_cases.push(Model::TestCase.new(@current, *actions))
+          test_case = Model::TestCase.new(@current, *actions)
+          test_case.tags = @current_tags
+          @test_cases.push(test_case)
           @tc_actions = []
           @current = nil
+          @current_tags = nil
         end
       end
 
@@ -50,7 +54,7 @@ module SteppingStone
 
     def scenario(scenario)
       @builder.replay
-      @builder.record(scenario.name)
+      @builder.record(scenario.name, scenario.tags.collect(&:name))
     end
 
     def step(step)
