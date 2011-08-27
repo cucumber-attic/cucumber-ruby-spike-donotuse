@@ -26,15 +26,11 @@ module SteppingStone
       end
 
       def start_test(test_case)
-        env_hooks.invoke(:before)
-
-        env_hooks.invoke(:around) do
+        env_hooks.invoke do
           session = Servers::Rb::Session.new(build_context, test_case)
           yield session
           session.end_test
         end
-
-        env_hooks.invoke(:after)
       end
 
       def add_mapping(mapping)

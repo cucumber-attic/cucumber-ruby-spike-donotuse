@@ -20,13 +20,23 @@ module SteppingStone
       hooks[:after].push(hook)
     end
 
-    def invoke(type, &run)
-      if type == :around
-        hooks[:around].inject(run) do |inside, outside|
-          lambda { outside.call(inside) }
-        end.call
-      else
-        hooks[type].each { |hook| hook.call }
+    def invoke(&run)
+      compose_around(&compose_before_and_after(&run)).call
+    end
+
+    private
+
+    def compose_around(&run)
+      hooks[:around].inject(run) do |inside, outside|
+        lambda { outside.call(inside) }
+      end
+    end
+
+    def compose_before_and_after(&run)
+      lambda do
+        hooks[:before].each { |hook| hook.call }
+        run.call
+        hooks[:after].each { |hook| hook.call }
       end
     end
   end
