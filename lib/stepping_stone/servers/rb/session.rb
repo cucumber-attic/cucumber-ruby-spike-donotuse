@@ -1,3 +1,4 @@
+require 'stepping_stone/model/events'
 require 'stepping_stone/model/result'
 
 module SteppingStone

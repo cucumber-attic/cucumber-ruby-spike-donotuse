@@ -1,4 +1,3 @@
-require 'stepping_stone/model/events'
 require 'stepping_stone/text_mapper/namespace'
 require 'stepping_stone/code_loader'
 
