@@ -17,26 +17,18 @@ Given "there are no hooks" do
 end
 
 Given /^a passing before hook$/ do
-  env_hooks[:before] = lambda do
-    @before_hook = lambda do
-      DateTime.now
-    end.call
-  end
+  env_hooks.before { @before_time = -> { DateTime.now }.call }
 end
 
 Given /^a passing after hook$/ do
-  env_hooks[:after] = lambda do
-    @after_hook = lambda do
-      DateTime.now
-    end.call
-  end
+  env_hooks.after { @after_time = -> { DateTime.now }.call }
 end
 
 Given /^a passing around hook$/ do
-  env_hooks[:around] = lambda do |execution|
-    @around_hook_pre = lambda { DateTime.now }.call
+  env_hooks.around do |execution|
+    @around_pre_time = -> { DateTime.now }.call
     execution.call
-    @around_hook_post = lambda { DateTime.now }.call
+    @around_post_time = -> { DateTime.now }.call
   end
 end
 
@@ -57,16 +49,16 @@ Then /^the life cycle history is:$/ do |table|
 end
 
 Then /^the before hook is fired before the scenario$/ do
-  @before_hook.should be < test_case_start_time
+  @before_time.should be < test_case_start_time
 end
 
 Then /^the after hook is fired after the scenario$/ do
-  @after_hook.should be > test_case_end_time
+  @after_time.should be > test_case_end_time
 end
 
 Then /^the around hook fires around the scenario$/ do
-  @around_hook_pre.should be < test_case_start_time
-  @around_hook_post.should be > test_case_end_time
+  @around_pre_time.should be < test_case_start_time
+  @around_post_time.should be > test_case_end_time
 end
 
 module CucumberWorld
@@ -120,7 +112,7 @@ module CucumberWorld
   end
 
   def env_hooks
-    @env_hooks ||= {}
+    @env_hooks ||= SteppingStone::HookList.new
   end
 
   def sut

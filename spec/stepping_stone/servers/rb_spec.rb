@@ -3,6 +3,8 @@ require 'spec_helper'
 module SteppingStone
   module Servers
     describe Rb do
+      subject { Rb.new(HookList.new) }
+
       describe "#start_test" do
         it "starts a new session"
         it "yields the new session to the given block"

@@ -54,7 +54,7 @@ module SteppingStone
           compiler.compile(content)
         end.flatten
 
-        server = Servers.boot!(:default)
+        server = Servers.boot!(:default, :env_hooks => HookList.new)
         reporter = Reporter.new(server)
         executor = Model::Executor.new(reporter)
 
