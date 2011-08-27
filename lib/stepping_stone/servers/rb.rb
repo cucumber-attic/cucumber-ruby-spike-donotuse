@@ -25,7 +25,7 @@ module SteppingStone
       end
 
       def start_test(test_case)
-        env_hooks.invoke do
+        env_hooks.invoke(test_case.tags) do
           session = Servers::Rb::Session.new(build_context, test_case)
           yield session
           session.end_test

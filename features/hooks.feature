@@ -23,14 +23,13 @@ Feature: Environment Hooks
     Then the around hook is fired around the other hooks
 
   Scenario: Tagged hook with matching scenario tag
-    Given a hook tagged with "foo"
-    When Cucumber executes a scenario tagged with "foo"
+    Given a hook tagged with "@foo"
+    When Cucumber executes a scenario tagged with "@foo"
     Then the hook is fired
 
-  @wip
   Scenario: Tagged hook without matching scenario tag
-    Given a passing hook tagged with "foo"
-    When Cucumber executes a scenario tagged with "bar"
+    Given a hook tagged with "@foo"
+    When Cucumber executes a scenario tagged with "@bar"
     Then the hook is not fired
 
   @wip

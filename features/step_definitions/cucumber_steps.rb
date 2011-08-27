@@ -32,7 +32,7 @@ Given /^a passing around hook$/ do
   end
 end
 
-Given /^a hook tagged with "(\w+)"$/ do |tag|
+Given /^a hook tagged with "(.+)"$/ do |tag|
   env_hooks.add_before(tag) { @before_time = -> { DateTime.now }.call }
 end
 
@@ -79,6 +79,10 @@ Then /^the hook is fired$/ do
   defined?(@before_time).should eq("instance-variable")
 end
 
+Then /^the hook is not fired$/ do
+  defined?(@before_time).should eq(nil)
+end
+
 module CucumberWorld
   def compile_scenario(name, body, background=nil, tags=nil)
     feature = build_feature(name, body, background, tags)
@@ -93,7 +97,7 @@ module CucumberWorld
     out = "Feature: test\n"
     out << "Background:\n #{background}\n" if background
     out << "\n"
-    out << "@#{tags}\n" if tags
+    out << "#{tags}\n" if tags
     out << "Scenario: #{name}\n#{body}"
   end
 
