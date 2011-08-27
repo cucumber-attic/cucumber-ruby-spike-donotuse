@@ -23,9 +23,20 @@ Feature: Environment Hooks
     Then the around hook is fired around the other hooks
 
   @wip
-  Scenario: Tagged hooks
-    Given a passing before hook tagged with "foo"
+  Scenario: Tagged hook with matching scenario tag
+    Given a passing hook tagged with "foo"
     When Cucumber executes a scenario tagged with "foo"
-    Then the before hook is fired before the scenario
+    Then the hook is fired
+
+  @wip
+  Scenario: Tagged hook without matching scenario tag
+    Given a passing hook tagged with "foo"
+    When Cucumber executes a scenario tagged with "bar"
+    Then the hook is not fired
+
+  @wip
+  Scenario: Tagged hook with untagged scenario
+    Given a passing hook tagged with "foo"
     When Cucumber executes a scenario with no tags
-    Then the before hook is not fired
+    Then the hook is not fired
+
