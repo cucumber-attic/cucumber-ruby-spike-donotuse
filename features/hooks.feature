@@ -15,6 +15,13 @@ Feature: Environment Hooks
     When Cucumber executes a scenario
     Then the around hook fires around the scenario
 
+  Scenario: Around fires around other hooks
+    Given a passing around hook
+    And a passing before hook
+    And a passing after hook
+    When Cucumber executes a scenario
+    Then the around hook is fired around the other hooks
+
   @wip
   Scenario: Tagged hooks
     Given a passing before hook tagged with "foo"

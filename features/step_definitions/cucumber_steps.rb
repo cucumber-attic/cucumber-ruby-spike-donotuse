@@ -61,6 +61,11 @@ Then /^the around hook fires around the scenario$/ do
   @around_post_time.should be > test_case_end_time
 end
 
+Then /^the around hook is fired around the other hooks$/ do
+  chronological = [@around_pre_time, @around_post_time, @before_time, @after_time].sort
+  chronological.should eq([@around_pre_time, @before_time, @after_time, @around_post_time])
+end
+
 module CucumberWorld
   def compile_scenario(name, body, background=nil)
     feature = build_feature(name, body, background)
