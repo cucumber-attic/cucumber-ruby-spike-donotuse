@@ -6,13 +6,13 @@ Given /^a passing background with:$/ do |background|
   @background = background
 end
 
-Given /^these passing hooks:$/ do |hooks|
+Given /^these passing listeners:$/ do |hooks|
   hooks.rows.each do |aspect, subject|
     add_hook(aspect, subject, :pass)
   end
 end
 
-Given "there are no hooks" do
+Given "there are no listeners" do
   sut.hooks.should be_empty
 end
 

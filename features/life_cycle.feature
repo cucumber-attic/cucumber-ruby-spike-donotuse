@@ -1,26 +1,29 @@
-Feature: Test case execution life cycle
+Feature: Life cycle event listeners
 
-  Cucumber does not execute anything directly. Instead
-  it compiles its input into a set of test cases, each
-  containing a set of actions, and executes the test cases
-  by instantiating a new context for each, then ensuring
-  what each action represents is applied to the system under
-  test.
+  Cucumber does not execute its input directly. Instead
+  it compiles it into a set of test cases, each containing a
+  set of actions, and then executes the test cases. By doing
+  this Cucumber ensures there is a standard execution model,
+  regardless of the form each example had before it was
+  compiled.
 
-  This allows Cucumber to define a uniform executable 
-  representation for each example you specify, regardless of
-  the specific format of the input. By itself that's not too
-  interesting, but Cucumber also provides a mechanism that
-  enables its users to specify hooks into the test case
-  lifecycle. Hooks are defined by three attributes: what they
-  are associated with, the time when they fire, and a
-  callback action.
+  Just having a standard model, however, isn't worth anything
+  if you can't tie that model to the software you are
+  developing, so Cucumber also provides a backend layer that
+  maps from test case actions to user-provided methods or
+  functions in the system under test. It is the responsibility
+  of these functions to setup, modify and verify the state of
+  the software under test in a way that fulfils the intent and
+  meaning of the input examples.
 
-  Hooks can be associated with a test case or an action.
-  They can fire before, after and around their subject.
-
-  In addition to this, hooks can be associated with metadata,
-  e.g. tags.
+  This communication between the execution model and the backend
+  takes the form of a series of events whose results determine
+  the outcome of the life cycle of each test case, whether it
+  passed or failed, etc. To get started the user must register
+  listeners for the "apply" events that correspond to test case
+  actions (how exactly that is done will differ from backend to
+  backend). If necessary or useful they may also register
+  listeners for the other events in the test case life cycle.
 
   Background:
     Given a passing scenario "Basic Arithmetic" with:
@@ -29,16 +32,16 @@ Feature: Test case execution life cycle
       Then the result is 9
       """
 
-  Scenario: No hooks
-    Given there are no hooks
+  Scenario: No listeners (should be "No listeners, test case is pending", then "Apply listeners", etc.)
+    Given there are no listeners
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle history is:
       | event | name            | status |
       | apply | I add 4 and 5   | passed |
       | apply | the result is 9 | passed |
 
-  Scenario: Before and after test case
-    Given these passing hooks:
+  Scenario: Setup and teardown
+    Given these passing listeners:
       | when     | what          |
       | setup    | all scenarios |
       | teardown | all scenarios |
@@ -49,6 +52,22 @@ Feature: Test case execution life cycle
       | apply    | I add 4 and 5    | passed |
       | apply    | the result is 9  | passed |
       | teardown | Basic Arithmetic | passed |
+
+  @wip
+  Scenario: Listeners for every event
+    Given there are listeners for every event
+    When Cucumber executes a scenario
+    Then the life cycle history is:
+      | event        |
+      | setup        |
+      | before_apply |
+      | apply        |
+      | after_apply  |
+      | teardown     |
+
+  Scenario: Failing listener fails test case
+  Scenario: Undefined action stops execution
+  Scenario: Undefined listener does not stop execution
 
   Scenario: Before and after dispatch
   Scenario: Failing hook skips the rest of the test case
