@@ -32,7 +32,7 @@ Feature: Life cycle event listeners
       Then the result is 9
       """
 
-  Scenario: No listeners (should be "No listeners, test case is pending", then "Apply listeners", etc.)
+  Scenario: No listeners
     Given there are no listeners
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle history is:
