@@ -16,7 +16,7 @@ module SteppingStone
         results.should eq([:around_before, :before, :run, :after, :around_after])
       end
 
-      it "passes arguments to invoke to the hooks" do
+      it "passes arguments to the hooks" do
         res = []
         subject.add(:around) do |run, arg|
           res.push(:"around_before_#{arg}")
