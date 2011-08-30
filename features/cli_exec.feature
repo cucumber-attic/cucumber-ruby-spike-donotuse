@@ -1,5 +1,5 @@
-Feature: sst exec
-  Usage of the 'sst exec' command
+Feature: CLI exec
+  Usage of the 'cuke exec' command
 
   Background:
     Given a file named "sst/sst_helper.rb" with:
@@ -75,7 +75,7 @@ Feature: sst exec
           Then the answer is 9
 
       """
-    When I successfully run `sst exec sst/features/calculator.feature`
+    When I successfully run `cuke exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
       ...
@@ -93,7 +93,7 @@ Feature: sst exec
           And the answer is not 16
 
       """
-    When I successfully run `sst exec sst/features/calculator.feature`
+    When I successfully run `cuke exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
       ..FS
@@ -112,7 +112,7 @@ Feature: sst exec
           Then the answer is 20
 
       """
-    When I successfully run `sst exec sst/features/calculator.feature`
+    When I successfully run `cuke exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
       ..US
@@ -133,7 +133,7 @@ Feature: sst exec
           Then the answer is 14
 
       """
-    When I successfully run `sst exec sst/features/calculator.feature`
+    When I successfully run `cuke exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
       ...
@@ -155,7 +155,7 @@ Feature: sst exec
           Then the answer is 32
 
       """
-    When I successfully run `sst exec sst/features/calculator.feature`
+    When I successfully run `cuke exec sst/features/calculator.feature`
     Then the output should contain exactly:
       """
       ......
