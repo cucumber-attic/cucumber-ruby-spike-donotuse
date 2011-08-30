@@ -14,8 +14,8 @@ module SteppingStone
       hooks[type] << [Gherkin::TagExpression.new(exprs), hook]
     end
 
-    def invoke(tags=[], &run)
-      compose(*filter(tags), run).call
+    def invoke(tags=[], *args, &run)
+      compose(*filter(tags), run, args).call
     end
 
     def filter(tags)
@@ -28,19 +28,19 @@ module SteppingStone
 
     private
 
-    def compose(around, before, after, run)
+    def compose(around, before, after, run, args)
       around.inject(
-        before_and_after(before, after, run)
+        before_and_after(before, after, run, args)
       ) do |inside, outside|
-        lambda { outside.call(inside) }
+        lambda { outside.call(inside, *args) }
       end
     end
 
-    def before_and_after(before, after, run)
+    def before_and_after(before, after, run, args)
       lambda do
-        before.each(&:call)
+        before.each { |hook| hook.call(*args) }
         run.call
-        after.each(&:call)
+        after.each { |hook| hook.call(*args) }
       end
     end
   end

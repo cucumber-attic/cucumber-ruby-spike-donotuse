@@ -16,6 +16,19 @@ module SteppingStone
         results.should eq([:around_before, :before, :run, :after, :around_after])
       end
 
+      it "passes arguments to invoke to the hooks" do
+        res = []
+        subject.add(:around) do |run, arg|
+          res.push(:"around_before_#{arg}")
+          run.call
+          res.push(:"around_after_#{arg}")
+        end
+        subject.add(:before) { |arg| res.push(:"before_#{arg}") }
+        subject.add(:after)  { |arg| res.push(:"after_#{arg}") }
+        subject.invoke([], :arg) {}
+        res.should eq([:around_before_arg, :before_arg, :after_arg, :around_after_arg])
+      end
+
       context "with a tagged hook" do
         it "invokes the hook when the tag matches" do
           res = []
