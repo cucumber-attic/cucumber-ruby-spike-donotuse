@@ -13,3 +13,10 @@ task :doc do
   ENV['ARUBA_REPORT_DIR'] = 'doc'
   sh "cucumber"
 end
+
+task :examples do
+  Dir["examples/*"].each do |example|
+    cd example
+    sh "../../bin/cuke exec features/*"
+  end
+end
