@@ -11,19 +11,17 @@ module SteppingStone
       cmd, _arguments, remainder = parse(args)
 
       case cmd
-      when :sst
-        raise "Doesn't do anything yet"
       when :exec
         Exec.execute(remainder)
       end
     end
 
     def self.parse(args)
-      Kerplutz.build(:sst) do |base|
+      Kerplutz.build(:cuke) do |base|
         base.banner = "Usage: #{base.name} [OPTIONS] COMMAND [ARGS]"
 
         base.action :version, "Show the version", abbrev: :V do
-          puts "Stepping Stone v#{SteppingStone::VERSION}"
+          puts "Cucumber v#{SteppingStone::VERSION}"
         end
 
         base.command :exec, "Execute a specification" do |cmd|
