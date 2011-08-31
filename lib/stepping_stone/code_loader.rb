@@ -29,7 +29,7 @@ module SteppingStone
     end
 
     def project_dir # :nodoc:
-      @project_dir ||= 'sst'
+      @project_dir ||= 'cukes'
     end
 
     def determine_root # :nodoc:

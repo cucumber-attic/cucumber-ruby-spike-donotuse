@@ -2,14 +2,14 @@ Feature: CLI exec
   Usage of the 'cuke exec' command
 
   Background:
-    Given a file named "sst/sst_helper.rb" with:
+    Given a file named "cukes/cukes_helper.rb" with:
       """
       require 'stepping_stone'
       require 'rspec/expectations'
       """
-    And a file named "sst/mappers/calculator_mapper.rb" with:
+    And a file named "cukes/mappers/calculator_mapper.rb" with:
       """
-      require 'sst_helper'
+      require 'cukes_helper'
 
       module CalculatorMapper
         extend SteppingStone::Mapper
@@ -66,7 +66,7 @@ Feature: CLI exec
       """
 
   Scenario: Executing a passing scenario
-    Given a file named "sst/features/calculator.feature" with:
+    Given a file named "cukes/features/calculator.feature" with:
       """
       Feature: Calculator
         Scenario: Addition
@@ -75,7 +75,7 @@ Feature: CLI exec
           Then the answer is 9
 
       """
-    When I successfully run `cuke exec sst/features/calculator.feature`
+    When I successfully run `cuke exec cukes/features/calculator.feature`
     Then the output should contain exactly:
       """
       ...
@@ -83,7 +83,7 @@ Feature: CLI exec
       """
 
   Scenario: Executing a failing scenario
-    Given a file named "sst/features/calculator.feature" with:
+    Given a file named "cukes/features/calculator.feature" with:
       """
       Feature: Calculator
         Scenario: Bad Addition
@@ -93,7 +93,7 @@ Feature: CLI exec
           And the answer is not 16
 
       """
-    When I successfully run `cuke exec sst/features/calculator.feature`
+    When I successfully run `cuke exec cukes/features/calculator.feature`
     Then the output should contain exactly:
       """
       ..FS
@@ -101,7 +101,7 @@ Feature: CLI exec
       """
 
   Scenario: Executing a scenario with an undefined mapping
-    Given a file named "sst/features/calculator.feature" with:
+    Given a file named "cukes/features/calculator.feature" with:
       """
       Feature: Calculator
         Scenario: Undefined Mapping
@@ -112,7 +112,7 @@ Feature: CLI exec
           Then the answer is 20
 
       """
-    When I successfully run `cuke exec sst/features/calculator.feature`
+    When I successfully run `cuke exec cukes/features/calculator.feature`
     Then the output should contain exactly:
       """
       ..US
@@ -120,7 +120,7 @@ Feature: CLI exec
       """
 
   Scenario: Executing a scenario with a doc string
-    Given a file named "sst/features/calculator.feature" with:
+    Given a file named "cukes/features/calculator.feature" with:
       """
       Feature: Calculator
         Scenario: Addition script
@@ -133,7 +133,7 @@ Feature: CLI exec
           Then the answer is 14
 
       """
-    When I successfully run `cuke exec sst/features/calculator.feature`
+    When I successfully run `cuke exec cukes/features/calculator.feature`
     Then the output should contain exactly:
       """
       ...
@@ -141,7 +141,7 @@ Feature: CLI exec
       """
 
   Scenario: Executing two scenarios
-    Given a file named "sst/features/calculator.feature" with:
+    Given a file named "cukes/features/calculator.feature" with:
       """
       Feature: Calculator
         Scenario: Addition
@@ -155,7 +155,7 @@ Feature: CLI exec
           Then the answer is 32
 
       """
-    When I successfully run `cuke exec sst/features/calculator.feature`
+    When I successfully run `cuke exec cukes/features/calculator.feature`
     Then the output should contain exactly:
       """
       ......

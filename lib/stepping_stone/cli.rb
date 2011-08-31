@@ -41,8 +41,8 @@ module SteppingStone
       def execute
         # Should be part of boot process
         require 'stepping_stone/code_loader'
-        CodeLoader.add_to_load_path('.', 'sst')
-        require 'sst/sst_helper'
+        CodeLoader.add_to_load_path('.', 'cukes')
+        require 'cukes/cukes_helper'
 
         compiler = GherkinCompiler.new
 
