@@ -40,36 +40,26 @@ Feature: Life cycle event listeners
       | apply | I add 4 and 5   | passed |
       | apply | the result is 9 | passed |
 
-  Scenario: Setup and teardown
+  Scenario: Passing listeners for every event
     Given these passing listeners:
-      | when     | what          |
-      | setup    | all scenarios |
-      | teardown | all scenarios |
+      # | listener | filter |
+      | when         | what       |
+      | setup        | everything |
+      | before_apply | everything |
+      | after_apply  | everything |
+      | teardown     | everything |
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle history is:
-      | event    | name             | status |
-      | setup    | Basic Arithmetic | passed |
-      | apply    | I add 4 and 5    | passed |
-      | apply    | the result is 9  | passed |
-      | teardown | Basic Arithmetic | passed |
+      | event        | name             | status |
+      | setup        | Basic Arithmetic | passed |
+      | before_apply | Basic Arithmetic | passed |
+      | apply        | I add 4 and 5    | passed |
+      | after_apply  | Basic Arithmetic | passed |
+      | before_apply | Basic Arithmetic | passed |
+      | apply        | the result is 9  | passed |
+      | after_apply  | Basic Arithmetic | passed |
+      | teardown     | Basic Arithmetic | passed |
 
-  @wip
-  Scenario: Listeners for every event
-    Given there are listeners for every event
-    When Cucumber executes a scenario
-    Then the life cycle history is:
-      | event        |
-      | setup        |
-      | before_apply |
-      | apply        |
-      | after_apply  |
-      | teardown     |
-
-  Scenario: Failing listener fails test case
-  Scenario: Undefined action stops execution
-  Scenario: Undefined listener does not stop execution
-
-  Scenario: Before and after dispatch
-  Scenario: Failing hook skips the rest of the test case
-  Scenario: Observing results
+  Scenario: Failing listener skips the rest of the test case
   Scenario: Executing on particular metadata
+  Scenario: Observing results

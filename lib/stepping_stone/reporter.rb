@@ -27,7 +27,7 @@ module SteppingStone
       end
 
       def after_apply(action)
-        add(session.before_apply(action))
+        add(session.after_apply(action))
       end
 
       def skip(action)
