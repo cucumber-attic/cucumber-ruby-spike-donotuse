@@ -1,4 +1,4 @@
-require 'sst_helper'
+require 'cukes_helper'
 
 module StupidMapper
   extend SteppingStone::Mapper
