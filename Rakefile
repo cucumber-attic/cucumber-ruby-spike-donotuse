@@ -17,6 +17,8 @@ end
 task :examples do
   Dir["examples/*"].each do |example|
     cd example
-    sh "../../bin/cuke exec features/*"
+    sh "../../bin/cuke exec cukes/features/*"
   end
 end
+
+task :smoke => [:spec, :cucumber, :examples]
