@@ -10,6 +10,7 @@ module SteppingStone
       def execute(test_case)
         server.start_test(test_case) do |session|
           @last_event = session.setup
+
           test_case.each do |action|
             if @last_event.skip_next?
               session.skip(action)
@@ -19,7 +20,10 @@ module SteppingStone
               session.after_apply(action)
             end
           end
-          session.teardown
+
+          unless @last_event.skip_next?
+            session.teardown
+          end
         end
       end
     end

@@ -83,13 +83,13 @@ module SteppingStone
         it "skips actions after a failing action" do
           server.should_receive(:start_test).and_yield(session)
           subject.execute(tc(:pass, :fail, :pass))
-          session.statuses.should eq([:passed, :passed, :failed, :skipped, :passed])
+          session.statuses.should eq([:passed, :passed, :failed, :skipped])
         end
 
         it "skips actions after an undefined action" do
           server.should_receive(:start_test).and_yield(session)
           subject.execute(tc(:pass, :undefined, :pass))
-          session.statuses.should eq([:passed, :passed, :undefined, :skipped, :passed])
+          session.statuses.should eq([:passed, :passed, :undefined, :skipped])
         end
 
         context "when setup fails" do
@@ -98,7 +98,7 @@ module SteppingStone
           it "skips the actions that follow it" do
             server.should_receive(:start_test).and_yield(session)
             subject.execute(tc(:pass, :pass))
-            session.statuses.should eq([:failed, :skipped, :skipped, :passed])
+            session.statuses.should eq([:failed, :skipped, :skipped])
           end
         end
       end
