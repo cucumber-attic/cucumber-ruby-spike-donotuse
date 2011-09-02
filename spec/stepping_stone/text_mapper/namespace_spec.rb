@@ -9,8 +9,6 @@ module SteppingStone
         end
       end
 
-      it "creates a context with the proper helpers and attributes"
-
       describe "#build_context" do
         subject { Namespace.new }
 
@@ -25,13 +23,6 @@ module SteppingStone
           end
         end
 
-        "a context built from a module has the modules helper methods"
-        "a context built from a class has an attribute referencing an instance of that class"
-        "a context built from two modules has both modules' helper methods"
-        "a context built from two classes has two attributes, each referencing an instance of that class"
-        "a context built from a module and a class has the helper methods and the class instance"
-        "helper methods can access the class instance attributes defined in the context"
-
         it "builds an execution context" do
           # Move dispatch assertion to Context spec, use a mock to ensure the Context Factory's new method
           # is called with the correct arguments
@@ -39,9 +30,6 @@ module SteppingStone
           context = subject.build_context(Servers::Rb::Context.new)
           context.dispatch([:from_mapper_a]).should eq(:to_mapper_a)
         end
-
-        it "exports the helper module"
-        it "exports hooks"
       end
     end
   end
