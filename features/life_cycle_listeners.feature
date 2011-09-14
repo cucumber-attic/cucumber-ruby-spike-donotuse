@@ -44,12 +44,11 @@ Feature: Life cycle event listeners
 
   Scenario: Passing listeners for every event
     Given these passing listeners:
-      # | listener | filter |
-      | when         | what       |
-      | setup        | everything |
-      | before_apply | everything |
-      | after_apply  | everything |
-      | teardown     | everything |
+      | event        | filter |
+      | setup        | none   |
+      | before_apply | none   |
+      | after_apply  | none   |
+      | teardown     | none   |
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle history is:
       | event        | name             | status |
