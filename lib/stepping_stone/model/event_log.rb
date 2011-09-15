@@ -1,5 +1,3 @@
-require 'stepping_stone/model/events'
-
 module SteppingStone
   module Model
     class EventLog

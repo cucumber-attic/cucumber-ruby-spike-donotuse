@@ -1,4 +1,4 @@
-require 'stepping_stone/model/events'
+require 'stepping_stone/model/responses'
 
 module SteppingStone
   module Model
@@ -8,13 +8,13 @@ module SteppingStone
 
       HOOKS.each do |factory|
         define_method(factory) do |*args|
-          Events::HookEvent.new(factory, *args)
+          Response.new(factory, *args)
         end
       end
 
       ACTIONS.each do |factory|
         define_method(factory) do |*args|
-          Events::ActionEvent.new(factory, *args)
+          ActionResponse.new(factory, *args)
         end
       end
     end

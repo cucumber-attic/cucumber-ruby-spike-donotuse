@@ -2,16 +2,31 @@ require 'spec_helper'
 
 module SteppingStone
   module Model
-    module Events
-      # TODO: Extract state specs into spec of parent Event class
-      describe ActionEvent do
-        let(:passed) { Result.new(:passed) }
-        let(:failed) { Result.new(:failed) }
-        let(:undefined) { Result.new(:undefined) }
-        let(:skipped) { Result.new(:skipped) }
+    describe "response types" do
+      let(:passed) { Result.new(:passed) }
+      let(:failed) { Result.new(:failed) }
+      let(:undefined) { Result.new(:undefined) }
+      let(:skipped) { Result.new(:skipped) }
 
+      describe Response do
+        context "when undefined" do
+          subject { Response.new(:setup, :name, undefined) }
+          it { should_not be_important }
+          its(:skip_next?) { should be_false }
+          its(:to_s) { should eq("") }
+        end
+
+        context "when failed" do
+          subject { Response.new(:setup, :name, failed) }
+          it { should be_important }
+          its(:skip_next?) { should be_true }
+          its(:to_s) { should eq("") }
+        end
+      end
+
+      describe ActionResponse do
         context "when passed" do
-          subject { ActionEvent.new(:apply, :from, passed) }
+          subject { ActionResponse.new(:apply, :from, passed) }
 
           it { should be_passed }
           it { should_not be_failed }
@@ -24,7 +39,7 @@ module SteppingStone
         end
 
         context "when failed" do
-          subject { ActionEvent.new(:apply, :from, failed) }
+          subject { ActionResponse.new(:apply, :from, failed) }
 
           it { should be_failed }
           it { should_not be_passed }
@@ -37,7 +52,7 @@ module SteppingStone
         end
 
         context "when undefined" do
-          subject { ActionEvent.new(:apply, :from, undefined) }
+          subject { ActionResponse.new(:apply, :from, undefined) }
 
           it { should be_undefined }
           it { should_not be_passed }
@@ -50,7 +65,7 @@ module SteppingStone
         end
 
         context "when skipped" do
-          subject { ActionEvent.new(:apply, :from, skipped) }
+          subject { ActionResponse.new(:apply, :from, skipped) }
 
           it { should be_skipped }
           it { should_not be_passed }
@@ -60,25 +75,6 @@ module SteppingStone
 
           its(:skip_next?) { should be_true }
           its(:to_s) { should eq("S") }
-        end
-      end
-
-      describe HookEvent do
-        let(:failed) { Result.new(:failed) }
-        let(:undefined) { Result.new(:undefined) }
-
-        context "when undefined" do
-          subject { HookEvent.new(:setup, :name, undefined) }
-          it { should_not be_important }
-          its(:skip_next?) { should be_false }
-          its(:to_s) { should eq("") }
-        end
-
-        context "when failed" do
-          subject { HookEvent.new(:setup, :name, failed) }
-          it { should be_important }
-          its(:skip_next?) { should be_true }
-          its(:to_s) { should eq("") }
         end
       end
     end

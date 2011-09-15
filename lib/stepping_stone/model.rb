@@ -1,7 +1,7 @@
-require 'stepping_stone/model/test_case'
-require 'stepping_stone/model/events'
-require 'stepping_stone/model/event_log'
 require 'stepping_stone/model/executor'
+require 'stepping_stone/model/event_log'
+require 'stepping_stone/model/test_case'
+require 'stepping_stone/model/responses'
 require 'stepping_stone/model/responder'
 
 module SteppingStone
