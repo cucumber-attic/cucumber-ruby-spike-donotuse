@@ -1,44 +1,42 @@
-require 'stepping_stone/model/events'
+require 'stepping_stone/model/responder'
 require 'stepping_stone/model/result'
 
 module SteppingStone
   module Servers
     class Rb
       class Session
-        attr_reader :context, :test_case, :event_builder
+        attr_reader :context, :test_case, :responder
 
-        def initialize(context, test_case, event_builder = Model::Events)
+        def initialize(context, test_case, responder = Model::Responder.new)
           @context = context
           @test_case = test_case
-          @event_builder = event_builder
+          @responder = responder
         end
 
         def setup
-          build_event(:setup, test_case_name, context.dispatch([:setup, test_case_metadata]))
+          responder.setup(test_case_name, context.dispatch([:setup, test_case_metadata]))
         end
 
         def teardown
-          build_event(:teardown, test_case_name, context.dispatch([:teardown, test_case_metadata]))
+          responder.teardown(test_case_name, context.dispatch([:teardown, test_case_metadata]))
         end
 
         def apply(action)
-          build_event(:apply, action, context.dispatch(action))
+          responder.apply(action, context.dispatch(action))
         end
 
         def before_apply(action)
-          build_event(:before_apply, test_case_name, context.dispatch([:before_apply, {}]))
+          responder.before_apply(test_case_name, context.dispatch([:before_apply, {}]))
         end
 
         def after_apply(action)
-          build_event(:after_apply, test_case_name, context.dispatch([:after_apply, {}]))
+          responder.after_apply(test_case_name, context.dispatch([:after_apply, {}]))
         end
 
         def skip(action)
-          build_event(:skip, action, context.skip(action))
-        end
-
-        def skip(action)
-          build_event(:skip, action, Model::Result.new(:skipped))
+          # TODO: Remove this. It's only here because we are reporting via a delegator.
+          # Doing pub/sub with an observer or broadcaster should be much cleaner.
+          responder.skip(action, Model::Result.new(:skipped))
         end
 
         def end_test
@@ -53,10 +51,6 @@ module SteppingStone
 
         def test_case_metadata
           test_case.metadata
-        end
-
-        def build_event(type, *args)
-          event_builder.send(type, *args)
         end
       end
     end

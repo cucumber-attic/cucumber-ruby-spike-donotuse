@@ -62,5 +62,7 @@ Feature: Life cycle event listeners
       | teardown     | Basic Arithmetic | passed |
 
   Scenario: Failing listener skips the rest of the test case
+  Scenario: Two passing listeners on the same event
+  Scenario: One passing, one failing listener on the same event
   Scenario: Executing on particular metadata
   Scenario: Observing results

@@ -4,23 +4,6 @@ require 'date'
 module SteppingStone
   module Model
     module Events
-      HOOKS   = [:setup, :teardown, :before_apply, :after_apply]
-      ACTIONS = [:apply, :skip]
-
-      class << self
-        HOOKS.each do |factory|
-          define_method(factory) do |*args|
-            HookEvent.new(factory, *args)
-          end
-        end
-
-        ACTIONS.each do |factory|
-          define_method(factory) do |*args|
-            ActionEvent.new(factory, *args)
-          end
-        end
-      end
-
       class Event
         extend Forwardable
 
@@ -35,6 +18,18 @@ module SteppingStone
 
         def to_a
           [type, name, status]
+        end
+
+        def skip_next?
+          failed?
+        end
+
+        def to_s
+          ""
+        end
+
+        def include_in_history?
+          failed?
         end
       end
 
