@@ -36,16 +36,17 @@ module SteppingStone
       end
 
       describe "#history" do
-        it "includes only the important events" do
+        it "includes important events" do
           subject.history.should have(6).events
+          subject.history.each do |event|
+            event.should be_important
+          end
         end
 
-        it "does not include undefined hooks" do
-          subject.history.each do |event|
-            if Events::HookEvent === event
-              event.should_not be_undefined
-            end
-          end
+        it "excludes unimportant events" do
+          unimportant = ev(:setup, :undefined)
+          subject.add(unimportant)
+          subject.history.should_not include(unimportant)
         end
       end
 

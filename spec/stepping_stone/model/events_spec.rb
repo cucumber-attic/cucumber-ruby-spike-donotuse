@@ -4,7 +4,6 @@ module SteppingStone
   module Model
     module Events
       # TODO: Extract state specs into spec of parent Event class
-      #       Rename #skip? to #skip_remaining_actions?
       describe ActionEvent do
         let(:passed) { Result.new(:passed) }
         let(:failed) { Result.new(:failed) }
@@ -18,6 +17,7 @@ module SteppingStone
           it { should_not be_failed }
           it { should_not be_undefined }
           it { should_not be_skipped }
+          it { should be_important }
 
           its(:skip_next?) { should be_false }
           its(:to_s)  { should eq(".") }
@@ -30,6 +30,7 @@ module SteppingStone
           it { should_not be_passed }
           it { should_not be_undefined }
           it { should_not be_skipped }
+          it { should be_important }
 
           its(:skip_next?) { should be_true }
           its(:to_s)  { should eq("F") }
@@ -42,6 +43,7 @@ module SteppingStone
           it { should_not be_passed }
           it { should_not be_failed }
           it { should_not be_skipped }
+          it { should be_important }
 
           its(:skip_next?) { should be_true }
           its(:to_s)  { should eq("U") }
@@ -54,6 +56,7 @@ module SteppingStone
           it { should_not be_passed }
           it { should_not be_failed }
           it { should_not be_undefined }
+          it { should be_important }
 
           its(:skip_next?) { should be_true }
           its(:to_s) { should eq("S") }
@@ -66,12 +69,14 @@ module SteppingStone
 
         context "when undefined" do
           subject { HookEvent.new(:setup, :name, undefined) }
+          it { should_not be_important }
           its(:skip_next?) { should be_false }
           its(:to_s) { should eq("") }
         end
 
         context "when failed" do
           subject { HookEvent.new(:setup, :name, failed) }
+          it { should be_important }
           its(:skip_next?) { should be_true }
           its(:to_s) { should eq("") }
         end

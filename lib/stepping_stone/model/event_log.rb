@@ -22,10 +22,7 @@ module SteppingStone
       end
 
       def history
-        @events.select do |event|
-          Events::ActionEvent === event or
-            !event.undefined?
-        end
+        @events.select(&:important?)
       end
 
       def to_s

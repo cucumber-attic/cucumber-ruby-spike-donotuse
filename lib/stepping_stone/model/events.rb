@@ -27,10 +27,6 @@ module SteppingStone
         def to_s
           ""
         end
-
-        def include_in_history?
-          failed?
-        end
       end
 
       class HookEvent < Event
@@ -41,11 +37,19 @@ module SteppingStone
         def to_s
           ""
         end
+
+        def important?
+          !undefined?
+        end
       end
 
       class ActionEvent < Event
         def skip_next?
           failed? or undefined? or skipped?
+        end
+
+        def important?
+          true
         end
 
         def to_s
