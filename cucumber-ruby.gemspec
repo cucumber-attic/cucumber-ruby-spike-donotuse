@@ -1,11 +1,11 @@
 Gem::Specification.new do |s|
-  s.name        = 'stepping_stone'
-  s.version     = '0.0.1'
+  s.name        = 'cucumber-ruby'
+  s.version     = '1.99.1'
   s.authors     = ["Mike Sassak"]
-  s.description = "Flexible bridge between customer-friendly data and code"
-  s.summary     = "stepping_stone #{s.version}"
+  s.description = "Pure-ruby Cucumber 2.x"
+  s.summary     = "cucumber #{s.version}"
   s.email       = "msassak@gmail.com"
-  s.homepage    = "https://github.com/msassak/stepping_stone"
+  s.homepage    = "https://github.com/msassak/cucumber-ruby"
 
   s.add_dependency 'kerplutz', '>= 0.1.2'
   s.add_dependency 'gherkin'

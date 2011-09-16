@@ -1,7 +1,7 @@
-# Stepping Stone
+# Cucumber
 
-Stepping Stone is a flexible bridge between customer-friendly
-data and code.
+Cucumber is a testing library that helps you bridge the gap between
+the business and development sides of your software development team.
 
 ## What is customer-friendly information?
 
@@ -11,21 +11,20 @@ data and code.
 
 ## Getting Started
 
-First install Stepping Stone:
+First install Cucumber:
 
-    $ gem install stepping_stone
+    $ gem install cucumber
 
-Then generate the directories to contain the files Stepping
-Stone will use:
+Then generate the directories to contain the files Cucumber will use:
 
-    $ sst generate
+    $ cuke generate
 
 This will create the following:
 
-    sst/
+    cukes/
         features/
         lib/
-        sst_helper.rb
+        cukes_helper.rb
 
 If you've used Cucumber at all, you should understand what the features
 directory is for. If you haven't, that's where you'll be putting your
@@ -36,14 +35,14 @@ Once you have written some features and the mappings from the actions
 described in them onto code that drives your system, you can start
 executing the features:
 
-    $ sst exec features/my_lovely_feature.feature
+    $ cuke exec cukes/features/my_lovely_feature.feature
 
 And that's it. Millions of dollars and priceless fame await!
 
 ## Mappings
 
-The heart of the problem Stepping Stone addresses is the best way to bind
-plain text to programming language code. To do this Stepping Stone uses
+The heart of the problem Cucumber addresses is the best way to bind
+plain text to programming language code. To do this Cucumber uses
 mappings defined by the programmer that include enough information to
 create a poor man's dynamic dispatch between plain text and Ruby.
 
@@ -74,16 +73,16 @@ Your first feature looks like this:
         Then the answer is 6
 
 I can hear the revving of a lambo already! But some work still remains.
-You need to let Stepping Stone know how to convert those steps into
+You need to let Cucumber know how to convert those steps into
 actions on your calculator library. Let's get to work.
 
 A mapping consists of a pattern and invocation information. To create
 one you use the `def_map` macro. The first thing you need is to create a
-calculator, so open `sst/lib/calculator_mapper.rb` in your favorite editor
+calculator, so open `cukes/lib/calculator_mapper.rb` in your favorite editor
 and type the following:
 
     class CalculatorMapper
-      extend SteppingStone::TextMapper
+      extend Cucumber::TextMapper
 
       def_map "a calculator" => :create
 
@@ -158,7 +157,7 @@ Newly invigorated, you implement the remaining pending map:
 Now your entire mapper looks like this:
 
     class CalculatorMapper
-      extend SteppingStone::TextMapper
+      extend Cucumber::TextMapper
 
       def_map "a calculator"                       => :create
       def_map "the calculator is cleared"          => :clear
@@ -188,7 +187,7 @@ methods of the Calculator class. Why can't you just write something like
 this?:
 
     class CalculatorMapper
-      extend SteppingStone::TextMapper
+      extend Cucumber::TextMapper
 
       def_subject "a calculator"                   => Calculator, :new
       def_map "the calculator is cleared"          => :clear
@@ -206,55 +205,6 @@ Good news: you can! But please keep in mind these are only the basics.
 
 Frontend: compilers
 Backend: servers
-
-## FAQ
-
-### BDD?
-
-Given its focus on natural language, it would not be entirely unfair to
-call Stepping Stone a tool for Behavior-Driven Development, but the
-pudding's proof is in the tasting, and so Stepping Stone aims to be
-useful first and foremost, and in accord with the "state of the art" in
-testing and software development theories second. This is by no means a
-knock on BDD. Behavior-Driven Development remains a revelation for those
-who have no real experience with testing's relationship to software
-design, but that sort of thing is best left to the wider internet. Let
-your hammers be hammers--only use them properly. Stepping Stone is officially
-theory-agnostic.
-
-### Cucumber?
-
-This is just Cucumber. Yes and no. Cucumber itself suffers from a sort
-of identity crisis. Stepping Stone's relationship to Cucumber can best
-be understood as an *argument* about the direction Cucumber and its
-ecosystem should take.
-
-...some stuff about architecture and design...
-
-Hey wait that sounds an awful lot like a Meta-Object Protocol for
-testing! You are very well read, sir.
-
-Why is this needed? Because the value of Cucumber is Gherkin, that is,
-the langauge everyone on the product development team can share. In
-light of this, the real problem to solve when parsing Gherkin is how to
-convert patterns in text into method calls. This is a binding, not a
-testing problem.
-
-But Stepping Stone just looks like another way to write step
-definitions! You think this because Cucumber focuses on the wrong
-things: step definitions are a distraction. The real difficulty is in
-mapping natural language to code. Step defs were the simplest thing that
-could work, but they are showing their age.
-
-1. Matching rules
-2. Method lookup
-
-## Usage
-
-### With "Legacy" Cucumber Code
-
-Stepping Stone includes excellent support for Cucumber. Require
-'stepping_stone/step_defs' in your mappers and go to town.
 
 ## Copyright
 

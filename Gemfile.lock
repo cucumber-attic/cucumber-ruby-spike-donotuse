@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    stepping_stone (0.0.1)
+    cucumber-ruby (1.99.1)
       gherkin
       kerplutz (>= 0.1.2)
 
@@ -61,6 +61,6 @@ PLATFORMS
 DEPENDENCIES
   aruba
   cucumber
+  cucumber-ruby!
   pry
   rspec
-  stepping_stone!
