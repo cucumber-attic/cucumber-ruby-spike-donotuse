@@ -17,15 +17,15 @@ Given "there are no listeners" do
 end
 
 Given /^a passing before hook$/ do
-  env_hooks.add(:before) { @before_time = -> { DateTime.now }.call }
+  hooks.add(:before) { @before_time = -> { DateTime.now }.call }
 end
 
 Given /^a passing after hook$/ do
-  env_hooks.add(:after) { @after_time = -> { DateTime.now }.call }
+  hooks.add(:after) { @after_time = -> { DateTime.now }.call }
 end
 
 Given /^a passing around hook$/ do
-  env_hooks.add(:around) do |execution|
+  hooks.add(:around) do |execution|
     @around_pre_time = -> { DateTime.now }.call
     execution.call
     @around_post_time = -> { DateTime.now }.call
@@ -33,11 +33,11 @@ Given /^a passing around hook$/ do
 end
 
 Given /^a hook tagged with "(.+)"$/ do |tag|
-  env_hooks.add(:before, tag) { @before_time = -> { DateTime.now }.call }
+  hooks.add(:before, tag) { @before_time = -> { DateTime.now }.call }
 end
 
 Given /^an untagged hook$/ do
-  env_hooks.add(:before) { @before_time = -> { DateTime.now }.call }
+  hooks.add(:before) { @before_time = -> { DateTime.now }.call }
 end
 
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
@@ -143,12 +143,12 @@ module CucumberWorld
     sut.add_mapping(listener)
   end
 
-  def env_hooks
-    @env_hooks ||= SteppingStone::Hooks.new
+  def hooks
+    @hooks ||= SteppingStone::Hooks.new
   end
 
   def sut
-    @sut ||= SteppingStone::Servers::Rb.new(env_hooks)
+    @sut ||= SteppingStone::Servers::Rb.new(hooks)
   end
 
   def reporter

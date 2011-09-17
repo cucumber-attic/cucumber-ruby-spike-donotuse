@@ -10,22 +10,22 @@ module SteppingStone
       # Called by Cucumber when it's time to start executing features. Non-idempotent,
       # invasive and environment-related startup code should go here.
       def self.boot!(opts)
-        server = self.new(opts[:env_hooks])
+        server = self.new(opts[:hooks])
         SteppingStone.const_set(:Mapper, server.dsl_module)
         CodeLoader.require_glob("mappers", "**/*")
         server
       end
 
       attr_accessor :mapper_namespace
-      attr_reader :env_hooks
+      attr_reader :hooks
 
-      def initialize(env_hooks)
-        @env_hooks = env_hooks
+      def initialize(hooks)
+        @hooks = hooks
         @mapper_namespace = TextMapper::Namespace.new
       end
 
       def start_test(test_case)
-        env_hooks.invoke(test_case.tags) do
+        hooks.invoke(test_case.tags) do
           session = Servers::Rb::Session.new(build_context, test_case)
           yield session
           session.end_test
