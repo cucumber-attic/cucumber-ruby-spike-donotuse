@@ -36,8 +36,8 @@ module SteppingStone
         mapper_namespace.add_mapping(mapping)
       end
 
-      def hooks
-        mapper_namespace.hooks
+      def listeners
+        mapper_namespace.listeners
       end
 
       def mappings

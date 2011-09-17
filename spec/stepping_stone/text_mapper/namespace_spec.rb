@@ -3,6 +3,15 @@ require 'spec_helper'
 module SteppingStone
   module TextMapper
     describe Namespace do
+      describe "#listeners" do
+        it "filters listeners from mappings and returns them" do
+          listener = Listener.new([:from]){}
+          subject.add_mapping(Mapping.new([:from], :to))
+          subject.add_mapping(listener)
+          subject.listeners.should eq([listener])
+        end
+      end
+
       describe "#to_extension_module" do
         it "returns a module" do
           Namespace.new.to_extension_module.should be_an_instance_of(Module)

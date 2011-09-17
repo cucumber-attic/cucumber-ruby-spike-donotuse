@@ -1,5 +1,5 @@
 require 'stepping_stone/model/doc_string'
-require 'stepping_stone/text_mapper/mapping'
+require 'stepping_stone/text_mapper/listener'
 require 'stepping_stone/text_mapper/mapping_pool'
 require 'stepping_stone/text_mapper/dsl'
 
@@ -10,7 +10,6 @@ module SteppingStone
 
       def initialize
         @mappings = MappingPool.new
-        @hooks = MappingPool.new
         @mappers = []
       end
 
@@ -26,8 +25,8 @@ module SteppingStone
         mappings.find!(from)
       end
 
-      def hooks
-        mappings.select { |mapping| Hook === mapping }
+      def listeners
+        mappings.select { |mapping| Listener === mapping }
       end
 
       def build_context(context)

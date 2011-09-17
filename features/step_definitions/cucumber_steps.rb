@@ -6,14 +6,14 @@ Given /^a passing background with:$/ do |background|
   @background = background
 end
 
-Given /^these passing listeners:$/ do |hooks|
-  hooks.rows.each do |aspect, subject|
-    add_hook(aspect, subject, :pass)
+Given /^these passing listeners:$/ do |listeners|
+  listeners.rows.each do |event, _filter|
+    add_listener(event)
   end
 end
 
 Given "there are no listeners" do
-  sut.hooks.should be_empty
+  sut.listeners.should be_empty
 end
 
 Given /^a passing before hook$/ do
@@ -138,10 +138,9 @@ module CucumberWorld
     end
   end
 
-  def add_hook(aspect, subject, result)
-    # subject isn't used for anything yet
-    hook = SteppingStone::TextMapper::Hook.new([aspect.to_sym, {}]) { |test_case| result }
-    sut.add_mapping(hook)
+  def add_listener(event, filter = {}, result = :pass)
+    listener = SteppingStone::TextMapper::Listener.new([event.to_sym, filter]) { |test_case| result }
+    sut.add_mapping(listener)
   end
 
   def env_hooks

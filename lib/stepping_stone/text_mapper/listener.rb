@@ -1,7 +1,7 @@
 module SteppingStone
   module TextMapper
     # TODO: Collapse this into the mapping class or make it a subclass like MappingToBlock
-    class Hook
+    class Listener
       def initialize(signature, &blk)
         @signature = Pattern.new(signature)
         @blk = blk

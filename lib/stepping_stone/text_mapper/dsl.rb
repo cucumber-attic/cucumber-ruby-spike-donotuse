@@ -1,3 +1,5 @@
+require 'stepping_stone/text_mapper/mapping'
+
 module SteppingStone
   module TextMapper
     class Dsl
