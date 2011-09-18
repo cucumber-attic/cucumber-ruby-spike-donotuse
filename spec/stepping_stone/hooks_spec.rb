@@ -119,5 +119,19 @@ module SteppingStone
         subject.hooks[:around].should have(1).hook
       end
     end
+
+    describe "the fluent interface for building hooks" do
+      subject { Hooks::FluentDsl }
+      let(:ctx) { Object.new.extend(subject) }
+
+      it "adds hook-building methods to the context" do
+        res = []
+        ctx.before { res.push(:before) }
+        ctx.after { res.push(:after) }
+        ctx.around { |run| res.push(:around); run.call }
+        ctx.hooks.invoke{}
+        res.should eq([:around, :before, :after])
+      end
+    end
   end
 end

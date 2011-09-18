@@ -2,6 +2,24 @@ require 'gherkin/tag_expression'
 
 module SteppingStone
   class Hooks
+    module FluentDsl
+      def hooks
+        @hooks ||= Hooks.new
+      end
+
+      def around(*args, &hook)
+        hooks.add(:around, *args, &hook)
+      end
+
+      def before(*args, &hook)
+        hooks.add(:before, *args, &hook)
+      end
+
+      def after(*args, &hook)
+        hooks.add(:after, *args, &hook)
+      end
+    end
+
     attr_reader :hooks
 
     def initialize
