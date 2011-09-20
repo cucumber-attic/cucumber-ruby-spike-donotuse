@@ -6,8 +6,20 @@ SteppingStone.configure do |config|
     puts "Before"
   end
 
+  config.before do
+    puts "Before 2"
+  end
+
+  config.before("~@foo") do
+    puts "Before ~@foo"
+  end
+
   config.after do
     puts "After"
+  end
+
+  config.after("@foo") do
+    puts "After @foo"
   end
 
   config.around do |scenario|

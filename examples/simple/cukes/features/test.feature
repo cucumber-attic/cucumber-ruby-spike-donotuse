@@ -5,3 +5,7 @@ Feature: Hello
       """
       Oh hai
       """
+
+  @foo
+  Scenario: test 2
+    Given a foo
