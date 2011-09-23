@@ -3,6 +3,11 @@
 Cucumber is a testing library that helps you bridge the gap between
 the business and development sides of your software development team.
 
+## Setup
+
+    $ git submodule init
+    $ git submodule update
+
 ## What is customer-friendly information?
 
 * business readable
