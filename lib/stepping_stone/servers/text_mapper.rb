@@ -1,8 +1,12 @@
-require 'stepping_stone/text_mapper/namespace'
-require 'stepping_stone/code_loader'
+require 'cucumber/text_mapper/namespace'
 
+require 'stepping_stone/model/doc_string'
+require 'stepping_stone/model/data_table'
+
+require 'stepping_stone/code_loader'
 require 'stepping_stone/servers/text_mapper/session'
 require 'stepping_stone/servers/text_mapper/context'
+
 
 module SteppingStone
   module Servers
@@ -21,7 +25,8 @@ module SteppingStone
 
       def initialize(hooks)
         @hooks = hooks
-        @mapper_namespace = SteppingStone::TextMapper::Namespace.new
+        @mapper_namespace = Cucumber::TextMapper::Namespace.new({ SteppingStone::Model::DocString => :DocString,
+                                                                  SteppingStone::Model::DataTable => :DataTable })
       end
 
       def start_test(test_case)

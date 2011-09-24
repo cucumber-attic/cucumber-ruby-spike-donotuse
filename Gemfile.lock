@@ -1,4 +1,9 @@
 PATH
+  remote: ../cucumber-text_mapper
+  specs:
+    cucumber-text_mapper (0.1.0)
+
+PATH
   remote: .
   specs:
     cucumber-ruby (1.99.1)
@@ -62,5 +67,6 @@ DEPENDENCIES
   aruba
   cucumber
   cucumber-ruby!
+  cucumber-text_mapper!
   pry
   rspec
