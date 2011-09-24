@@ -17,6 +17,7 @@ Feature: CLI exec
         def_map "a calculator"                                   => :create
         def_map /(\d+) and (\d+) are added together/             => [:add, Integer, Integer]
         def_map ["these numbers are added together:", DocString] => :add_script
+        def_map ["these numbers are added together:", DataTable] => :add_column
         def_map /(\d+) and (\d+) are multiplied/                 => [:multiply, Integer, Integer]
         def_map /the answer is (\d+)/                            => :assert_answer
         def_map /the answer is not (\d+)/                        => :assert_not_answer
@@ -49,6 +50,11 @@ Feature: CLI exec
 
         def add_script(script)
           @calculator.add_script(script.split.map(&:to_i))
+        end
+
+        def add_column(table)
+          values = table.raw.map(&:first).map(&:to_i)
+          @calculator.add_script(values)
         end
 
         def multiply(m, n)
@@ -119,27 +125,6 @@ Feature: CLI exec
 
       """
 
-  Scenario: Executing a scenario with a doc string
-    Given a file named "cukes/features/calculator.feature" with:
-      """
-      Feature: Calculator
-        Scenario: Addition script
-          Given a calculator
-          When these numbers are added together:
-            \"\"\"
-            4
-            10
-            \"\"\"
-          Then the answer is 14
-
-      """
-    When I successfully run `cuke exec cukes/features/calculator.feature`
-    Then the output should contain exactly:
-      """
-      ...
-
-      """
-
   Scenario: Executing two scenarios
     Given a file named "cukes/features/calculator.feature" with:
       """
@@ -161,3 +146,44 @@ Feature: CLI exec
       ......
 
       """
+
+  Scenario: Executing a scenario with a doc string
+    Given a file named "cukes/features/calculator.feature" with:
+      """
+      Feature: Calculator
+        Scenario: Addition script
+          Given a calculator
+          When these numbers are added together:
+            \"\"\"
+            4
+            10
+            \"\"\"
+          Then the answer is 14
+
+      """
+    When I successfully run `cuke exec cukes/features/calculator.feature`
+    Then the output should contain exactly:
+      """
+      ...
+
+      """
+
+  Scenario: Executing a scenario with a data table
+    Given a file named "cukes/features/calculator.feature" with:
+      """
+      Feature: Calculator
+        Scenario: Addition script
+          Given a calculator
+          When these numbers are added together:
+            | 4  |
+            | 10 |
+          Then the answer is 14
+
+      """
+    When I successfully run `cuke exec cukes/features/calculator.feature`
+    Then the output should contain exactly:
+      """
+      ...
+
+      """
+

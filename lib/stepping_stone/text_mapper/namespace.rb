@@ -1,4 +1,5 @@
 require 'stepping_stone/model/doc_string'
+require 'stepping_stone/model/data_table'
 require 'stepping_stone/text_mapper/listener'
 require 'stepping_stone/text_mapper/mapping_pool'
 require 'stepping_stone/text_mapper/dsl'
@@ -36,7 +37,8 @@ module SteppingStone
       end
 
       def to_extension_module
-        Dsl.new(self, { Model::DocString => :DocString }).to_module
+        Dsl.new(self, { Model::DocString => :DocString,
+                        Model::DataTable => :DataTable }).to_module
       end
     end
   end

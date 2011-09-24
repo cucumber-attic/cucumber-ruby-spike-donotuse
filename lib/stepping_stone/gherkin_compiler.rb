@@ -1,48 +1,49 @@
 require 'gherkin'
 require 'stepping_stone/model/test_case'
 require 'stepping_stone/model/doc_string'
+require 'stepping_stone/model/data_table'
 
 module SteppingStone
-  class GherkinCompiler
-    class Builder
-      attr_reader :test_cases
+  class Builder
+    attr_reader :test_cases
 
-      def initialize
-        @pre_actions = []
+    def initialize
+      @pre_actions = []
+      @tc_actions = []
+      @current = nil
+      @test_cases = []
+    end
+
+    def record(uri, tags)
+      @current = uri
+      @current_tags = tags
+    end
+
+    def replay
+      if @current
+        actions = @pre_actions.dup + @tc_actions
+        test_case = Model::TestCase.new(@current, *actions)
+        test_case.tags = @current_tags
+        @test_cases.push(test_case)
         @tc_actions = []
         @current = nil
-        @test_cases = []
-      end
-
-      def record(uri, tags)
-        @current = uri
-        @current_tags = tags
-      end
-
-      def replay
-        if @current
-          actions = @pre_actions.dup + @tc_actions
-          test_case = Model::TestCase.new(@current, *actions)
-          test_case.tags = @current_tags
-          @test_cases.push(test_case)
-          @tc_actions = []
-          @current = nil
-          @current_tags = nil
-        end
-      end
-
-      def add_action(parts)
-        if @current
-          @tc_actions.push(parts)
-        else
-          @pre_actions.push(parts)
-        end
+        @current_tags = nil
       end
     end
 
-    def initialize
+    def add_action(parts)
+      if @current
+        @tc_actions.push(parts)
+      else
+        @pre_actions.push(parts)
+      end
+    end
+  end
+
+  class GherkinCompiler
+    def initialize(builder = Builder.new)
       @parser = ::Gherkin::Parser::Parser.new(self, true, "root", false)
-      @builder = Builder.new
+      @builder = builder
     end
 
     def compile(content)
@@ -59,7 +60,8 @@ module SteppingStone
 
     def step(step)
       action = [step.name]
-      action << Model::DocString.new(step.multiline_arg.value) if step.multiline_arg
+      action << Model::DocString.new(step.doc_string.value) if step.doc_string
+      action << Model::DataTable.new(step.rows.map { |row| row.cells }) if step.rows
       @builder.add_action(action)
     end
 
