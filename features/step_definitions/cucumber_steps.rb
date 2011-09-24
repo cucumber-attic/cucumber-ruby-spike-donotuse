@@ -148,7 +148,7 @@ module CucumberWorld
   end
 
   def sut
-    @sut ||= SteppingStone::Servers::Rb.new(hooks)
+    @sut ||= SteppingStone::Servers::TextMapper.new(hooks)
   end
 
   def reporter

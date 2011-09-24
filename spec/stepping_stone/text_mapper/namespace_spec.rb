@@ -36,7 +36,7 @@ module SteppingStone
           # Move dispatch assertion to Context spec, use a mock to ensure the Context Factory's new method
           # is called with the correct arguments
           build_mapper(:mapper_a, subject.to_extension_module)
-          context = subject.build_context(Servers::Rb::Context.new)
+          context = subject.build_context(Servers::TextMapper::Context.new)
           context.dispatch([:from_mapper_a]).should eq(:to_mapper_a)
         end
       end

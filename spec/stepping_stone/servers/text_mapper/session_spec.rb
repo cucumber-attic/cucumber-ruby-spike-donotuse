@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module SteppingStone
   module Servers
-    class Rb
+    class TextMapper
       describe Session do
         it "does something"
       end

@@ -1,12 +1,12 @@
 require 'stepping_stone/text_mapper/namespace'
 require 'stepping_stone/code_loader'
 
-require 'stepping_stone/servers/rb/session'
-require 'stepping_stone/servers/rb/context'
+require 'stepping_stone/servers/text_mapper/session'
+require 'stepping_stone/servers/text_mapper/context'
 
 module SteppingStone
   module Servers
-    class Rb
+    class TextMapper
       # Called by Cucumber when it's time to start executing features. Non-idempotent,
       # invasive and environment-related startup code should go here.
       def self.boot!(opts)
@@ -21,12 +21,12 @@ module SteppingStone
 
       def initialize(hooks)
         @hooks = hooks
-        @mapper_namespace = TextMapper::Namespace.new
+        @mapper_namespace = SteppingStone::TextMapper::Namespace.new
       end
 
       def start_test(test_case)
         hooks.invoke(test_case.tags) do
-          session = Servers::Rb::Session.new(build_context, test_case)
+          session = Servers::TextMapper::Session.new(build_context, test_case)
           yield session
           session.end_test
         end
@@ -45,7 +45,7 @@ module SteppingStone
       end
 
       def build_context
-        mapper_namespace.build_context(Servers::Rb::Context.new)
+        mapper_namespace.build_context(Servers::TextMapper::Context.new)
       end
 
       def dsl_module

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module SteppingStone
   module Servers
-    class Rb
+    class TextMapper
       describe "Context" do
         subject { Context.new }
 

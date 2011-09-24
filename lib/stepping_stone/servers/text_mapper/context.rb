@@ -2,7 +2,7 @@ require 'stepping_stone/model/result'
 
 module SteppingStone
   module Servers
-    class Rb
+    class TextMapper
       class Context
         attr_accessor :mappings
 
@@ -15,7 +15,7 @@ module SteppingStone
         def dispatch(pattern)
           mapping = mappings.find_mapping(pattern)
           Model::Result.new(:passed, mapping.call(self, pattern))
-        rescue TextMapper::UndefinedMappingError => error
+        rescue SteppingStone::TextMapper::UndefinedMappingError => error
           Model::Result.new(:undefined, error)
         rescue RSpec::Expectations::ExpectationNotMetError => error
           Model::Result.new(:failed, error)

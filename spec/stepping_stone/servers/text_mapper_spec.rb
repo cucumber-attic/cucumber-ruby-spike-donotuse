@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module SteppingStone
   module Servers
-    describe Rb do
-      subject { Rb.new(Hooks.new) }
+    describe TextMapper do
+      subject { TextMapper.new(Hooks.new) }
 
       describe "#start_test" do
         it "starts a new session"

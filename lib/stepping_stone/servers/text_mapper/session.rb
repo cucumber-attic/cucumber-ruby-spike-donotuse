@@ -3,7 +3,7 @@ require 'stepping_stone/model/result'
 
 module SteppingStone
   module Servers
-    class Rb
+    class TextMapper
       class Session
         attr_reader :context, :test_case, :responder
 
