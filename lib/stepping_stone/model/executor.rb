@@ -22,13 +22,13 @@ module SteppingStone
 
       def run(session, &executor)
         each do |request|
-          case executor.call(request, handle(session, request))
+          case cmd = executor.call(request, handle(session, request))
           when :continue
             next
           when :stop
             break
           else
-            raise "Bad protocol"
+            raise "Script received bad command from the executor: '#{cmd}'"
           end
         end
       end
