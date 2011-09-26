@@ -116,12 +116,13 @@ Feature: CLI exec
           # This next step's mapping is undefined
           And 5 is added to the result
           Then the answer is 20
+          And the answer is not 42
 
       """
     When I successfully run `cuke exec cukes/features/calculator.feature`
     Then the output should contain exactly:
       """
-      ..US
+      ..USS
 
       """
 
