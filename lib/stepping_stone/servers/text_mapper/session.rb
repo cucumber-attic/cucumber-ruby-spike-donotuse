@@ -21,15 +21,15 @@ module SteppingStone
           responder.teardown(test_case_name, context.dispatch([:teardown, test_case_metadata]))
         end
 
-        def apply(action)
+        def apply(*action)
           responder.apply(action, context.dispatch(action))
         end
 
-        def before_apply(action)
+        def before_apply(*action)
           responder.before_apply(test_case_name, context.dispatch([:before_apply, {}]))
         end
 
-        def after_apply(action)
+        def after_apply(*action)
           responder.after_apply(test_case_name, context.dispatch([:after_apply, {}]))
         end
 

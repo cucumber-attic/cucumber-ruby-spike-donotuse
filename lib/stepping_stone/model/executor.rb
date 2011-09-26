@@ -4,6 +4,50 @@ require 'stepping_stone/model/result'
 
 module SteppingStone
   module Model
+    class Request
+      attr_reader :event, :action
+
+      def initialize(event, action=nil)
+        @event = event
+        @action = action
+      end
+    end
+
+    class Script
+      attr_reader :test_case
+
+      def initialize(test_case)
+        @test_case = test_case
+      end
+
+      def run(session, &executor)
+        each do |request|
+          case executor.call(request, handle(session, request))
+          when :continue
+            next
+          when :stop
+            break
+          else
+            raise "Bad protocol"
+          end
+        end
+      end
+
+      def each
+        yield Request.new(:setup)
+        test_case.each do |action|
+          yield Request.new(:before_apply, action)
+          yield Request.new(:apply, action)
+          yield Request.new(:after_apply, action)
+        end
+        yield Request.new(:teardown)
+      end
+
+      def handle(session, request)
+        session.send(request.event, *request.action)
+      end
+    end
+
     class Executor
       include Observable
 
@@ -16,21 +60,17 @@ module SteppingStone
       end
 
       def execute(test_case)
+        script = Script.new(test_case)
         server.start_test(test_case) do |session|
-          @last_event = session.setup
-
-          test_case.each do |action|
-            if @last_event.skip_next?
-              broadcast(responder.skip(action, Model::Result.new(:skipped)))
+          script.run(session) do |request, response|
+            if response.halt?
+              broadcast(response)
+              broadcast(responder.skip(request.action, Model::Result.new(:skipped)))
+              :stop
             else
-              session.before_apply(action)
-              @last_event = session.apply(action)
-              session.after_apply(action)
+              broadcast(response)
+              :continue
             end
-          end
-
-          unless @last_event.skip_next?
-            session.teardown
           end
         end
       end

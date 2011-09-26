@@ -15,7 +15,7 @@ module SteppingStone
 
       def_delegators :@result, :passed?, :failed?, :undefined?, :skipped?, :status
 
-      def skip_next?
+      def halt?
         failed?
       end
 
@@ -33,7 +33,7 @@ module SteppingStone
     end
 
     class ActionResponse < Response
-      def skip_next?
+      def halt?
         failed? or undefined? or skipped?
       end
 

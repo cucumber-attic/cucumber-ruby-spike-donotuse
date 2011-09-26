@@ -12,14 +12,14 @@ module SteppingStone
         context "when undefined" do
           subject { Response.new(:setup, :name, undefined) }
           it { should_not be_important }
-          its(:skip_next?) { should be_false }
+          its(:halt?) { should be_false }
           its(:to_s) { should eq("") }
         end
 
         context "when failed" do
           subject { Response.new(:setup, :name, failed) }
           it { should be_important }
-          its(:skip_next?) { should be_true }
+          its(:halt?) { should be_true }
           its(:to_s) { should eq("") }
         end
       end
@@ -34,7 +34,7 @@ module SteppingStone
           it { should_not be_skipped }
           it { should be_important }
 
-          its(:skip_next?) { should be_false }
+          its(:halt?) { should be_false }
           its(:to_s)  { should eq(".") }
         end
 
@@ -47,7 +47,7 @@ module SteppingStone
           it { should_not be_skipped }
           it { should be_important }
 
-          its(:skip_next?) { should be_true }
+          its(:halt?) { should be_true }
           its(:to_s)  { should eq("F") }
         end
 
@@ -60,7 +60,7 @@ module SteppingStone
           it { should_not be_skipped }
           it { should be_important }
 
-          its(:skip_next?) { should be_true }
+          its(:halt?) { should be_true }
           its(:to_s)  { should eq("U") }
         end
 
@@ -73,7 +73,7 @@ module SteppingStone
           it { should_not be_undefined }
           it { should be_important }
 
-          its(:skip_next?) { should be_true }
+          its(:halt?) { should be_true }
           its(:to_s) { should eq("S") }
         end
       end

@@ -152,11 +152,11 @@ module CucumberWorld
   end
 
   def reporter
-    @reporter ||= SteppingStone::Reporter.new(sut)
+    @reporter ||= SteppingStone::Reporter.new(executor)
   end
 
   def executor
-    @executor ||= SteppingStone::Model::Executor.new(reporter)
+    @executor ||= SteppingStone::Model::Executor.new(sut)
   end
 
   def execute(test_case)
@@ -174,10 +174,15 @@ module CucumberWorld
   def test_case_end_time
     reporter.history.last.created_at
   end
+
+  def start_reporter
+    reporter
+  end
 end
 
 Before do
   define_mapper(sut)
+  start_reporter
 end
 
 World(CucumberWorld)
