@@ -33,12 +33,6 @@ module SteppingStone
           responder.after_apply(test_case_name, context.dispatch([:after_apply, {}]))
         end
 
-        def skip(action)
-          # TODO: Remove this. It's only here because we are reporting via a delegator.
-          # Doing pub/sub with an observer or broadcaster should be much cleaner.
-          responder.skip(action, Model::Result.new(:skipped))
-        end
-
         def end_test
           # no-op
         end

@@ -30,10 +30,6 @@ module SteppingStone
         add(session.after_apply(action))
       end
 
-      def skip(action)
-        add(session.skip(action))
-      end
-
       def add(event)
         reporter.add_result(event)
       end
@@ -52,8 +48,12 @@ module SteppingStone
       end
     end
 
-    def add_result(result)
+    def update(result)
       results.add(result)
+    end
+
+    def add_result(result)
+      update(result)
     end
 
     def history

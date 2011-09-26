@@ -43,10 +43,6 @@ module SteppingStone
           log.add(responder.apply(action, Result.new(status_for(action))))
         end
 
-        def skip(action)
-          log.add(responder.skip(action, Result.new(:skipped)))
-        end
-
         def types
           log.events.map(&:type)
         end
@@ -79,28 +75,6 @@ module SteppingStone
           server.should_receive(:start_test).and_yield(session)
           subject.execute(tc(:pass, :pass))
           session.statuses.should eq([:passed, :passed, :passed, :passed])
-        end
-
-        it "skips actions after a failing action" do
-          server.should_receive(:start_test).and_yield(session)
-          subject.execute(tc(:pass, :fail, :pass))
-          session.statuses.should eq([:passed, :passed, :failed, :skipped])
-        end
-
-        it "skips actions after an undefined action" do
-          server.should_receive(:start_test).and_yield(session)
-          subject.execute(tc(:pass, :undefined, :pass))
-          session.statuses.should eq([:passed, :passed, :undefined, :skipped])
-        end
-
-        context "when setup fails" do
-          let(:session) { FakeSession.new(:setup => :failed) }
-
-          it "skips the actions that follow it" do
-            server.should_receive(:start_test).and_yield(session)
-            subject.execute(tc(:pass, :pass))
-            session.statuses.should eq([:failed, :skipped, :skipped])
-          end
         end
       end
     end

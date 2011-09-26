@@ -53,8 +53,10 @@ module SteppingStone
         end.flatten
 
         server = Servers.boot!(:default, :hooks => SteppingStone.configuration.hooks)
+
         reporter = Reporter.new(server)
         executor = Model::Executor.new(reporter)
+        executor.add_observer(reporter)
 
         test_cases.each do |test_case|
           executor.execute(test_case)

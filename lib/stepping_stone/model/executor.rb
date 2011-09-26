@@ -1,10 +1,18 @@
+require 'observer'
+require 'stepping_stone/model/responder'
+require 'stepping_stone/model/result'
+
 module SteppingStone
   module Model
     class Executor
+      include Observable
+
       attr_reader :server
+      attr_reader :responder
 
       def initialize(server)
         @server = server
+        @responder = Model::Responder.new
       end
 
       def execute(test_case)
@@ -13,7 +21,7 @@ module SteppingStone
 
           test_case.each do |action|
             if @last_event.skip_next?
-              session.skip(action)
+              broadcast(responder.skip(action, Model::Result.new(:skipped)))
             else
               session.before_apply(action)
               @last_event = session.apply(action)
@@ -25,6 +33,11 @@ module SteppingStone
             session.teardown
           end
         end
+      end
+
+      def broadcast(msg)
+        changed
+        notify_observers(msg)
       end
     end
   end
