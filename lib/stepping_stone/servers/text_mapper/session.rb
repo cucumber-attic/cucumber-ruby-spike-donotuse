@@ -1,36 +1,34 @@
-require 'stepping_stone/model/responder'
-require 'stepping_stone/model/result'
+require 'stepping_stone/model/responses'
 
 module SteppingStone
   module Servers
     class TextMapper
       class Session
-        attr_reader :context, :test_case, :responder
+        attr_reader :context, :test_case
 
-        def initialize(context, test_case, responder = Model::Responder.new)
+        def initialize(context, test_case)
           @context = context
           @test_case = test_case
-          @responder = responder
         end
 
         def setup
-          responder.setup(test_case_name, context.dispatch([:setup, test_case_metadata]))
+          Model::Response.new(:setup, test_case_name, context.dispatch([:setup, test_case_metadata]))
         end
 
         def teardown
-          responder.teardown(test_case_name, context.dispatch([:teardown, test_case_metadata]))
+          Model::Response.new(:teardown, test_case_name, context.dispatch([:teardown, test_case_metadata]))
         end
 
         def apply(*action)
-          responder.apply(action, context.dispatch(action))
+          Model::ActionResponse.new(:apply, action, context.dispatch(action))
         end
 
         def before_apply(*action)
-          responder.before_apply(test_case_name, context.dispatch([:before_apply, {}]))
+          Model::Response.new(:before_apply, test_case_name, context.dispatch([:before_apply, {}]))
         end
 
         def after_apply(*action)
-          responder.after_apply(test_case_name, context.dispatch([:after_apply, {}]))
+          Model::Response.new(:after_apply, test_case_name, context.dispatch([:after_apply, {}]))
         end
 
         def end_test

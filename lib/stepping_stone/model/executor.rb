@@ -1,6 +1,6 @@
 require 'observer'
-require 'stepping_stone/model/responder'
 require 'stepping_stone/model/result'
+require 'stepping_stone/model/responses'
 
 module SteppingStone
   module Model
@@ -38,12 +38,9 @@ module SteppingStone
       include Observable
 
       attr_reader :server
-      attr_reader :responder
 
       def initialize(server)
         @server = server
-        # Remove the responder stuff when the broadcaster / reporter protocol is fleshed out
-        @responder = Model::Responder.new
       end
 
       def execute(test_case)
@@ -72,7 +69,7 @@ module SteppingStone
 
       def broadcast_skip(request)
         if request.event == :apply
-          response = responder.skip(request.action, Model::Result.new(:skipped))
+          response = ActionResponse.new(:skip, request.action, Model::Result.new(:skipped))
           broadcast(response)
         end
       end

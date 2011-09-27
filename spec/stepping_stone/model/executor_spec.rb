@@ -11,11 +11,10 @@ module SteppingStone
       end
 
       class FakeSession
-        attr_reader :log, :responder, :action_to_status
+        attr_reader :log, :action_to_status
 
         def initialize(action_to_status={})
           @log = EventLog.new
-          @responder = Responder.new
           @action_to_status = {
             :pass      => :passed,
             :fail      => :failed,
@@ -24,23 +23,23 @@ module SteppingStone
         end
 
         def setup
-          log.add(responder.setup(:name, Result.new(status_for(:setup))))
+          log.add(Response.new(:setup, :name, Result.new(status_for(:setup))))
         end
 
         def teardown
-          log.add(responder.teardown(:name, Result.new(:passed)))
+          log.add(Response.new(:teardown, :name, Result.new(:passed)))
         end
 
         def before_apply(action)
-          log.add(responder.before_apply(:name, Result.new(:undefined)))
+          log.add(Response.new(:before_apply, :name, Result.new(:undefined)))
         end
 
         def after_apply(action)
-          log.add(responder.after_apply(:name, Result.new(:undefined)))
+          log.add(Response.new(:after_apply, :name, Result.new(:undefined)))
         end
 
         def apply(action)
-          log.add(responder.apply(action, Result.new(status_for(action))))
+          log.add(Response.new(:apply, action, Result.new(status_for(action))))
         end
 
         def types

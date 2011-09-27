@@ -3,22 +3,20 @@ require 'spec_helper'
 module SteppingStone
   module Model
     describe EventLog do
-      let(:responder) { Responder.new }
-
-      def ev(type, status)
-        responder.send(type, :name, Result.new(status))
+      def ev(type, status, klass=Response)
+        klass.new(type, :name, Result.new(status))
       end
 
       before do
         subject.add(ev(:setup, :passed))
         subject.add(ev(:before_apply, :undefined))
-        subject.add(ev(:apply, :passed))
+        subject.add(ev(:apply, :passed, ActionResponse))
         subject.add(ev(:after_apply, :passed))
         subject.add(ev(:before_apply, :undefined))
-        subject.add(ev(:apply, :undefined))
+        subject.add(ev(:apply, :undefined, ActionResponse))
         subject.add(ev(:after_apply, :undefined))
         subject.add(ev(:before_apply, :undefined))
-        subject.add(ev(:apply, :skipped))
+        subject.add(ev(:apply, :skipped, ActionResponse))
         subject.add(ev(:after_apply, :undefined))
         subject.add(ev(:teardown, :failed))
       end
@@ -51,7 +49,7 @@ module SteppingStone
       end
 
       describe "#add" do
-        let(:event) { responder.apply(:from, :passed) }
+        let(:event) { ActionResponse.new(:apply, :from, :passed) }
 
         it "adds the event to the log" do
           subject.add(event)
