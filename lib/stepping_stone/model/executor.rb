@@ -18,7 +18,7 @@ module SteppingStone
           script.inject(:continue) do |state, request|
             case state
             when :continue
-              response = handle(session, request)
+              response = session.handle(request)
               broadcast(response)
               response.halt? ? :skip : :continue
             when :skip

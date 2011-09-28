@@ -13,33 +13,17 @@ module SteppingStone
       class FakeSession
         attr_reader :log, :action_to_status
 
-        def initialize(action_to_status={})
+        def initialize
           @log = EventLog.new
           @action_to_status = {
             :pass      => :passed,
             :fail      => :failed,
             :undefined => :undefined
-          }.merge(action_to_status)
+          }
         end
 
-        def setup
-          log.add(Response.new(:setup, :name, Result.new(status_for(:setup))))
-        end
-
-        def teardown
-          log.add(Response.new(:teardown, :name, Result.new(:passed)))
-        end
-
-        def before_apply(action)
-          log.add(Response.new(:before_apply, :name, Result.new(:undefined)))
-        end
-
-        def after_apply(action)
-          log.add(Response.new(:after_apply, :name, Result.new(:undefined)))
-        end
-
-        def apply(action)
-          log.add(Response.new(:apply, action, Result.new(status_for(action))))
+        def handle(request)
+          log.add(Response.new(request.event, request.action, Result.new(status_for(request.action))))
         end
 
         def types
@@ -53,7 +37,7 @@ module SteppingStone
         private
 
         def status_for(action)
-          action_to_status.fetch(action, :passed)
+          action_to_status.fetch(action, :undefined)
         end
       end
 
@@ -73,7 +57,7 @@ module SteppingStone
         it "executes passing actions" do
           server.should_receive(:start_test).and_yield(session)
           subject.execute(scr(:pass, :pass))
-          session.statuses.should eq([:passed, :passed, :passed, :passed])
+          session.statuses.should eq([:passed, :passed])
         end
       end
     end

@@ -31,7 +31,7 @@ module SteppingStone
 
       def start_test(test_case)
         hooks.invoke(test_case.tags) do
-          session = Servers::TextMapper::Session.new(build_context, test_case)
+          session = Servers::TextMapper::Session.new(build_context)
           yield session
           session.end_test
         end
