@@ -42,10 +42,6 @@ module SteppingStone
           broadcast(response)
         end
       end
-
-      def handle(session, request)
-        session.send(request.event, *request.action)
-      end
     end
   end
 end
