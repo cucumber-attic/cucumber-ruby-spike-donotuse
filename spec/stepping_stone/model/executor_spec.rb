@@ -6,8 +6,8 @@ module SteppingStone
       let(:server) { double("sut server") }
       subject { Executor.new(server) }
 
-      def tc(*actions)
-        TestCase.new("test case", *actions)
+      def scr(*actions)
+        Script.new(TestCase.new("test case", *actions))
       end
 
       class FakeSession
@@ -61,9 +61,9 @@ module SteppingStone
         let(:session) { FakeSession.new }
 
         it "triggers the events in the proper order" do
-          test_case = tc(:action1, :action2)
-          server.should_receive(:start_test).with(test_case).and_yield(session)
-          subject.execute(test_case)
+          script = scr(:action1, :action2)
+          server.should_receive(:start_test).and_yield(session)
+          subject.execute(script)
           session.types.should eq([:setup,
                                    :before_apply, :apply, :after_apply,
                                    :before_apply, :apply, :after_apply,
@@ -72,7 +72,7 @@ module SteppingStone
 
         it "executes passing actions" do
           server.should_receive(:start_test).and_yield(session)
-          subject.execute(tc(:pass, :pass))
+          subject.execute(scr(:pass, :pass))
           session.statuses.should eq([:passed, :passed, :passed, :passed])
         end
       end

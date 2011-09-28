@@ -4,6 +4,7 @@ require 'stepping_stone'
 require 'stepping_stone/gherkin_compiler'
 require 'stepping_stone/reporter'
 require 'stepping_stone/model/executor'
+require 'stepping_stone/model/script'
 
 module SteppingStone
   module Cli
@@ -57,7 +58,7 @@ module SteppingStone
         reporter = Reporter.new(executor)
 
         test_cases.each do |test_case|
-          executor.execute(test_case)
+          executor.execute(Model::Script.new(test_case))
         end
 
         puts reporter.to_s

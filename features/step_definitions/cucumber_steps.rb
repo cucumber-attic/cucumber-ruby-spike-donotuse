@@ -96,7 +96,7 @@ module CucumberWorld
   def compile_scenario(name, body, background=nil, tags=nil)
     feature = build_feature(name, body, background, tags)
     if test_cases = SteppingStone::GherkinCompiler.new.compile(feature)
-      test_cases[0]
+      create_script(test_cases[0])
     else
       raise "Something when wrong while compiling #{body}"
     end
@@ -177,6 +177,10 @@ module CucumberWorld
 
   def start_reporter
     reporter
+  end
+
+  def create_script(test_case)
+    SteppingStone::Model::Script.new(test_case)
   end
 end
 
