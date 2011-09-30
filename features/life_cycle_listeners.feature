@@ -46,19 +46,13 @@ Feature: Life cycle event listeners
     Given these passing listeners:
       | event        | filter |
       | setup        | none   |
-      | before_apply | none   |
-      | after_apply  | none   |
       | teardown     | none   |
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle history is:
       | event        | name             | status |
       | setup        | Basic Arithmetic | passed |
-      | before_apply | Basic Arithmetic | passed |
       | apply        | I add 4 and 5    | passed |
-      | after_apply  | Basic Arithmetic | passed |
-      | before_apply | Basic Arithmetic | passed |
       | apply        | the result is 9  | passed |
-      | after_apply  | Basic Arithmetic | passed |
       | teardown     | Basic Arithmetic | passed |
 
   Scenario: Failing listener skips the rest of the test case

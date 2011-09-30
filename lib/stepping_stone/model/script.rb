@@ -27,9 +27,7 @@ module SteppingStone
       def each
         yield Request.new(:setup, test_case.name, test_case.metadata)
         test_case.each do |action|
-          yield Request.new(:before_apply, test_case.name, test_case.metadata)
           yield Request.new(:apply, action)
-          yield Request.new(:after_apply, test_case.name, test_case.metadata)
         end
         yield Request.new(:teardown, test_case.name, test_case.metadata)
       end

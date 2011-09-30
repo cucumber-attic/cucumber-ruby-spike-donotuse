@@ -48,10 +48,7 @@ module SteppingStone
           script = scr(:action1, :action2)
           server.should_receive(:start_test).and_yield(session)
           subject.execute(script)
-          session.types.should eq([:setup,
-                                   :before_apply, :apply, :after_apply,
-                                   :before_apply, :apply, :after_apply,
-                                   :teardown])
+          session.types.should eq([:setup, :apply, :apply, :teardown])
         end
 
         it "executes passing actions" do
