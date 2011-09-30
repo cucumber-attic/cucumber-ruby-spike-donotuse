@@ -3,20 +3,22 @@ require 'spec_helper'
 module SteppingStone
   module Model
     describe EventLog do
-      def ev(type, status, klass=Response)
-        klass.new(type, :name, Result.new(status))
+      def ev(event, status, required=false)
+        req = Request.new(event, [], required)
+        res = Result.new(status)
+        Response.new(req, res)
       end
 
       before do
         subject.add(ev(:setup, :passed))
         subject.add(ev(:before_apply, :undefined))
-        subject.add(ev(:apply, :passed, ActionResponse))
+        subject.add(ev(:map, :passed, true))
         subject.add(ev(:after_apply, :passed))
         subject.add(ev(:before_apply, :undefined))
-        subject.add(ev(:apply, :undefined, ActionResponse))
+        subject.add(ev(:map, :undefined, true))
         subject.add(ev(:after_apply, :undefined))
         subject.add(ev(:before_apply, :undefined))
-        subject.add(ev(:apply, :skipped, ActionResponse))
+        subject.add(ev(:map, :skipped, true))
         subject.add(ev(:after_apply, :undefined))
         subject.add(ev(:teardown, :failed))
       end
@@ -28,8 +30,8 @@ module SteppingStone
 
         it "filters events" do
           subject.events(status: :passed).length.should eq(3)
-          subject.events(type: :apply).length.should eq(3)
-          subject.events(status: :undefined, type: :before_apply).length.should eq(3)
+          subject.events(event: :map).length.should eq(3)
+          subject.events(status: :undefined, event: :before_apply).length.should eq(3)
         end
       end
 
@@ -49,7 +51,7 @@ module SteppingStone
       end
 
       describe "#add" do
-        let(:event) { ActionResponse.new(:apply, :from, :passed) }
+        let(:event) { Response.new(Request.new(:map, [:from]), Result.new(:passed)) }
 
         it "adds the event to the log" do
           subject.add(event)

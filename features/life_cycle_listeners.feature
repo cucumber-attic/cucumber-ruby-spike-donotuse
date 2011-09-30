@@ -39,8 +39,8 @@ Feature: Life cycle event listeners
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle history is:
       | event | name            | status |
-      | apply | I add 4 and 5   | passed |
-      | apply | the result is 9 | passed |
+      | map   | I add 4 and 5   | passed |
+      | map   | the result is 9 | passed |
 
   Scenario: Passing listeners for every event
     Given these passing listeners:
@@ -51,8 +51,8 @@ Feature: Life cycle event listeners
     Then the life cycle history is:
       | event        | name             | status |
       | setup        | Basic Arithmetic | passed |
-      | apply        | I add 4 and 5    | passed |
-      | apply        | the result is 9  | passed |
+      | map          | I add 4 and 5    | passed |
+      | map          | the result is 9  | passed |
       | teardown     | Basic Arithmetic | passed |
 
   Scenario: Failing listener skips the rest of the test case

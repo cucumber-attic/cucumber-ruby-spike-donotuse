@@ -22,12 +22,12 @@ module SteppingStone
           }
         end
 
-        def handle(request)
-          log.add(Response.new(request.event, request.action, Result.new(status_for(request.action))))
+        def perform(request)
+          log.add(Response.new(request, Result.new(status_for(request.arguments))))
         end
 
-        def types
-          log.events.map(&:type)
+        def events
+          log.events.map(&:event)
         end
 
         def statuses
@@ -45,10 +45,10 @@ module SteppingStone
         let(:session) { FakeSession.new }
 
         it "triggers the events in the proper order" do
-          script = scr(:action1, :action2)
+          script = scr(:pass, :pass)
           server.should_receive(:start_test).and_yield(session)
           subject.execute(script)
-          session.types.should eq([:setup, :apply, :apply, :teardown])
+          session.events.should eq([:setup, :map, :map, :teardown])
         end
 
         it "executes passing actions" do

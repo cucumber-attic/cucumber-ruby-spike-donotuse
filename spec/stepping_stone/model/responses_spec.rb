@@ -2,31 +2,35 @@ require 'spec_helper'
 
 module SteppingStone
   module Model
-    describe "response types" do
+    describe Response do
       let(:passed) { Result.new(:passed) }
       let(:failed) { Result.new(:failed) }
       let(:undefined) { Result.new(:undefined) }
       let(:skipped) { Result.new(:skipped) }
 
-      describe Response do
-        context "when undefined" do
-          subject { Response.new(:setup, :name, undefined) }
+      context "to a request that is not required" do
+        let(:request) { Request.new(:setup, []) }
+
+        context "with an undefined result" do
+          subject { Response.new(request, undefined) }
           it { should_not be_important }
           its(:halt?) { should be_false }
           its(:to_s) { should eq("") }
         end
 
-        context "when failed" do
-          subject { Response.new(:setup, :name, failed) }
+        context "with a failed result" do
+          subject { Response.new(request, failed) }
           it { should be_important }
           its(:halt?) { should be_true }
           its(:to_s) { should eq("") }
         end
       end
 
-      describe ActionResponse do
-        context "when passed" do
-          subject { ActionResponse.new(:apply, :from, passed) }
+      context "to a required request" do
+        let(:request) { Request.required(:map, []) }
+
+        context "with a passed result" do
+          subject { Response.new(request, passed) }
 
           it { should be_passed }
           it { should_not be_failed }
@@ -38,8 +42,8 @@ module SteppingStone
           its(:to_s)  { should eq(".") }
         end
 
-        context "when failed" do
-          subject { ActionResponse.new(:apply, :from, failed) }
+        context "with a failed result" do
+          subject { Response.new(request, failed) }
 
           it { should be_failed }
           it { should_not be_passed }
@@ -51,8 +55,8 @@ module SteppingStone
           its(:to_s)  { should eq("F") }
         end
 
-        context "when undefined" do
-          subject { ActionResponse.new(:apply, :from, undefined) }
+        context "with an undefined result" do
+          subject { Response.new(request, undefined) }
 
           it { should be_undefined }
           it { should_not be_passed }
@@ -64,8 +68,8 @@ module SteppingStone
           its(:to_s)  { should eq("U") }
         end
 
-        context "when skipped" do
-          subject { ActionResponse.new(:apply, :from, skipped) }
+        context "with a skipped result" do
+          subject { Response.new(request, skipped) }
 
           it { should be_skipped }
           it { should_not be_passed }

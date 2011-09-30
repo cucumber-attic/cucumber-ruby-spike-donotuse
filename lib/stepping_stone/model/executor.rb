@@ -18,7 +18,7 @@ module SteppingStone
           script.inject(:continue) do |state, request|
             case state
             when :continue
-              response = session.handle(request)
+              response = session.perform(request)
               broadcast(response)
               response.halt? ? :skip : :continue
             when :skip
@@ -37,8 +37,8 @@ module SteppingStone
       end
 
       def broadcast_skip(request)
-        if request.event == :apply
-          response = ActionResponse.new(:skip, request.action, Model::Result.new(:skipped))
+        if request.event == :map
+          response = Model::Response.new(request, Model::Result.new(:skipped))
           broadcast(response)
         end
       end

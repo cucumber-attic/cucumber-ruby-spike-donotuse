@@ -1,16 +1,22 @@
 module SteppingStone
   module Model
     class Request
-      attr_reader :event, :action, :arguments
+      def self.required(event, arguments)
+        self.new(event, arguments, true)
+      end
 
-      def initialize(event, action, arguments=nil)
-        @event = event
-        @action = action
-        @arguments = arguments
+      attr_reader :event, :arguments
+
+      def initialize(event, arguments, response_required=false)
+        @event, @arguments, @response_required = event, arguments, response_required
+      end
+
+      def signature
+        [event, *arguments]
       end
 
       def response_required?
-        event == :apply
+        @response_required
       end
     end
 
@@ -25,11 +31,12 @@ module SteppingStone
       end
 
       def each
-        yield Request.new(:setup, test_case.name, test_case.metadata)
+        # TODO: Track the result of yield to determine if we should continue
+        yield Request.new(:setup, [test_case.name])
         test_case.each do |action|
-          yield Request.new(:apply, action)
+          yield Request.required(:map, action)
         end
-        yield Request.new(:teardown, test_case.name, test_case.metadata)
+        yield Request.new(:teardown, [test_case.name])
       end
     end
   end

@@ -6,48 +6,44 @@ module SteppingStone
     class Response
       extend Forwardable
 
-      attr_reader :type, :name, :result, :created_at
+      def_delegators :@request, :event, :arguments, :response_required?
+      def_delegators :@result, :passed?, :failed?, :undefined?, :skipped?, :status
 
-      def initialize(type, name, result)
-        @type, @name, @result = type, [name].flatten, result
+      attr_reader :created_at
+
+      def initialize(request, result)
+        @request, @result = request, result
         @created_at = DateTime.now
       end
 
-      def_delegators :@result, :passed?, :failed?, :undefined?, :skipped?, :status
-
       def halt?
-        failed?
+        if response_required?
+          failed? or undefined? or skipped?
+        else
+          failed?
+        end
       end
 
       def important?
-        !undefined?
+        response_required? or !undefined?
       end
 
       def to_a
-        [type, name, status]
+        [event, arguments, status]
       end
 
       def to_s
-        ""
-      end
-    end
-
-    class ActionResponse < Response
-      def halt?
-        failed? or undefined? or skipped?
-      end
-
-      def important?
-        true
-      end
-
-      def to_s
-        {
-          :passed    => ".",
-          :failed    => "F",
-          :undefined => "U",
-          :skipped   => "S"
-        }[status]
+        # Ugly, but this won't be here for long
+        if response_required?
+          {
+            :passed    => ".",
+            :failed    => "F",
+            :undefined => "U",
+            :skipped   => "S"
+          }[status]
+        else
+          ""
+        end
       end
     end
   end

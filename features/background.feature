@@ -18,6 +18,6 @@ Feature: Backgrounds
     When Cucumber executes the scenario "Arithmetic"
     Then the life cycle history is:
       | event | name              | status |
-      | apply | I log in as "Bob" | passed |
-      | apply | I add 4 and 5     | passed |
-      | apply | the result is 9   | passed |
+      | map   | I log in as "Bob" | passed |
+      | map   | I add 4 and 5     | passed |
+      | map   | the result is 9   | passed |

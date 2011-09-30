@@ -10,12 +10,8 @@ module SteppingStone
           @context = context
         end
 
-        def handle(request)
-          if request.response_required?
-            Model::ActionResponse.new(request.event, request.action, context.dispatch(request.action))
-          else
-            Model::Response.new(request.event, request.action, context.dispatch([request.event, request.arguments]))
-          end
+        def perform(request)
+          Model::Response.new(request, context.dispatch(request.signature))
         end
 
         def end_test
