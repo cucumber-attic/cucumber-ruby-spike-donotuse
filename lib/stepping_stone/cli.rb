@@ -3,7 +3,7 @@ require 'kerplutz'
 require 'stepping_stone'
 require 'stepping_stone/gherkin_compiler'
 require 'stepping_stone/reporter'
-require 'stepping_stone/model/executor'
+require 'stepping_stone/executor'
 require 'stepping_stone/model/script'
 
 module SteppingStone
@@ -54,7 +54,7 @@ module SteppingStone
         end.flatten
 
         server = Servers.boot!(:default, :hooks => SteppingStone.configuration.hooks)
-        executor = Model::Executor.new(server)
+        executor = Executor.new(server)
         reporter = Reporter.new(executor)
 
         test_cases.each do |test_case|

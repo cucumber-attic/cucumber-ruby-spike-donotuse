@@ -1,8 +1,7 @@
-require 'stepping_stone/model/executor'
 require 'stepping_stone/model/script'
-require 'stepping_stone/model/event_log'
 require 'stepping_stone/model/test_case'
-require 'stepping_stone/model/responses'
+require 'stepping_stone/model/request'
+require 'stepping_stone/model/response'
 
 module SteppingStone
   # Contains the types used by Cucumber to model execution.

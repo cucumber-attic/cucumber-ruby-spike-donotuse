@@ -1,4 +1,4 @@
-require 'stepping_stone/model/event_log'
+require 'stepping_stone/event_log'
 
 module SteppingStone
   class Reporter
@@ -6,7 +6,7 @@ module SteppingStone
 
     def initialize(broadcaster)
       broadcaster.add_observer(self)
-      @results = Model::EventLog.new
+      @results = EventLog.new
     end
 
     def update(result)

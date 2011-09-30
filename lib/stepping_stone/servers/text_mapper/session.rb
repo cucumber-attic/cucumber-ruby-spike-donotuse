@@ -1,4 +1,4 @@
-require 'stepping_stone/model/responses'
+require 'stepping_stone/model/response'
 
 module SteppingStone
   module Servers

@@ -156,7 +156,7 @@ module CucumberWorld
   end
 
   def executor
-    @executor ||= SteppingStone::Model::Executor.new(sut)
+    @executor ||= SteppingStone::Executor.new(sut)
   end
 
   def execute(test_case)
