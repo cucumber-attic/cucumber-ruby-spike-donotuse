@@ -5,10 +5,16 @@ the business and development sides of your software development team.
 
 ## Setup
 
+Check out TextMapper into the same directory that contains cucumber-ruby,
+then from the cucumber-ruby directory:
+
     $ git submodule init
     $ git submodule update
 
-## Getting Started
+## Getting Started (Not Accurate Yet!)
+
+See the examples/ directory for an up-to-date-ish idea of what we're
+aiming at.
 
 First install Cucumber:
 
@@ -40,8 +46,8 @@ And that's it. Millions of dollars and priceless fame await!
 
 ## Architecture
 
-Frontend: compilers
-Backend: servers
+* Frontend: compilers
+* Backend: servers
 
 ## Copyright
 
