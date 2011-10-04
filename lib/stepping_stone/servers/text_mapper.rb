@@ -1,4 +1,4 @@
-require 'cucumber/text_mapper/namespace'
+require 'text_mapper/namespace'
 
 require 'stepping_stone/model/doc_string'
 require 'stepping_stone/model/data_table'
@@ -25,7 +25,7 @@ module SteppingStone
 
       def initialize(hooks)
         @hooks = hooks
-        @mapper_namespace = Cucumber::TextMapper::Namespace.new({ SteppingStone::Model::DocString => :DocString,
+        @mapper_namespace = ::TextMapper::Namespace.new({ SteppingStone::Model::DocString => :DocString,
                                                                   SteppingStone::Model::DataTable => :DataTable })
       end
 

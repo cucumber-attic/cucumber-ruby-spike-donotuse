@@ -139,7 +139,7 @@ module CucumberWorld
   end
 
   def add_listener(event, filter = nil, result = :pass)
-    listener = Cucumber::TextMapper::Listener.new([event.to_sym, filter]) { |test_case| result }
+    listener = ::TextMapper::Listener.new([event.to_sym, filter]) { |test_case| result }
     sut.add_mapping(listener)
   end
 

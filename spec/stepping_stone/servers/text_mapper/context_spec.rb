@@ -52,7 +52,7 @@ module SteppingStone
             it "returns an undefined result object" do
               mappings = double("mappings")
               mappings.stub(:find_mapping) do
-                raise Cucumber::TextMapper::UndefinedMappingError, [:bar]
+                raise ::TextMapper::UndefinedMappingError, [:bar]
               end
               subject.mappings = mappings
               subject.dispatch([:bar]).should be_undefined

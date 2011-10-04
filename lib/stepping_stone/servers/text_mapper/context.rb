@@ -15,7 +15,7 @@ module SteppingStone
         def dispatch(pattern)
           mapping = mappings.find_mapping(pattern)
           Model::Result.new(:passed, mapping.call(self, pattern))
-        rescue Cucumber::TextMapper::UndefinedMappingError => error
+        rescue ::TextMapper::UndefinedMappingError => error
           Model::Result.new(:undefined, error)
         rescue RSpec::Expectations::ExpectationNotMetError => error
           Model::Result.new(:failed, error)
