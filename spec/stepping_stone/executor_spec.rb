@@ -6,7 +6,7 @@ module SteppingStone
     subject { Executor.new(server) }
 
     def scr(*actions)
-      Script.new(TestCase.new("test case", *actions))
+      Model::Script.new(Model::TestCase.new("test case", *actions))
     end
 
     class FakeSession
@@ -22,7 +22,7 @@ module SteppingStone
       end
 
       def perform(request)
-        log.add(Response.new(request, Result.new(status_for(request.arguments))))
+        log.add(Model::Response.new(request, Model::Result.new(status_for(request.arguments))))
       end
 
       def events
