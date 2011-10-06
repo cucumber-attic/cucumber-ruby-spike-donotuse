@@ -14,13 +14,13 @@ Feature: CLI exec
       module CalculatorMapper
         extend SteppingStone::Mapper
 
-        def_map "a calculator"                                   => :create
-        def_map /(\d+) and (\d+) are added together/             => [:add, Integer, Integer]
-        def_map ["these numbers are added together:", DocString] => :add_script
-        def_map ["these numbers are added together:", DataTable] => :add_column
-        def_map /(\d+) and (\d+) are multiplied/                 => [:multiply, Integer, Integer]
-        def_map /the answer is (\d+)/                            => :assert_answer
-        def_map /the answer is not (\d+)/                        => :assert_not_answer
+        map("a calculator").to(:create)
+        map(/(\d+) and (\d+) are added together/).to(:add, Integer, Integer)
+        map("these numbers are added together:", DocString).to(:add_script)
+        map("these numbers are added together:", DataTable).to(:add_column)
+        map(/(\d+) and (\d+) are multiplied/).to(:multiply, Integer, Integer)
+        map(/the answer is (\d+)/).to(:assert_answer)
+        map(/the answer is not (\d+)/).to(:assert_not_answer)
 
         def create
           @calculator = Class.new do

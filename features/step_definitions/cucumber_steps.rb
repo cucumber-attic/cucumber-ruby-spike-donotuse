@@ -115,10 +115,10 @@ module CucumberWorld
       extend sut.dsl_module
       include RSpec::Matchers
 
-      def_map /I log in as "(\w+)"/ => :login_as
-      def_map "I add 4 and 5" => :add
-      def_map "the result is 9" => :assert_result
-      def_map "a passing step" => :passing
+      map(/I log in as "(\w+)"/).to(:login_as)
+      map("I add 4 and 5").to(:add)
+      map("the result is 9").to(:assert_result)
+      map("a passing step").to(:passing)
 
       def login_as(userid)
         @userid = userid
