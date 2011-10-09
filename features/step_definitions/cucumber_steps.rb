@@ -111,15 +111,12 @@ module CucumberWorld
   end
 
   def define_mapper(sut)
-    Module.new do
-      extend sut.dsl_module
-      include RSpec::Matchers
+    add_mapping([/I log in as "(\w+)"/], [:login_as])
+    add_mapping(["I add 4 and 5"], [:add])
+    add_mapping(["the result is 9"], [:assert_result])
+    add_mapping(["a passing step"], [:passing])
 
-      map(/I log in as "(\w+)"/).to(:login_as)
-      map("I add 4 and 5").to(:add)
-      map("the result is 9").to(:assert_result)
-      map("a passing step").to(:passing)
-
+    sut.add_mixin(Module.new do
       def login_as(userid)
         @userid = userid
       end
@@ -135,12 +132,19 @@ module CucumberWorld
       def passing
         @passing = true
       end
-    end
+    end)
+
+    sut.add_mixin(RSpec::Matchers)
   end
 
   def add_listener(event, filter = nil, result = :pass)
     listener = ::TextMapper::Listener.new([event.to_sym, filter]) { |test_case| result }
     sut.add_mapping(listener)
+  end
+
+  def add_mapping(from, to)
+    mapping = ::TextMapper::Mapping.from_primitives(from.unshift(:map), to)
+    sut.add_mapping(mapping)
   end
 
   def hooks

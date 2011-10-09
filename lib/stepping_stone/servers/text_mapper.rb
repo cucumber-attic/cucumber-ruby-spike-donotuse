@@ -31,10 +31,14 @@ module SteppingStone
 
       def start_test(test_case)
         hooks.invoke(test_case.tags) do
-          session = Servers::TextMapper::Session.new(build_context)
+          session = Servers::TextMapper::Session.new(new_context)
           yield session
           session.end_test
         end
+      end
+
+      def add_mixin(mixin)
+        mapper_namespace.add_mixin(mixin)
       end
 
       def add_mapping(mapping)
@@ -49,8 +53,8 @@ module SteppingStone
         mapper_namespace.mappings
       end
 
-      def build_context
-        mapper_namespace.build_context(Servers::TextMapper::Context.new)
+      def new_context
+        mapper_namespace.initialize_context(Servers::TextMapper::Context.new)
       end
 
       def dsl_module
