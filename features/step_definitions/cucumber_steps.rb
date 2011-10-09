@@ -110,7 +110,7 @@ module CucumberWorld
     out << "Scenario: #{name}\n#{body}"
   end
 
-  def define_mapper(sut)
+  def define_mapper
     add_mapping([/I log in as "(\w+)"/], [:login_as])
     add_mapping(["I add 4 and 5"], [:add])
     add_mapping(["the result is 9"], [:assert_result])
@@ -197,7 +197,7 @@ module CucumberWorld
 end
 
 Before do
-  define_mapper(sut)
+  define_mapper
   start_reporter
 end
 
