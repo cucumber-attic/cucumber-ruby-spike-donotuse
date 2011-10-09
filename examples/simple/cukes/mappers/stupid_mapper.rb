@@ -3,8 +3,8 @@ require 'cukes_helper'
 module StupidMapper
   extend SteppingStone::Mapper
 
-  def_map "a foo" => :foo
-  def_map [/a "(\w+)" with:/, DocString] => :go
+  map("a foo").to(:foo)
+  map(/a "(\w+)" with:/, DocString).to(:go)
 
   def foo
     puts "In Foo"

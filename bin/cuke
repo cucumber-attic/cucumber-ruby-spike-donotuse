@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + '/../lib') unless $:.include?(File.dirname(__FILE__) + '/../lib')
 # FIXME: Hack until we actually release the text mapper
-$:.unshift(File.dirname(__FILE__) + '/../../cucumber-text_mapper/lib')
+$:.unshift(File.dirname(__FILE__) + '/../../textmapper-ruby/lib')
 
 require 'stepping_stone/cli'
 SteppingStone::Cli.go!(ARGV.dup)
