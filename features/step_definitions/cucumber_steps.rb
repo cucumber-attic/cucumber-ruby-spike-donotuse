@@ -116,7 +116,7 @@ module CucumberWorld
     add_mapping(["the result is 9"], [:assert_result])
     add_mapping(["a passing step"], [:passing])
 
-    sut.add_mixin(Module.new do
+    add_mixin do
       def login_as(userid)
         @userid = userid
       end
@@ -132,9 +132,17 @@ module CucumberWorld
       def passing
         @passing = true
       end
-    end)
+    end
 
-    sut.add_mixin(RSpec::Matchers)
+    add_mixin(RSpec::Matchers)
+  end
+
+  def add_mixin(mixin=nil, &block)
+    if block_given?
+      sut.add_mixin(Module.new(&block))
+    else
+      sut.add_mixin(mixin)
+    end
   end
 
   def add_listener(event, filter = nil, result = :pass)
