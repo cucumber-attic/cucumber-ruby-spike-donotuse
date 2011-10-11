@@ -31,6 +31,11 @@ Then "the scenario is pending" do
   pending.should be(true)
 end
 
+Then "the scenario is undefined" do
+  undefined = reporter.history.any?(&:undefined?)
+  undefined.should be(true)
+end
+
 Then /^the step "(.+)" is skipped$/ do |name|
   skipped = reporter.history.find { |ev| ev.arguments == [name] }
   skipped.should be_skipped
