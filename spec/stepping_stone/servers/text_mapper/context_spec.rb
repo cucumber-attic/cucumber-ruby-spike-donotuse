@@ -38,7 +38,7 @@ module SteppingStone
               subject.dispatch([:foo])
             end
 
-            it "returns a passed result object" do
+            it "returns a passed result" do
               mappings = double("mappings")
               mapping = double("mapping")
               mappings.stub(:find_mapping).and_return(mapping)
@@ -49,7 +49,7 @@ module SteppingStone
           end
 
           context "when a mapping does not exist" do
-            it "returns an undefined result object" do
+            it "returns an undefined result" do
               mappings = double("mappings")
               mappings.stub(:find_mapping) do
                 raise ::TextMapper::UndefinedMappingError, [:bar]
@@ -60,7 +60,7 @@ module SteppingStone
           end
 
           context "when a mapping invocation fails" do
-            it "returns a failed result object" do
+            it "returns a failed result" do
               mappings = double("mappings")
               mapping  = double("mapping")
               mappings.stub(:find_mapping).and_return(mapping)
@@ -71,6 +71,24 @@ module SteppingStone
               end
               subject.dispatch([:go!]).should be_failed
             end
+          end
+
+          context "when a mapping calls pending" do
+            it "returns a pending result" do
+              mapping = ::TextMapper::Mapping.from_primitives([:do_pending], [:pending])
+              mappings = double("mappings")
+              mappings.stub(:find_mapping).and_return(mapping)
+              subject.mappings = mappings
+              subject.dispatch([:do_pending]).should be_pending
+            end
+          end
+        end
+
+        describe "#pending" do
+          it "raises a pending exception" do
+            expect do
+              subject.pending
+            end.to raise_error(SteppingStone::Pending)
           end
         end
       end

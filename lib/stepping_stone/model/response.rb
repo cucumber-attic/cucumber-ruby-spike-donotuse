@@ -7,7 +7,7 @@ module SteppingStone
       extend Forwardable
 
       def_delegators :@request, :event, :arguments, :response_required?
-      def_delegators :@result, :passed?, :failed?, :undefined?, :skipped?, :status
+      def_delegators :@result, :passed?, :failed?, :undefined?, :skipped?, :pending?, :status
 
       attr_reader :created_at
 
@@ -18,9 +18,9 @@ module SteppingStone
 
       def halt?
         if response_required?
-          failed? or undefined? or skipped?
+          failed? or undefined? or skipped? or pending?
         else
-          failed?
+          failed? or pending?
         end
       end
 
@@ -39,7 +39,8 @@ module SteppingStone
             :passed    => ".",
             :failed    => "F",
             :undefined => "U",
-            :skipped   => "S"
+            :skipped   => "S",
+            :pending   => "P"
           }[status]
         else
           ""

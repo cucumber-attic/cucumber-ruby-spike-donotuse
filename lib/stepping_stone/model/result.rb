@@ -24,6 +24,10 @@ module SteppingStone
         status == :skipped
       end
 
+      def pending?
+        status == :pending
+      end
+
       def ==(obj)
         value == obj
       end

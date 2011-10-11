@@ -1,9 +1,39 @@
-Given /^a passing scenario "(.+)" with:$/ do |name, body|
-  @test_case = compile_scenario(name, body, @background)
+Given /^a scenario "(.+)" with:$/ do |name, body|
+  @test_case = compile_scenario(name, body)
 end
 
-Given /^a passing background with:$/ do |background|
+Given /^a passing scenario "(.+)" with:$/ do |name, body|
+  @test_case = compile_scenario(name, body, @background)
+  create_passing_mappings(body)
+end
+
+Given "a passing background with:" do |background|
   @background = background
+  create_passing_mappings(background)
+end
+
+Given /^the step "(.+)" has a (\w+) mapping$/ do |name, status|
+  add_mapping([name], ["do_#{status}".to_sym])
+end
+
+Then "the scenario passes" do
+  passed = reporter.history.all?(&:passed?)
+  passed.should be(true)
+end
+
+Then "the scenario fails" do
+  failed = reporter.history.any?(&:failed?)
+  failed.should be(true)
+end
+
+Then "the scenario is pending" do
+  pending = reporter.history.any?(&:pending?)
+  pending.should be(true)
+end
+
+Then /^the step "(.+)" is skipped$/ do |name|
+  skipped = reporter.history.find { |ev| ev.arguments == [name] }
+  skipped.should be_skipped
 end
 
 Given /^these passing listeners:$/ do |listeners|
@@ -110,27 +140,18 @@ module CucumberWorld
     out << "Scenario: #{name}\n#{body}"
   end
 
-  def define_mapper
-    add_mapping([/I log in as "(\w+)"/], [:login_as])
-    add_mapping(["I add 4 and 5"], [:add])
-    add_mapping(["the result is 9"], [:assert_result])
-    add_mapping(["a passing step"], [:passing])
-
+  def define_context_mixins
     add_mixin do
-      def login_as(userid)
-        @userid = userid
-      end
-
-      def add
-        @result = 5 + 4
-      end
-
-      def assert_result
-        @result.should eq(9)
-      end
-
-      def passing
+      def do_passing
         @passing = true
+      end
+
+      def do_failing
+        1.should eq(2)
+      end
+
+      def do_pending
+        pending("This is pending!")
       end
     end
 
@@ -194,10 +215,21 @@ module CucumberWorld
   def create_script(test_case)
     SteppingStone::Model::Script.new(test_case)
   end
+
+  def create_passing_mappings(steps_text)
+    create_mappings(steps_text, :do_passing)
+  end
+
+  def create_mappings(steps_text, target)
+    steps_text.split("\n").each do |line|
+      from = line.gsub(/(Given|When|Then|But|And)\s/, '')
+      add_mapping([from], [target])
+    end
+  end
 end
 
 Before do
-  define_mapper
+  define_context_mixins
   start_reporter
 end
 

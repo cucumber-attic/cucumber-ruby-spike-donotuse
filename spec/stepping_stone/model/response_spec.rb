@@ -3,10 +3,11 @@ require 'spec_helper'
 module SteppingStone
   module Model
     describe Response do
-      let(:passed) { Result.new(:passed) }
-      let(:failed) { Result.new(:failed) }
+      let(:passed)    { Result.new(:passed) }
+      let(:failed)    { Result.new(:failed) }
+      let(:pending)   { Result.new(:pending) }
+      let(:skipped)   { Result.new(:skipped) }
       let(:undefined) { Result.new(:undefined) }
-      let(:skipped) { Result.new(:skipped) }
 
       context "to a request that is not required" do
         let(:request) { Request.new(:setup, []) }
@@ -24,6 +25,13 @@ module SteppingStone
           its(:halt?) { should be_true }
           its(:to_s) { should eq("") }
         end
+
+        context "with a pending result" do
+          subject { Response.new(request, pending) }
+          it { should be_important }
+          its(:halt?) { should be_true }
+          its(:to_s) { should eq("") }
+        end
       end
 
       context "to a required request" do
@@ -36,6 +44,7 @@ module SteppingStone
           it { should_not be_failed }
           it { should_not be_undefined }
           it { should_not be_skipped }
+          it { should_not be_pending }
           it { should be_important }
 
           its(:halt?) { should be_false }
@@ -49,6 +58,7 @@ module SteppingStone
           it { should_not be_passed }
           it { should_not be_undefined }
           it { should_not be_skipped }
+          it { should_not be_pending }
           it { should be_important }
 
           its(:halt?) { should be_true }
@@ -62,6 +72,7 @@ module SteppingStone
           it { should_not be_passed }
           it { should_not be_failed }
           it { should_not be_skipped }
+          it { should_not be_pending }
           it { should be_important }
 
           its(:halt?) { should be_true }
@@ -75,10 +86,25 @@ module SteppingStone
           it { should_not be_passed }
           it { should_not be_failed }
           it { should_not be_undefined }
+          it { should_not be_pending }
           it { should be_important }
 
           its(:halt?) { should be_true }
-          its(:to_s) { should eq("S") }
+          its(:to_s)  { should eq("S") }
+        end
+
+        context "with a pending result" do
+          subject { Response.new(request, pending) }
+
+          it { should be_pending }
+          it { should_not be_passed }
+          it { should_not be_failed }
+          it { should_not be_undefined }
+          it { should_not be_skipped }
+          it { should be_important }
+
+          its(:halt?) { should be_true }
+          its(:to_s)  { should eq("P") }
         end
       end
     end

@@ -8,7 +8,7 @@ Feature: Backgrounds
   Scenario: Scenario with a background
     Given a passing background with:
       """
-      Given I log in as "Bob"
+      Given a new calculator
       """
     And a passing scenario "Arithmetic" with:
       """
@@ -17,7 +17,7 @@ Feature: Backgrounds
       """
     When Cucumber executes the scenario "Arithmetic"
     Then the life cycle history is:
-      | event | name              | status |
-      | map   | I log in as "Bob" | passed |
-      | map   | I add 4 and 5     | passed |
-      | map   | the result is 9   | passed |
+      | event | name             | status |
+      | map   | a new calculator | passed |
+      | map   | I add 4 and 5    | passed |
+      | map   | the result is 9  | passed |
