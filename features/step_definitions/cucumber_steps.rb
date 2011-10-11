@@ -85,7 +85,7 @@ When /^Cucumber executes a scenario tagged with "(.+)"$/ do |tag|
 end
 
 When /^Cucumber executes a scenario with no tags$/ do
-  @test_case = compile_scenario("Test Scenario", "Given a passing step", backgroung=nil, tags=[])
+  @test_case = compile_scenario("Test Scenario", "Given a passing step", background=nil, tags=[])
   execute(@test_case)
 end
 
