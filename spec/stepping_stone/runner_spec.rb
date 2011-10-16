@@ -5,16 +5,16 @@ module SteppingStone
     let(:server) { double("sut server") }
     subject { Runner.new(server) }
 
-    def scr(*actions)
-      Model::Script.new(Model::TestCase.new("test case", *actions))
+    def scr(*instructions)
+      Model::Script.new(Model::TestCase.new("test case", *instructions))
     end
 
     class FakeSession
-      attr_reader :log, :action_to_status
+      attr_reader :log, :instruction_to_status
 
       def initialize
         @log = EventLog.new
-        @action_to_status = {
+        @instruction_to_status = {
           :pass      => :passed,
           :fail      => :failed,
           :undefined => :undefined
@@ -35,8 +35,8 @@ module SteppingStone
 
       private
 
-      def status_for(action)
-        action_to_status.fetch(action, :undefined)
+      def status_for(instruction)
+        instruction_to_status.fetch(instruction, :undefined)
       end
     end
 
@@ -50,7 +50,7 @@ module SteppingStone
         session.events.should eq([:setup, :map, :map, :teardown])
       end
 
-      it "executes passing actions" do
+      it "executes passing instructions" do
         server.should_receive(:start_test).and_yield(session)
         subject.execute(scr(:pass, :pass))
         session.statuses.should eq([:passed, :passed])

@@ -1,8 +1,8 @@
 require 'stepping_stone/servers/text_mapper'
 
 module SteppingStone
-  # A server's responsibility is to manage test case execution and mapping
-  # from natural language actions to code.
+  # A server's responsibility is act as an intermediary
+  # between the test runner and the system under test.
   module Servers
     def self.boot!(name=:default, opts={})
       case name

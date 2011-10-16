@@ -36,7 +36,7 @@ directory is for. If you haven't, that's where you'll be putting your
 Gherkin-formatted feature files. The lib directory will contain your
 mappings.
 
-Once you have written some features and the mappings from the actions
+Once you have written some features and the mappings from the instructions
 described in them onto code that drives your system, you can start
 executing the features:
 

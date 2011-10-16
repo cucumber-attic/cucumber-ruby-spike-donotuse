@@ -8,8 +8,8 @@ module SteppingStone
     attr_reader :test_cases
 
     def initialize
-      @pre_actions = []
-      @tc_actions = []
+      @pre_instructions = []
+      @tc_instructions = []
       @current = nil
       @test_cases = []
     end
@@ -21,21 +21,21 @@ module SteppingStone
 
     def replay
       if @current
-        actions = @pre_actions.dup + @tc_actions
-        test_case = Model::TestCase.new(@current, *actions)
+        instructions = @pre_instructions.dup + @tc_instructions
+        test_case = Model::TestCase.new(@current, *instructions)
         test_case.tags = @current_tags
         @test_cases.push(test_case)
-        @tc_actions = []
+        @tc_instructions = []
         @current = nil
         @current_tags = nil
       end
     end
 
-    def add_action(parts)
+    def add_instruction(parts)
       if @current
-        @tc_actions.push(parts)
+        @tc_instructions.push(parts)
       else
-        @pre_actions.push(parts)
+        @pre_instructions.push(parts)
       end
     end
   end
@@ -59,10 +59,10 @@ module SteppingStone
     end
 
     def step(step)
-      action = [step.name]
-      action << Model::DocString.new(step.doc_string.value) if step.doc_string
-      action << Model::DataTable.new(step.rows.map { |row| row.cells }) if step.rows
-      @builder.add_action(action)
+      instruction = [step.name]
+      instruction << Model::DocString.new(step.doc_string.value) if step.doc_string
+      instruction << Model::DataTable.new(step.rows.map { |row| row.cells }) if step.rows
+      @builder.add_instruction(instruction)
     end
 
     def eof

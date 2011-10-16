@@ -15,8 +15,8 @@ module SteppingStone
       def each
         # TODO: Track the result of yield to determine if we should continue
         yield Request.new(:setup, [test_case.name])
-        test_case.each do |action|
-          yield Request.required(:map, action)
+        test_case.each do |instruction|
+          yield Request.required(:map, instruction)
         end
         yield Request.new(:teardown, [test_case.name])
       end

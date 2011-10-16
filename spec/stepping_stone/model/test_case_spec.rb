@@ -9,17 +9,17 @@ module SteppingStone
         subject.class.should include(Enumerable)
       end
 
-      context "with many actions" do
-        let(:first) { double("first action") }
-        let(:second) { double("second action") }
+      context "with many instructions" do
+        let(:first) { double("first instruction") }
+        let(:second) { double("second instruction") }
 
         subject { TestCase.new("test case", first, second) }
 
         describe "#each" do
-          it "yields its actions" do
-            actions = []
-            subject.each { |action| actions << action }
-            actions.should == [first, second]
+          it "yields its instructions" do
+            instructions = []
+            subject.each { |i| instructions << i }
+            instructions.should == [first, second]
           end
         end
       end
