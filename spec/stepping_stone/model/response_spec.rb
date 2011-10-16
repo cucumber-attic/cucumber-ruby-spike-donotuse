@@ -35,7 +35,7 @@ module SteppingStone
       end
 
       context "to a required request" do
-        let(:request) { Request.required(:map, []) }
+        let(:request) { Request.new(:map, []) }
 
         context "with a passed result" do
           subject { Response.new(request, passed) }

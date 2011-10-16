@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module SteppingStone
   describe EventLog do
-    def ev(event, status, required=false)
-      req = Model::Request.new(event, [], required)
+    def ev(event, status)
+      req = Model::Request.new(event, [])
       res = Model::Result.new(status)
       Model::Response.new(req, res)
     end
@@ -11,13 +11,13 @@ module SteppingStone
     before do
       subject.add(ev(:setup, :passed))
       subject.add(ev(:before_apply, :undefined))
-      subject.add(ev(:map, :passed, true))
+      subject.add(ev(:map, :passed))
       subject.add(ev(:after_apply, :passed))
       subject.add(ev(:before_apply, :undefined))
-      subject.add(ev(:map, :undefined, true))
+      subject.add(ev(:map, :undefined))
       subject.add(ev(:after_apply, :undefined))
       subject.add(ev(:before_apply, :undefined))
-      subject.add(ev(:map, :skipped, true))
+      subject.add(ev(:map, :skipped))
       subject.add(ev(:after_apply, :undefined))
       subject.add(ev(:teardown, :failed))
     end

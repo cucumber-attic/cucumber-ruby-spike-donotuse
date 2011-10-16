@@ -8,13 +8,7 @@ module SteppingStone
   class Runner
     module RequestSynthesizer
       def each
-        super do |instruction|
-          if [:setup, :teardown].include?(instruction.first)
-            yield Model::Request.new(*instruction)
-          else
-            yield Model::Request.required(*instruction)
-          end
-        end
+        super { |instruction| yield Model::Request.new(*instruction) }
       end
     end
 

@@ -1,14 +1,13 @@
 module SteppingStone
   module Model
     class Request
-      def self.required(event, arguments)
-        self.new(event, arguments, true)
-      end
+      RESPONSE_REQUIRED = [:map]
 
       attr_reader :event, :arguments
 
-      def initialize(event, arguments, response_required=false)
-        @event, @arguments, @response_required = event, arguments, response_required
+      def initialize(event, arguments)
+        @event, @arguments = event, arguments
+        @response_required = RESPONSE_REQUIRED.include?(event)
       end
 
       def signature
