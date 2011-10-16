@@ -2,23 +2,23 @@ require 'stepping_stone/event_log'
 
 module SteppingStone
   class Reporter
-    attr_reader :results
+    attr_reader :log
 
     def initialize(broadcaster)
       broadcaster.add_observer(self)
-      @results = EventLog.new
+      @log = EventLog.new
     end
 
-    def update(result)
-      results.add(result)
+    def update(event)
+      log.add(event)
     end
 
     def history
-      results.history
+      log.history
     end
 
     def to_s
-      results.to_s
+      log.to_s
     end
   end
 end
