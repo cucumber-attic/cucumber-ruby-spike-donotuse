@@ -6,7 +6,7 @@ require 'stepping_stone/model/result'
 
 module SteppingStone
   class Runner
-    module RequestSynthesizer
+    module RequestIterator
       def each
         super { |instruction| yield Model::Request.new(*instruction) }
       end
@@ -14,14 +14,14 @@ module SteppingStone
 
     include Observable
 
-    attr_reader :server
+    attr_reader :server, :decorator
 
-    def initialize(server)
-      @server = server
+    def initialize(server, decorator = RequestIterator)
+      @server, @decorator = server, decorator
     end
 
     def execute(test_case)
-      test_case.extend(RequestSynthesizer)
+      test_case.extend(decorator)
       server.start_test(test_case) do |session|
         test_case.inject(:continue) do |state, request|
           case state
