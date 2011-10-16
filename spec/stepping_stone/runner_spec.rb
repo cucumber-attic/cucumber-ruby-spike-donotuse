@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 module SteppingStone
-  describe Executor do
+  describe Runner do
     let(:server) { double("sut server") }
-    subject { Executor.new(server) }
+    subject { Runner.new(server) }
 
     def scr(*actions)
       Model::Script.new(Model::TestCase.new("test case", *actions))

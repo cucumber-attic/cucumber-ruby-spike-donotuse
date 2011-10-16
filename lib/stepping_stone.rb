@@ -2,7 +2,7 @@ require 'stepping_stone/configuration'
 require 'stepping_stone/model'
 require 'stepping_stone/servers'
 require 'stepping_stone/hooks'
-require 'stepping_stone/executor'
+require 'stepping_stone/runner'
 require 'stepping_stone/event_log'
 
 module SteppingStone

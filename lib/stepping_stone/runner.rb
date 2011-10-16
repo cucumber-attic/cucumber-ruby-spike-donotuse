@@ -3,7 +3,7 @@ require 'stepping_stone/model/result'
 require 'stepping_stone/model/response'
 
 module SteppingStone
-  class Executor
+  class Runner
     include Observable
 
     attr_reader :server

@@ -190,15 +190,15 @@ module CucumberWorld
   end
 
   def reporter
-    @reporter ||= SteppingStone::Reporter.new(executor)
+    @reporter ||= SteppingStone::Reporter.new(runner)
   end
 
-  def executor
-    @executor ||= SteppingStone::Executor.new(sut)
+  def runner
+    @runner ||= SteppingStone::Runner.new(sut)
   end
 
   def execute(test_case)
-    executor.execute(test_case)
+    runner.execute(test_case)
   end
 
   def life_cycle_history

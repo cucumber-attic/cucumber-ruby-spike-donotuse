@@ -7,8 +7,8 @@ module SteppingStone
   # Contains the types used by Cucumber to model execution.
   # Consists of these classes:
   #   * TestCase
-  #   * Event
-  #   * Executor
+  #   * Request
+  #   * Response
   # And possibly more, but this is more placeholder docs than anything else.
   module Model
   end
