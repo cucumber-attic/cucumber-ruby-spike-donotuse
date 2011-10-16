@@ -6,9 +6,13 @@ require 'stepping_stone/model/result'
 
 module SteppingStone
   class Runner
-    module RequestIterator
+    module RequestRunner
       def each
         super { |instruction| yield Model::Request.new(*instruction) }
+      end
+
+      def run(*args, &block)
+        inject(*args, &block)
       end
     end
 
@@ -16,14 +20,14 @@ module SteppingStone
 
     attr_reader :server, :decorator
 
-    def initialize(server, decorator = RequestIterator)
+    def initialize(server, decorator = RequestRunner)
       @server, @decorator = server, decorator
     end
 
     def execute(test_case)
       test_case.extend(decorator)
       server.start_test(test_case) do |session|
-        test_case.inject(:continue) do |state, request|
+        test_case.run(:continue) do |state, request|
           case state
           when :continue
             response = session.perform(request)
