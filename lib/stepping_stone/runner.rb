@@ -1,9 +1,20 @@
 require 'observer'
-require 'stepping_stone/model/result'
+
+require 'stepping_stone/model/request'
 require 'stepping_stone/model/response'
+require 'stepping_stone/model/result'
 
 module SteppingStone
   class Runner
+    module RequestSynthesizer
+      def each
+        Model::Request.new(:setup, [name])
+        yield Model::Request.new(:setup, [name])
+        super { |instruction| yield Model::Request.required(:map, instruction) }
+        yield Model::Request.new(:teardown, [name])
+      end
+    end
+
     include Observable
 
     attr_reader :server
@@ -12,9 +23,10 @@ module SteppingStone
       @server = server
     end
 
-    def execute(script)
-      server.start_test(script.test_case) do |session|
-        script.inject(:continue) do |state, request|
+    def execute(test_case)
+      test_case.extend(RequestSynthesizer)
+      server.start_test(test_case) do |session|
+        test_case.inject(:continue) do |state, request|
           case state
           when :continue
             response = session.perform(request)
