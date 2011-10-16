@@ -11,7 +11,9 @@ module SteppingStone
       #
       def initialize(name, *instructions)
         @name = name
-        @instructions = instructions
+        @instructions = instructions.map { |i| [:map, i] }
+        @instructions.unshift([:setup, [@name]])
+        @instructions.push([:teardown, [@name]])
         @tags = []
       end
 

@@ -8,10 +8,13 @@ module SteppingStone
   class Runner
     module RequestSynthesizer
       def each
-        Model::Request.new(:setup, [name])
-        yield Model::Request.new(:setup, [name])
-        super { |instruction| yield Model::Request.required(:map, instruction) }
-        yield Model::Request.new(:teardown, [name])
+        super do |instruction|
+          if [:setup, :teardown].include?(instruction.first)
+            yield Model::Request.new(*instruction)
+          else
+            yield Model::Request.required(*instruction)
+          end
+        end
       end
     end
 

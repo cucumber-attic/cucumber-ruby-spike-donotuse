@@ -9,24 +9,35 @@ module SteppingStone
         subject.class.should include(Enumerable)
       end
 
-      context "with many instructions" do
-        let(:first) { double("first instruction") }
-        let(:second) { double("second instruction") }
+      its(:metadata) { should eq({}) }
 
-        subject { TestCase.new("test case", first, second) }
+      context "with no map instructions" do
+        it "has setup and teardown instructions" do
+          subject.instructions.should eq([[:setup, ["test case"]], [:teardown, ["test case"]]])
+        end
 
         describe "#each" do
           it "yields its instructions" do
-            instructions = []
-            subject.each { |i| instructions << i }
-            instructions.should == [first, second]
+            yielded = []
+            subject.each { |i| yielded << i }
+            yielded.should eq(subject.instructions)
           end
         end
       end
 
-      describe "#metadata" do
-        it "is empty" do
-          subject.metadata.should eq({})
+      context "with map instructions" do
+        subject { TestCase.new("test case", "foo", "bar") }
+
+        it "converts each step into a map instruction" do
+          subject.instructions.should eq([[:setup, ["test case"]], [:map, "foo"], [:map, "bar"], [:teardown, ["test case"]]])
+        end
+
+        describe "#each" do
+          it "yields its instructions" do
+            yielded = []
+            subject.each { |i| yielded << i }
+            yielded.should eq(subject.instructions)
+          end
         end
       end
     end
