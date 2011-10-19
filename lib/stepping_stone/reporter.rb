@@ -17,6 +17,22 @@ module SteppingStone
       log.history
     end
 
+    def passed?
+      history.all?(&:passed?)
+    end
+
+    def failed?
+      history.any?(&:failed?)
+    end
+
+    def pending?
+      history.any?(&:pending?)
+    end
+
+    def undefined?
+      history.any?(&:undefined?)
+    end
+
     def to_s
       log.to_s
     end

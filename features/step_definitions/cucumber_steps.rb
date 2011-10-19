@@ -17,23 +17,19 @@ Given /^the step "(.+)" has a (\w+) mapping$/ do |name, status|
 end
 
 Then "the scenario passes" do
-  passed = reporter.history.all?(&:passed?)
-  passed.should be(true)
+  reporter.should be_passed
 end
 
 Then "the scenario fails" do
-  failed = reporter.history.any?(&:failed?)
-  failed.should be(true)
+  reporter.should be_failed
 end
 
 Then "the scenario is pending" do
-  pending = reporter.history.any?(&:pending?)
-  pending.should be(true)
+  reporter.should be_pending
 end
 
 Then "the scenario is undefined" do
-  undefined = reporter.history.any?(&:undefined?)
-  undefined.should be(true)
+  reporter.should be_undefined
 end
 
 Then /^the step "(.+)" is skipped$/ do |name|
