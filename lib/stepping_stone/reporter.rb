@@ -33,8 +33,19 @@ module SteppingStone
       history.any?(&:undefined?)
     end
 
-    def to_s
-      log.to_s
+    def write(out)
+      history.each do |ev|
+        if ev.response_required?
+          letter = {
+            :passed    => ".",
+            :failed    => "F",
+            :undefined => "U",
+            :skipped   => "S",
+            :pending   => "P"
+          }[ev.status]
+          out.write(letter)
+        end
+      end
     end
   end
 end

@@ -61,11 +61,5 @@ module SteppingStone
         subject.add(event).should eq(event)
       end
     end
-
-    describe "#to_s" do
-      it "builds a string representation" do
-        subject.to_s.should eq(".US")
-      end
-    end
   end
 end

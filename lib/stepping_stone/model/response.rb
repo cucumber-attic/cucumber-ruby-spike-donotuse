@@ -31,21 +31,6 @@ module SteppingStone
       def to_a
         [event, arguments, status]
       end
-
-      def to_s
-        # Ugly, but this won't be here for long
-        if response_required?
-          {
-            :passed    => ".",
-            :failed    => "F",
-            :undefined => "U",
-            :skipped   => "S",
-            :pending   => "P"
-          }[status]
-        else
-          ""
-        end
-      end
     end
   end
 end

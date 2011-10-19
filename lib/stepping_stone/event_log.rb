@@ -21,9 +21,5 @@ module SteppingStone
     def history
       @events.select(&:important?)
     end
-
-    def to_s
-      events.map(&:to_s).join
-    end
   end
 end

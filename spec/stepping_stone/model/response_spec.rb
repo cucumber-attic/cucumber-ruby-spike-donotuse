@@ -16,21 +16,18 @@ module SteppingStone
           subject { Response.new(request, undefined) }
           it { should_not be_important }
           its(:halt?) { should be_false }
-          its(:to_s) { should eq("") }
         end
 
         context "with a failed result" do
           subject { Response.new(request, failed) }
           it { should be_important }
           its(:halt?) { should be_true }
-          its(:to_s) { should eq("") }
         end
 
         context "with a pending result" do
           subject { Response.new(request, pending) }
           it { should be_important }
           its(:halt?) { should be_true }
-          its(:to_s) { should eq("") }
         end
       end
 
@@ -48,7 +45,6 @@ module SteppingStone
           it { should be_important }
 
           its(:halt?) { should be_false }
-          its(:to_s)  { should eq(".") }
         end
 
         context "with a failed result" do
@@ -62,7 +58,6 @@ module SteppingStone
           it { should be_important }
 
           its(:halt?) { should be_true }
-          its(:to_s)  { should eq("F") }
         end
 
         context "with an undefined result" do
@@ -76,7 +71,6 @@ module SteppingStone
           it { should be_important }
 
           its(:halt?) { should be_true }
-          its(:to_s)  { should eq("U") }
         end
 
         context "with a skipped result" do
@@ -90,7 +84,6 @@ module SteppingStone
           it { should be_important }
 
           its(:halt?) { should be_true }
-          its(:to_s)  { should eq("S") }
         end
 
         context "with a pending result" do
@@ -104,7 +97,6 @@ module SteppingStone
           it { should be_important }
 
           its(:halt?) { should be_true }
-          its(:to_s)  { should eq("P") }
         end
       end
     end

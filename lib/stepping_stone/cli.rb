@@ -60,7 +60,10 @@ module SteppingStone
           runner.execute(test_case)
         end
 
-        puts reporter.to_s
+        require 'stringio'
+        out = StringIO.new
+        reporter.write(out)
+        puts out.string
       end
     end
   end
