@@ -53,11 +53,13 @@ module SteppingStone
         end.flatten
 
         server = Servers.boot!(:default, :hooks => SteppingStone.configuration.hooks)
-        runner = Runner.new(server)
-        reporter = Reporter.new(runner)
+        reporter = Reporter.new
+        runner = Runner.new(server, reporter)
 
-        test_cases.each do |test_case|
-          runner.execute(test_case)
+        reporter.record_run do
+          test_cases.each do |test_case|
+            runner.execute(test_case)
+          end
         end
 
         require 'stringio'

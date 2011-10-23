@@ -16,6 +16,10 @@ Given /^the step "(.+)" has a (\w+) mapping$/ do |name, status|
   add_mapping([name], ["do_#{status}".to_sym])
 end
 
+Given "I'm using the progress formatter" do
+  start_progress_formatter
+end
+
 Then "the scenario passes" do
   reporter.should be_passed
 end
@@ -123,6 +127,10 @@ Then /^the hook is not fired$/ do
   defined?(@before_time).should eq(nil)
 end
 
+Then "the progress output looks like:" do |output|
+  progress_output.should eq(output)
+end
+
 module CucumberWorld
   def compile_scenario(name, body, background=nil, tags=nil)
     feature = build_feature(name, body, background, tags)
@@ -186,15 +194,19 @@ module CucumberWorld
   end
 
   def reporter
-    @reporter ||= SteppingStone::Reporter.new(runner)
+    @reporter ||= SteppingStone::Reporter.new
   end
 
   def runner
-    @runner ||= SteppingStone::Runner.new(sut)
+    @runner ||= SteppingStone::Runner.new(sut, reporter)
+  end
+
+  def progress_output
+    @progress.string
   end
 
   def execute(test_case)
-    runner.execute(test_case)
+    reporter.record_run { runner.execute(test_case) }
   end
 
   def life_cycle_history
@@ -209,8 +221,9 @@ module CucumberWorld
     reporter.history.last.created_at
   end
 
-  def start_reporter
-    reporter
+  def start_progress_formatter
+    @progress = StringIO.new
+    SteppingStone::Observers::Progress.new(reporter, @progress)
   end
 
   def create_passing_mappings(steps_text)
@@ -227,7 +240,6 @@ end
 
 Before do
   define_context_mixins
-  start_reporter
 end
 
 World(CucumberWorld)

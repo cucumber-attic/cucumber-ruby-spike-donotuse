@@ -1,7 +1,13 @@
 module SteppingStone
   class EventLog
+    include Enumerable
+
     def initialize
       @events = []
+    end
+
+    def each(&block)
+      @events.each(&block)
     end
 
     def add(event)

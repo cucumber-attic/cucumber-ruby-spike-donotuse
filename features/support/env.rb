@@ -9,3 +9,4 @@ require 'aruba/cucumber'
 
 require 'rspec/expectations'
 require 'date'
+require 'stringio'

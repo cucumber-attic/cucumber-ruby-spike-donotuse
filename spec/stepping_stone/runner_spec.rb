@@ -3,17 +3,19 @@ require 'spec_helper'
 module SteppingStone
   describe Runner do
     let(:server) { double("sut server") }
-    subject { Runner.new(server) }
+    let(:reporter) { Reporter.new }
+    let(:events)   { reporter.log.map(&:event) }
+    let(:statuses) { reporter.history.map(&:status) }
+
+
+    subject { Runner.new(server, reporter) }
 
     def tc(*instructions)
       Model::TestCase.new("test case", *instructions)
     end
 
     class FakeSession
-      attr_reader :log, :instruction_to_status
-
       def initialize
-        @log = EventLog.new
         @instruction_to_status = {
           :pass      => :passed,
           :fail      => :failed,
@@ -22,38 +24,33 @@ module SteppingStone
       end
 
       def perform(request)
-        log.add(Model::Response.new(request, Model::Result.new(status_for(request.arguments))))
+        response_for(request)
       end
 
-      def events
-        log.events.map(&:event)
+      def response_for(request)
+        Model::Response.new(request, Model::Result.new(status_for(request.arguments)))
       end
-
-      def statuses
-        log.history.map(&:status)
-      end
-
-      private
 
       def status_for(instruction)
-        instruction_to_status.fetch(instruction, :undefined)
+        @instruction_to_status.fetch(instruction, :undefined)
       end
     end
 
     describe "#execute" do
-      let(:session) { FakeSession.new }
+      let(:session)  { FakeSession.new }
 
-      it "triggers the events in the proper order" do
-        test_case = tc(:pass, :pass)
+      before do
         server.should_receive(:start_test).and_yield(session)
-        subject.execute(test_case)
-        session.events.should eq([:setup, :map, :map, :teardown])
       end
 
-      it "executes passing instructions" do
-        server.should_receive(:start_test).and_yield(session)
+      it "send requests to the session in the proper order" do
         subject.execute(tc(:pass, :pass))
-        session.statuses.should eq([:passed, :passed])
+        events.should eq([:setup, :map, :map, :teardown])
+      end
+
+      it "stops executing when an instruction fails" do
+        subject.execute(tc(:pass, :fail, :pass))
+        statuses.should eq([:passed, :failed, :skipped])
       end
     end
   end
