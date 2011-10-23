@@ -41,6 +41,7 @@ module SteppingStone
     end
 
     def record(event)
+      @log.add(event)
       case event.event
       when :setup
         @result = Result.new(event.arguments[0])
