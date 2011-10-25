@@ -1,6 +1,5 @@
 require 'observer'
 require 'stepping_stone/event_log'
-require 'stepping_stone/model/response'
 require 'stepping_stone/model/result'
 
 module SteppingStone
@@ -77,21 +76,16 @@ module SteppingStone
       notify_observers(:end_run)
     end
 
-    def broadcast(response)
-      update(response)
-    end
-
-    def broadcast_skip(request)
-      if request.event == :map
-        response = Model::Response.new(request, Model::Result.new(:skipped))
-        broadcast(response)
-      end
-    end
-
-    def update(event)
-      record(event)
+    def broadcast(result)
+      record(result)
       changed
-      notify_observers(:event) if event.important?
+      notify_observers(:event) if result.important?
+    end
+
+    def broadcast_skip(instruction)
+      if instruction.name == :map
+        broadcast(Model::Result.new(:skipped, nil, instruction))
+      end
     end
 
     def last_status

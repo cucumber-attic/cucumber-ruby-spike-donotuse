@@ -13,7 +13,7 @@ module SteppingStone
 
       context "with no map instructions" do
         it "has setup and teardown instructions" do
-          subject.instructions.should eq([[:setup, ["test case"]], [:teardown, ["test case"]]])
+          subject.instructions.map(&:to_a).should eq([[:setup, ["test case"]], [:teardown, ["test case"]]])
         end
 
         describe "#each" do
@@ -29,7 +29,7 @@ module SteppingStone
         subject { TestCase.new("test case", "foo", "bar") }
 
         it "converts each step into a map instruction" do
-          subject.instructions.should eq([[:setup, ["test case"]], [:map, "foo"], [:map, "bar"], [:teardown, ["test case"]]])
+          subject.instructions.map(&:to_a).should eq([[:setup, ["test case"]], [:map, "foo"], [:map, "bar"], [:teardown, ["test case"]]])
         end
 
         describe "#each" do

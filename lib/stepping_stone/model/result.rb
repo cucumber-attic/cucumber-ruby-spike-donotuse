@@ -1,11 +1,42 @@
+require 'date'
+
 module SteppingStone
   module Model
     class Result
-      attr_reader :status, :value
+      EVENT_ERRORS    = [:failed, :pending] 
+      DISPATCH_ERRORS = [:failed, :pending, :undefined, :skipped]
+      
+      attr_reader :status, :value, :instruction, :created_at
 
-      def initialize(status, value=nil)
+      def initialize(status, value=nil, instruction=nil)
         @status = status
         @value = value
+        @instruction = instruction
+        @created_at = DateTime.now
+      end
+
+      def event
+        @instruction.name
+      end
+
+      def arguments
+        @instruction.arguments
+      end
+
+      def important?
+        response_required? or !undefined?
+      end
+      
+      def response_required?
+        @instruction.name == :map
+      end
+      
+      def halt?
+        if response_required?
+          DISPATCH_ERRORS.include?(@status)
+        else
+          EVENT_ERRORS.include?(@status)
+        end
       end
 
       def passed?
@@ -30,6 +61,10 @@ module SteppingStone
 
       def ==(obj)
         value == obj
+      end
+
+      def to_a
+        [event, arguments, status]
       end
     end
   end

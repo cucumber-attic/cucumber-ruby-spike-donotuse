@@ -2,9 +2,7 @@ require 'text_mapper/namespace'
 
 require 'stepping_stone/model/doc_string'
 require 'stepping_stone/model/data_table'
-
 require 'stepping_stone/code_loader'
-require 'stepping_stone/servers/text_mapper/session'
 require 'stepping_stone/servers/text_mapper/context'
 
 
@@ -31,9 +29,7 @@ module SteppingStone
 
       def start_test(test_case)
         hooks.invoke(test_case.tags) do
-          session = Servers::TextMapper::Session.new(new_context)
-          yield session
-          session.end_test
+          yield new_context
         end
       end
 

@@ -7,7 +7,6 @@ module SteppingStone
     let(:events)   { reporter.log.map(&:event) }
     let(:statuses) { reporter.history.map(&:status) }
 
-
     subject { Runner.new(server, reporter) }
 
     def tc(*instructions)
@@ -23,12 +22,12 @@ module SteppingStone
         }
       end
 
-      def perform(request)
+      def dispatch(request)
         response_for(request)
       end
 
       def response_for(request)
-        Model::Response.new(request, Model::Result.new(status_for(request.arguments)))
+        Model::Result.new(status_for(request.arguments), nil, request)
       end
 
       def status_for(instruction)
@@ -43,7 +42,7 @@ module SteppingStone
         server.should_receive(:start_test).and_yield(session)
       end
 
-      it "send requests to the session in the proper order" do
+      it "send requests to the session" do
         subject.execute(tc(:pass, :pass))
         events.should eq([:setup, :map, :map, :teardown])
       end
@@ -52,6 +51,14 @@ module SteppingStone
         subject.execute(tc(:pass, :fail, :pass))
         statuses.should eq([:passed, :failed, :skipped])
       end
+
+      context "test case with failing setup"
+      context "test case with failing teardown"      
+      context "test case with undefined setup and teardown"
+      context "test case with all steps passing"
+      context "test case with an undefined step"
+      context "test case with a failing step"
+      context "test case with a pending step"
     end
   end
 end

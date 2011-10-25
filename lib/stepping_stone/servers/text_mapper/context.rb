@@ -17,15 +17,16 @@ module SteppingStone
 
         # FIXME: Stop using exceptions for flow control for undefined mappings.
         # They are slow as molasses.
-        def dispatch(pattern)
+        def dispatch(instruction)
+          pattern = instruction.to_a.flatten
           mapping = mappings.find_mapping(pattern)
-          Model::Result.new(:passed, mapping.call(self, pattern))
+          Model::Result.new(:passed, mapping.call(self, pattern), instruction)
         rescue SteppingStone::Pending => error
-          Model::Result.new(:pending, error)
+          Model::Result.new(:pending, error, instruction)
         rescue ::TextMapper::UndefinedMappingError => error
-          Model::Result.new(:undefined, error)
+          Model::Result.new(:undefined, error, instruction)
         rescue RSpec::Expectations::ExpectationNotMetError => error
-          Model::Result.new(:failed, error)
+          Model::Result.new(:failed, error, instruction)
         end
       end
     end

@@ -1,37 +1,47 @@
-require 'stepping_stone/model/request'
-
 module SteppingStone
   class Runner
-    module RequestRunner
-      def each
-        super { |instruction| yield Model::Request.new(*instruction) }
-      end
+    attr_reader :server, :broker, :state
 
-      def run(*args, &block)
-        inject(*args, &block)
-      end
-    end
-
-    attr_reader :server, :broker, :decorator
-
-    def initialize(server, broker, decorator = RequestRunner)
-      @server, @broker, @decorator = server, broker, decorator
+    def initialize(server, broker)
+      @server, @broker = server, broker
     end
 
     def execute(test_case)
-      test_case.extend(decorator)
-      server.start_test(test_case) do |session| 
-        test_case.run(:continue) do |state, request|
-          case state
-          when :continue
-            response = session.perform(request)
-            broker.broadcast(response)
-            response.halt? ? :skip : :continue
-          when :skip
-            broker.broadcast_skip(request)
-            :skip
-          end
+      server.start_test(test_case) do |session|
+        @state = ContinueState.new(session, broker)
+        test_case.each do |instruction|
+          @state.execute(instruction)
+          @state = SkipState.new(session, broker) if @state.halt_execution?
         end
+      end
+    end
+
+    private
+    
+    class State
+      def initialize(session, broker)
+        @session, @broker = session, broker
+      end
+    end
+    
+    class ContinueState < State
+      def execute(instruction)
+        @result = @session.dispatch(instruction)
+        @broker.broadcast(@result)
+      end
+
+      def halt_execution?
+        @result.halt?
+      end
+    end
+
+    class SkipState < State
+      def execute(instruction)
+        @broker.broadcast_skip(instruction)
+      end
+
+      def halt_execution?
+        true
       end
     end
   end
