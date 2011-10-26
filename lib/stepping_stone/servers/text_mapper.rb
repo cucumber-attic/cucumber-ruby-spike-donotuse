@@ -25,6 +25,9 @@ module SteppingStone
         @hooks = hooks
         @mapper_namespace = ::TextMapper::Namespace.new({ SteppingStone::Model::DocString => :DocString,
                                                           SteppingStone::Model::DataTable => :DataTable })
+        @mapper_namespace.define_method(:around) { |*args, &hook| hooks.add(:around, *args, &hook) }
+        @mapper_namespace.define_method(:before) { |*args, &hook| hooks.add(:before, *args, &hook) }
+        @mapper_namespace.define_method(:after) { |*args, &hook| hooks.add(:after, *args, &hook) }
       end
 
       def start_test(test_case)
