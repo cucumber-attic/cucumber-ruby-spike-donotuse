@@ -52,27 +52,27 @@ Given "there are no listeners" do
 end
 
 Given /^a passing before hook$/ do
-  hooks.add(:before) { @before_time = -> { DateTime.now }.call }
+  hooks.add(:before) { SteppingStone.configuration.global_opts[:before_time] = -> { DateTime.now }.call }
 end
 
 Given /^a passing after hook$/ do
-  hooks.add(:after) { @after_time = -> { DateTime.now }.call }
+  hooks.add(:after) { SteppingStone.configuration.global_opts[:after_time] = -> { DateTime.now }.call }
 end
 
 Given /^a passing around hook$/ do
   hooks.add(:around) do |execution|
-    @around_pre_time = -> { DateTime.now }.call
+    SteppingStone.configuration.global_opts[:around_pre_time] = -> { DateTime.now }.call
     execution.call
-    @around_post_time = -> { DateTime.now }.call
+    SteppingStone.configuration.global_opts[:around_post_time] = -> { DateTime.now }.call
   end
 end
 
 Given /^a hook tagged with "(.+)"$/ do |tag|
-  hooks.add(:before, tag) { @before_time = -> { DateTime.now }.call }
+  hooks.add(:before, tag) { SteppingStone.configuration.global_opts[:before_time] = -> { DateTime.now }.call }
 end
 
 Given /^an untagged hook$/ do
-  hooks.add(:before) { @before_time = -> { DateTime.now }.call }
+  hooks.add(:before) { SteppingStone.configuration.global_opts[:before_time] = -> { DateTime.now }.call }
 end
 
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
@@ -102,16 +102,16 @@ Then /^the life cycle history is:$/ do |table|
 end
 
 Then /^the before hook is fired before the scenario$/ do
-  @before_time.should be < test_case_start_time
+  global_opts[:before_time].should be < test_case_start_time
 end
 
 Then /^the after hook is fired after the scenario$/ do
-  @after_time.should be > test_case_end_time
+  global_opts[:after_time].should be > test_case_end_time
 end
 
 Then /^the around hook fires around the scenario$/ do
-  @around_pre_time.should be < test_case_start_time
-  @around_post_time.should be > test_case_end_time
+  global_opts[:around_pre_time].should be < test_case_start_time
+  global_opts[:around_post_time].should be > test_case_end_time
 end
 
 Then /^the around hook is fired around the other hooks$/ do
@@ -120,11 +120,11 @@ Then /^the around hook is fired around the other hooks$/ do
 end
 
 Then /^the hook is fired$/ do
-  defined?(@before_time).should eq("instance-variable")
+  global_opts[:before_time].should_not be_nil
 end
 
 Then /^the hook is not fired$/ do
-  defined?(@before_time).should eq(nil)
+  global_opts[:before_time].should_not be_nil
 end
 
 Then "the progress output looks like:" do |output|
@@ -235,6 +235,10 @@ module CucumberWorld
       from = line.gsub(/(Given|When|Then|But|And)\s/, '')
       add_mapping([from], [target])
     end
+  end
+
+  def global_opts
+    SteppingStone.configuration.global_opts
   end
 end
 

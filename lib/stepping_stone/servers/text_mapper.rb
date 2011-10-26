@@ -31,8 +31,9 @@ module SteppingStone
       end
 
       def start_test(test_case)
-        hooks.invoke(test_case.tags) do
-          yield new_context
+        ctx = new_context
+        hooks.eval_within(ctx, test_case.tags) do
+          yield ctx
         end
       end
 
