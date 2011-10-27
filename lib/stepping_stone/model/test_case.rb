@@ -2,7 +2,7 @@ module SteppingStone
   module Model
     class Instruction
       attr_reader :name, :arguments, :metadata
-      
+
       def initialize(name, arguments, metadata={})
         @name, @arguments, @metadata = name, arguments, metadata
       end
@@ -10,12 +10,12 @@ module SteppingStone
       def event
         @name
       end
-      
+
       def to_a
         [@name, @arguments]
       end
     end
-    
+
     class TestCase
       include Enumerable
 
@@ -27,9 +27,7 @@ module SteppingStone
       #
       def initialize(name, *instructions)
         @name = name
-        @instructions = instructions.map { |i| Instruction.new(:map, i) }
-        @instructions.unshift(Instruction.new(:setup, [@name]))
-        @instructions.push(Instruction.new(:teardown, [@name]))
+        @instructions = build_instructions(instructions)
         @tags = []
       end
 
@@ -43,6 +41,16 @@ module SteppingStone
 
       def metadata
         {}
+      end
+
+      private
+
+      def build_instructions(instructions)
+        [
+          Instruction.new(:setup, [@name]),
+          instructions.map { |i| Instruction.new(:map, i) },
+          Instruction.new(:teardown, [@name]),
+        ].flatten
       end
     end
   end
