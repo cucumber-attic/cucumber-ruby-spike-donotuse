@@ -19,7 +19,8 @@ module SteppingStone
         # They are slow as molasses.
         def dispatch(instruction)
           pattern = instruction.to_a.flatten
-          mapping = mappings.find_mapping(pattern)
+          metadata = instruction.metadata
+          mapping = mappings.find_mapping(pattern, metadata)
           Model::Result.new(:passed, mapping.call(self, pattern), instruction)
         rescue SteppingStone::Pending => error
           Model::Result.new(:pending, error, instruction)

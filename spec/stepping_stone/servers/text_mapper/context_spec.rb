@@ -34,8 +34,8 @@ module SteppingStone
               mappings.stub(:find_mapping).and_return(mapping)
               subject.mappings = mappings
 
-              mapping.should_receive(:call).with(subject, [:foo])
-              subject.dispatch([:foo])
+              mapping.should_receive(:call).with(subject, [:map, :foo])
+              subject.dispatch(inst(:map, [:foo]))
             end
 
             it "returns a passed result" do
@@ -43,8 +43,8 @@ module SteppingStone
               mapping = double("mapping")
               mappings.stub(:find_mapping).and_return(mapping)
               subject.mappings = mappings
-              mapping.stub(:call).with(subject, [:foo]) { :success! }
-              subject.dispatch([:foo]).should be_passed
+              mapping.stub(:call).with(subject, [:map, :foo]) { :success! }
+              subject.dispatch(inst(:map, [:foo])).should be_passed
             end
           end
 
@@ -55,7 +55,7 @@ module SteppingStone
                 raise ::TextMapper::UndefinedMappingError, [:bar]
               end
               subject.mappings = mappings
-              subject.dispatch([:bar]).should be_undefined
+              subject.dispatch(inst(:map, [:bar])).should be_undefined
             end
           end
 
@@ -69,7 +69,7 @@ module SteppingStone
               mapping.stub(:call) do
                 raise RSpec::Expectations::ExpectationNotMetError
               end
-              subject.dispatch([:go!]).should be_failed
+              subject.dispatch(inst(:map, [:go!])).should be_failed
             end
           end
 
@@ -79,7 +79,7 @@ module SteppingStone
               mappings = double("mappings")
               mappings.stub(:find_mapping).and_return(mapping)
               subject.mappings = mappings
-              subject.dispatch([:do_pending]).should be_pending
+              subject.dispatch(inst(:map, [:do_pending])).should be_pending
             end
           end
         end
