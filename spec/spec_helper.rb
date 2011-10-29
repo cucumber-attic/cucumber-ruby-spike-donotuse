@@ -1,6 +1,8 @@
 require 'bundler'
 Bundler.setup
 
+require 'simplecov'
+
 require 'rspec'
 require 'stepping_stone'
 require 'text_mapper'

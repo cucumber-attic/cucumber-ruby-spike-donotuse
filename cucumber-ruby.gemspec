@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'cucumber'
   s.add_development_dependency 'aruba'
   s.add_development_dependency 'pry'
+  s.add_development_dependency 'simplecov'
 
   s.rubygems_version   = "1.3.7"
   s.files            = `git ls-files`.split("\n")

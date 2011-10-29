@@ -1,6 +1,8 @@
 require 'bundler'
 Bundler.setup
 
+require 'simplecov'
+
 require 'stepping_stone'
 require 'stepping_stone/gherkin_compiler'
 require 'stepping_stone/reporter'
