@@ -1,5 +1,3 @@
-require 'stepping_stone/hooks'
-
 module SteppingStone
   class Configuration
     def global_opts

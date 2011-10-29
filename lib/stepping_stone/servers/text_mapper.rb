@@ -4,7 +4,7 @@ require 'stepping_stone/model/doc_string'
 require 'stepping_stone/model/data_table'
 require 'stepping_stone/code_loader'
 
-require 'stepping_stone/servers/text_mapper/hook'
+require 'stepping_stone/servers/text_mapper/hooks'
 require 'stepping_stone/servers/text_mapper/context'
 
 module SteppingStone

@@ -1,25 +1,34 @@
 require 'gherkin/tag_expression'
 
 module SteppingStone
-  class Hooks
-    module MapperDslExtension
-      def hooks
-        @hooks ||= Hooks.new
-      end
+  module Servers
+    class TextMapper
+      class Hook
+        def initialize(hook_type, *exprs, &body)
+          @hook_type = hook_type
+          @tag_expr = Gherkin::TagExpression.new(exprs)
+          @body = body
+        end
 
-      def around(*args, &hook)
-        hooks.add(:around, *args, &hook)
-      end
+        def match(pattern, metadata={})
+          if pattern.first == @hook_type
+            tags = metadata.fetch(:tags, [])
+            @tag_expr.eval(tags)
+          end
+        end
 
-      def before(*args, &hook)
-        hooks.add(:before, *args, &hook)
-      end
+        def call(ctx, pattern)
+          ctx.instance_exec(pattern, &@body)
+        end
 
-      def after(*args, &hook)
-        hooks.add(:after, *args, &hook)
+        def reify!
+          self
+        end
       end
     end
+  end
 
+  class Hooks
     attr_reader :hooks
 
     def initialize
@@ -59,6 +68,24 @@ module SteppingStone
         before.each { |hook| hook.call(*args) }
         run.call
         after.each { |hook| hook.call(*args) }
+      end
+    end
+
+    module MapperDslExtension
+      def hooks
+        @hooks ||= Hooks.new
+      end
+
+      def around(*args, &hook)
+        hooks.add(:around, *args, &hook)
+      end
+
+      def before(*args, &hook)
+        hooks.add(:before, *args, &hook)
+      end
+
+      def after(*args, &hook)
+        hooks.add(:after, *args, &hook)
       end
     end
   end

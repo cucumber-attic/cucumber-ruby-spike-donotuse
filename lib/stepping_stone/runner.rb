@@ -18,13 +18,13 @@ module SteppingStone
     end
 
     private
-    
+
     class State
       def initialize(session, broker)
         @session, @broker = session, broker
       end
     end
-    
+
     class ContinueState < State
       def execute(instruction)
         @result = @session.dispatch(instruction)
