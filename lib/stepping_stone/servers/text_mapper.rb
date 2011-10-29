@@ -3,8 +3,9 @@ require 'text_mapper/namespace'
 require 'stepping_stone/model/doc_string'
 require 'stepping_stone/model/data_table'
 require 'stepping_stone/code_loader'
-require 'stepping_stone/servers/text_mapper/context'
 
+require 'stepping_stone/servers/text_mapper/hook'
+require 'stepping_stone/servers/text_mapper/context'
 
 module SteppingStone
   module Servers
@@ -12,7 +13,7 @@ module SteppingStone
       # Called by Cucumber when it's time to start executing features. Non-idempotent,
       # invasive and environment-related startup code should go here.
       def self.boot!(opts)
-        server = self.new(opts[:hooks])
+        server = self.new
         SteppingStone.const_set(:Mapper, server.dsl_module)
         CodeLoader.require_glob("mappers", "**/*")
         server
@@ -21,19 +22,21 @@ module SteppingStone
       attr_accessor :mapper_namespace
       attr_reader :hooks
 
-      def initialize(hooks)
-        @hooks = hooks
+      def initialize
+        @hooks = Hooks.new
         @mapper_namespace = ::TextMapper::Namespace.new({ SteppingStone::Model::DocString => :DocString,
                                                           SteppingStone::Model::DataTable => :DataTable })
-        @mapper_namespace.define_method(:around) { |*args, &hook| hooks.add(:around, *args, &hook) }
-        @mapper_namespace.define_method(:before) { |*args, &hook| hooks.add(:before, *args, &hook) }
-        @mapper_namespace.define_method(:after) { |*args, &hook| hooks.add(:after, *args, &hook) }
+        lambda do |namespace, hooks|
+          @mapper_namespace.define_method(:around) { |*args, &hook| hooks.add_around_hook(*args, &hook) }
+          @mapper_namespace.define_method(:before) { |*args, &hook| namespace.add_mapping(Hook.new(:setup, *args, &hook)) }
+          @mapper_namespace.define_method(:after) { |*args, &hook| namespace.add_mapping(Hook.new(:teardown, *args, &hook)) }
+        end.call(@mapper_namespace, self)
       end
 
       def start_test(test_case)
-        ctx = new_context
-        hooks.eval_within(ctx, test_case.tags) do
-          yield ctx
+        session = new_context
+        @hooks.invoke(test_case.tags, session) do
+          yield session
         end
       end
 
@@ -43,6 +46,10 @@ module SteppingStone
 
       def add_mapping(mapping)
         mapper_namespace.add_mapping(mapping)
+      end
+
+      def add_around_hook(*tag_exprs, &hook)
+        hooks.add(:around, *tag_exprs, &hook)
       end
 
       def listeners

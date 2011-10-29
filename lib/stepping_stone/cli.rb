@@ -52,7 +52,7 @@ module SteppingStone
           compiler.compile(content)
         end.flatten
 
-        server = Servers.boot!(:default, :hooks => SteppingStone.configuration.hooks)
+        server = Servers.boot!(:default)
         reporter = Reporter.new
         runner = Runner.new(server, reporter)
 

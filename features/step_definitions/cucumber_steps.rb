@@ -52,27 +52,53 @@ Given "there are no listeners" do
 end
 
 Given /^a passing before hook$/ do
-  hooks.add(:before) { SteppingStone.configuration.global_opts[:before_time] = -> { DateTime.now }.call }
+  add_hook(:setup) { @before_time = ->{ DateTime.now }.call }
 end
 
 Given /^a passing after hook$/ do
-  hooks.add(:after) { SteppingStone.configuration.global_opts[:after_time] = -> { DateTime.now }.call }
+  add_hook(:teardown) { @after_time = ->{ DateTime.now }.call }
 end
 
 Given /^a passing around hook$/ do
-  hooks.add(:around) do |execution|
-    SteppingStone.configuration.global_opts[:around_pre_time] = -> { DateTime.now }.call
-    execution.call
-    SteppingStone.configuration.global_opts[:around_post_time] = -> { DateTime.now }.call
+  add_hook(:around) do |continuation, session|
+    session.set_attribute(:around_pre_time, ->{ DateTime.now }.call)
+    continuation.call
+    session.set_attribute(:around_post_time, -> { DateTime.now }.call)
   end
 end
 
 Given /^a hook tagged with "(.+)"$/ do |tag|
-  hooks.add(:before, tag) { SteppingStone.configuration.global_opts[:before_time] = -> { DateTime.now }.call }
+  add_hook(:setup) { @before_time = -> { DateTime.now }.call }
 end
 
 Given /^an untagged hook$/ do
-  hooks.add(:before) { SteppingStone.configuration.global_opts[:before_time] = -> { DateTime.now }.call }
+  add_hook(:setup) { @before_time = -> { DateTime.now }.call }
+end
+
+Then /^the before hook is fired before the scenario$/ do
+  session.value_of(:before_time).should be < test_case_start_time
+end
+
+Then /^the after hook is fired after the scenario$/ do
+  session.value_of(:after_time).should be > test_case_start_time
+end
+
+Then /^the around hook fires around the scenario$/ do
+  session.value_of(:around_pre_time).should be < test_case_start_time
+  session.value_of(:around_post_time).should be > test_case_end_time
+end
+
+Then /^the around hook is fired around the other hooks$/ do
+  session.values_of(:around_pre_time, :before_time, :after_time, :around_post_time).should
+    eq(session.values_of(:around_pre_time, :around_post_time, :before_time, :after_time).sort)
+end
+
+Then /^the hook is fired$/ do
+  session.value_of(:before_time).should_not be_nil
+end
+
+Then /^the hook is not fired$/ do
+  session.value_of(:before_time).should_not be_nil
 end
 
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
@@ -80,17 +106,23 @@ When /^Cucumber executes the scenario "(.+)"$/ do |name|
 end
 
 When "Cucumber executes a scenario" do
-  @test_case = compile_scenario("Test Scenario", "Given a passing step")
+  body = "Given a passing step"
+  @test_case = compile_scenario("Test Scenario", body)
+  create_passing_mappings(body)
   execute(@test_case)
 end
 
 When /^Cucumber executes a scenario tagged with "(.+)"$/ do |tag|
-  @test_case = compile_scenario("Test Scenario", "Given a passing step", background=nil, tags=tag)
+  body = "Given a passing step"
+  create_passing_mappings(body)
+  @test_case = compile_scenario("Test Scenario", body, background=nil, tags=tag)
   execute(@test_case)
 end
 
 When /^Cucumber executes a scenario with no tags$/ do
-  @test_case = compile_scenario("Test Scenario", "Given a passing step", background=nil, tags=[])
+  body = "Given a passing step"
+  create_passing_mappings(body)
+  @test_case = compile_scenario("Test Scenario", body, background=nil, tags=[])
   execute(@test_case)
 end
 
@@ -99,32 +131,6 @@ Then /^the life cycle history is:$/ do |table|
   table.map_column!(:status, &:to_sym)
   table.map_column!(:name) { |name| [name] }
   life_cycle_history.should eq(table.rows)
-end
-
-Then /^the before hook is fired before the scenario$/ do
-  global_opts[:before_time].should be < test_case_start_time
-end
-
-Then /^the after hook is fired after the scenario$/ do
-  global_opts[:after_time].should be > test_case_end_time
-end
-
-Then /^the around hook fires around the scenario$/ do
-  global_opts[:around_pre_time].should be < test_case_start_time
-  global_opts[:around_post_time].should be > test_case_end_time
-end
-
-Then /^the around hook is fired around the other hooks$/ do
-  chronological = [@around_pre_time, @around_post_time, @before_time, @after_time].sort
-  chronological.should eq([@around_pre_time, @before_time, @after_time, @around_post_time])
-end
-
-Then /^the hook is fired$/ do
-  global_opts[:before_time].should_not be_nil
-end
-
-Then /^the hook is not fired$/ do
-  global_opts[:before_time].should_not be_nil
 end
 
 Then "the progress output looks like:" do |output|
@@ -185,12 +191,17 @@ module CucumberWorld
     sut.add_mapping(mapping)
   end
 
-  def hooks
-    @hooks ||= SteppingStone::Hooks.new
+  def add_hook(event, *exprs, &hook)
+    if event == :around
+      sut.add_around_hook(*exprs, &hook)
+    else
+      hook = SteppingStone::Servers::TextMapper::Hook.new(event, *exprs, &hook)
+      sut.add_mapping(hook)
+    end
   end
 
   def sut
-    @sut ||= SteppingStone::Servers::TextMapper.new(hooks)
+    @sut ||= SteppingStone::Servers::TextMapper.new
   end
 
   def reporter
@@ -199,6 +210,10 @@ module CucumberWorld
 
   def runner
     @runner ||= SteppingStone::Runner.new(sut, reporter)
+  end
+
+  def session
+    runner.current_session
   end
 
   def progress_output

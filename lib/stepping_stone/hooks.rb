@@ -2,7 +2,7 @@ require 'gherkin/tag_expression'
 
 module SteppingStone
   class Hooks
-    module FluentDsl
+    module MapperDslExtension
       def hooks
         @hooks ||= Hooks.new
       end
@@ -34,23 +34,6 @@ module SteppingStone
 
     def invoke(tags=[], *args, &run)
       compose(*filter(tags), run, args).call
-    end
-
-    def eval_within(ctx, tags=[], *args, &run)
-      around, before, after = filter(tags)
-      with_around(around) do
-        before.each { |hk| ctx.instance_exec(*args, &hk) }
-        run.call
-        after.each { |hk| ctx.instance_exec(*args, &hk) }
-      end
-    end
-
-    def with_around(around, &run)
-      around.inject(run) do |inside, outside|
-        lambda do
-          outside.call(inside)
-        end
-      end.call
     end
 
     def filter(tags)

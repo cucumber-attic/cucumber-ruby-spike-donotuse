@@ -29,6 +29,18 @@ module SteppingStone
         rescue RSpec::Expectations::ExpectationNotMetError => error
           Model::Result.new(:failed, error, instruction)
         end
+
+        def set_attribute(name, value)
+          instance_variable_set(:"@#{name}", value)
+        end
+
+        def value_of(attribute)
+          instance_variable_get(:"@#{attribute}")
+        end
+
+        def values_of(*attributes)
+          attributes.map { |attr| value_of(attr) }
+        end
       end
     end
   end

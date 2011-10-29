@@ -72,16 +72,6 @@ module SteppingStone
       end
     end
 
-    describe "#eval_within" do
-      it "evaluates before and after hooks in the given context" do
-        subject.add(:before) { @before = :before }
-        subject.add(:after)  { @after = :after }
-        ctx = Object.new
-        subject.eval_within(ctx) {}
-        ctx.instance_variables.should eq([:@before, :@after])
-      end
-    end
-
     describe "#filter" do
       it "returns an array of hooks by type" do
         subject.add(:around) {}
@@ -131,7 +121,7 @@ module SteppingStone
     end
 
     describe "the fluent interface for building hooks" do
-      subject { Hooks::FluentDsl }
+      subject { Hooks::MapperDslExtension }
       let(:ctx) { Object.new.extend(subject) }
 
       it "adds hook-building methods to the context" do

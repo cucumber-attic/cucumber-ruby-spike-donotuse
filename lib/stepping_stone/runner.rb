@@ -1,6 +1,6 @@
 module SteppingStone
   class Runner
-    attr_reader :server, :broker, :state
+    attr_reader :server, :broker, :state, :current_session
 
     def initialize(server, broker)
       @server, @broker = server, broker
@@ -8,6 +8,7 @@ module SteppingStone
 
     def execute(test_case)
       server.start_test(test_case) do |session|
+        @current_session = session
         @state = ContinueState.new(session, broker)
         test_case.each do |instruction|
           @state.execute(instruction)
