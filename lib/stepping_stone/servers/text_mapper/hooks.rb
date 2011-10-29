@@ -3,7 +3,7 @@ require 'gherkin/tag_expression'
 module SteppingStone
   module Servers
     class TextMapper
-      class Hook
+      class HookMapping
         def initialize(hook_type, *exprs, &body)
           @hook_type = hook_type
           @tag_expr = Gherkin::TagExpression.new(exprs)
