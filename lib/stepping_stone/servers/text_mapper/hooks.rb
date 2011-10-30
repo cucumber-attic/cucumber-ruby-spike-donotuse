@@ -4,14 +4,14 @@ module SteppingStone
   module Servers
     class TextMapper
       class HookMapping
-        def initialize(hook_type, *exprs, &body)
-          @hook_type = hook_type
+        def initialize(event, *exprs, &body)
+          @event = event
           @tag_expr = Gherkin::TagExpression.new(exprs)
           @body = body
         end
 
         def match(pattern, metadata={})
-          if pattern.first == @hook_type
+          if pattern.first == @event
             tags = metadata.fetch(:tags, [])
             @tag_expr.eval(tags)
           end
