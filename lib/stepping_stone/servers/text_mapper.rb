@@ -25,11 +25,11 @@ module SteppingStone
         @around_hook = AroundHook.new
         @mapper_namespace = ::TextMapper::Namespace.new({ SteppingStone::Model::DocString => :DocString,
                                                           SteppingStone::Model::DataTable => :DataTable })
-        lambda do |namespace, hooks|
-          @mapper_namespace.define_method(:around) { |*args, &hook| hooks.add_around_hook(*args, &hook) }
-          @mapper_namespace.define_method(:before) { |*args, &hook| namespace.add_mapping(HookMapping.new(:setup, *args, &hook)) }
-          @mapper_namespace.define_method(:after) { |*args, &hook| namespace.add_mapping(HookMapping.new(:teardown, *args, &hook)) }
-        end.call(@mapper_namespace, self)
+        lambda do |namespace|
+          @mapper_namespace.define_method(:around) { |*args, &hook| namespace.add_around_hook(*args, &hook) }
+          @mapper_namespace.define_method(:before) { |*args, &hook| namespace.add_mapping(HookMapping.new(:setup, args, &hook)) }
+          @mapper_namespace.define_method(:after) { |*args, &hook| namespace.add_mapping(HookMapping.new(:teardown, args, &hook)) }
+        end.call(self)
       end
 
       def start_test(test_case)
