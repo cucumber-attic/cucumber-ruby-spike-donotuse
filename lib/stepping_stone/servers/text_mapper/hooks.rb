@@ -17,7 +17,7 @@ module SteppingStone
           end
         end
 
-        def call(ctx, pattern)
+        def call(ctx, pattern=[])
           ctx.instance_exec(pattern, &@body)
         end
 

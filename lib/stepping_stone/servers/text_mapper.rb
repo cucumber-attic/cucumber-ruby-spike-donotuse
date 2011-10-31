@@ -1,10 +1,4 @@
-require 'text_mapper/namespace'
-
-require 'stepping_stone/model/doc_string'
-require 'stepping_stone/model/data_table'
-require 'stepping_stone/code_loader'
-
-require 'stepping_stone/servers/text_mapper/hooks'
+require 'stepping_stone/servers/text_mapper/cucumber_namespace'
 require 'stepping_stone/servers/text_mapper/context'
 
 module SteppingStone
@@ -22,19 +16,12 @@ module SteppingStone
       attr_accessor :mapper_namespace
 
       def initialize
-        @around_hook = AroundHook.new
-        @mapper_namespace = ::TextMapper::Namespace.new({ SteppingStone::Model::DocString => :DocString,
-                                                          SteppingStone::Model::DataTable => :DataTable })
-        lambda do |namespace|
-          @mapper_namespace.define_method(:around) { |*args, &hook| namespace.add_around_hook(*args, &hook) }
-          @mapper_namespace.define_method(:before) { |*args, &hook| namespace.add_mapping(HookMapping.new(:setup, args, &hook)) }
-          @mapper_namespace.define_method(:after) { |*args, &hook| namespace.add_mapping(HookMapping.new(:teardown, args, &hook)) }
-        end.call(self)
+        @mapper_namespace = CucumberNamespace.new
       end
 
       def start_test(test_case)
         session = new_context
-        @around_hook.invoke(test_case.tags, session) do
+        mapper_namespace.wrap_execution_of(session, test_case.tags) do
           yield session
         end
       end
@@ -47,8 +34,8 @@ module SteppingStone
         mapper_namespace.add_mapping(mapping)
       end
 
-      def add_around_hook(*tag_exprs, &hook)
-        @around_hook.add(tag_exprs, &hook)
+      def add_wrapper(*tag_exprs, &hook)
+        mapper_namespace.add_wrapper(*tag_exprs, &hook)
       end
 
       def listeners

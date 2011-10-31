@@ -193,7 +193,7 @@ module CucumberWorld
 
   def add_hook(event, *exprs, &hook)
     if event == :around
-      sut.add_around_hook(*exprs, &hook)
+      sut.add_wrapper(*exprs, &hook)
     else
       hook = SteppingStone::Servers::TextMapper::HookMapping.new(event, *exprs, &hook)
       sut.add_mapping(hook)
