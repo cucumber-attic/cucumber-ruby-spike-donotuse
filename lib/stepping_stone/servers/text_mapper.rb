@@ -20,10 +20,9 @@ module SteppingStone
       end
 
       attr_accessor :mapper_namespace
-      attr_reader :hooks
 
       def initialize
-        @hooks = Hooks.new
+        @around_hook = AroundHook.new
         @mapper_namespace = ::TextMapper::Namespace.new({ SteppingStone::Model::DocString => :DocString,
                                                           SteppingStone::Model::DataTable => :DataTable })
         lambda do |namespace, hooks|
@@ -35,7 +34,7 @@ module SteppingStone
 
       def start_test(test_case)
         session = new_context
-        @hooks.invoke(test_case.tags, session) do
+        @around_hook.invoke(test_case.tags, session) do
           yield session
         end
       end
@@ -49,7 +48,7 @@ module SteppingStone
       end
 
       def add_around_hook(*tag_exprs, &hook)
-        hooks.add(:around, *tag_exprs, &hook)
+        @around_hook.add(tag_exprs, &hook)
       end
 
       def listeners
