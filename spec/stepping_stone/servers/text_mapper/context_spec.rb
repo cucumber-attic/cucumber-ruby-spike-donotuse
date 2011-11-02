@@ -29,19 +29,19 @@ module SteppingStone
         describe "#dispatch" do
           let(:mappings) { CucumberNamespace.new }
 
-          def listener(from, &body)
+          def mapping(from, &body)
             ::TextMapper::BlockMapping.new([from], &body)
           end
 
-          context "when a passing listener exists" do
+          context "when a passing mapping exists" do
             it "returns a passed result" do
-              mappings.add_mapping(listener(:from){})
+              mappings.add_mapping(mapping(:from){})
               subject.mappings = mappings
               subject.dispatch(inst(:from)).should be_passed
             end
           end
 
-          context "when a matching listener does not exist" do
+          context "when a matching mapping does not exist" do
             it "returns an undefined result" do
               subject.mappings = mappings
               subject.dispatch(inst(:from)).should be_undefined
@@ -50,15 +50,15 @@ module SteppingStone
 
           context "when invocation fails" do
             it "returns a failed result" do
-              mappings.add_mapping(listener(:from){ raise RSpec::Expectations::ExpectationNotMetError })
+              mappings.add_mapping(mapping(:from){ raise RSpec::Expectations::ExpectationNotMetError })
               subject.mappings = mappings
               subject.dispatch(inst(:from)).should be_failed
             end
           end
 
-          context "when a listener is pending" do
+          context "when a mapping is pending" do
             it "returns a pending result" do
-              mappings.add_mapping(listener(:from){ pending })
+              mappings.add_mapping(mapping(:from){ pending })
               subject.mappings = mappings
               subject.dispatch(inst(:from)).should be_pending
             end

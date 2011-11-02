@@ -38,10 +38,6 @@ module SteppingStone
         mapper_namespace.add_wrapper(*tag_exprs, &hook)
       end
 
-      def listeners
-        mapper_namespace.listeners
-      end
-
       def mappings
         mapper_namespace.mappings
       end

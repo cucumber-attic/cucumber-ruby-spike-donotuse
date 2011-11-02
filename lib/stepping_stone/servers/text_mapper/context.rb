@@ -21,8 +21,8 @@ module SteppingStone
         def dispatch(instruction)
           pattern = instruction.to_a.flatten
           metadata = instruction.metadata
-          listeners = mappings.find_all_matching(pattern, metadata)
-          invocation = Invocation.new(listeners)
+          matches = mappings.find_all_matching(pattern, metadata)
+          invocation = Invocation.new(matches)
           results = invocation.call(self, pattern)
           Model::Result.new(instruction, :passed, results)
         rescue SteppingStone::Pending => error

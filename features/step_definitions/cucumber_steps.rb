@@ -13,7 +13,7 @@ Given "a passing background with:" do |background|
 end
 
 Given /^the step "(.+)" has a (\w+) mapping$/ do |name, status|
-  add_mapping([name], ["do_#{status}".to_sym])
+  add_method_mapping([name], ["do_#{status}".to_sym])
 end
 
 Given "I'm using the progress formatter" do
@@ -41,26 +41,22 @@ Then /^the step "(.+)" is skipped$/ do |name|
   skipped.should be_skipped
 end
 
-Given /^these passing listeners:$/ do |listeners|
-  listeners.rows.each do |event, _filter|
-    add_listener(event)
-  end
+Given /^a passing (\w+) mapping$/ do |event|
+  add_mapping(event)
 end
 
-Given /^a passing (\w+) listener$/ do |event|
-  add_listener(event)
+Given /^a failing (\w+) mapping$/ do |event|
+  add_failing_mapping(event)
 end
 
-Given /^a failing (\w+) listener$/ do |event|
-  add_failing_listener(event)
+Given /^a (\w+) mapping that passes with "(.+)"$/ do |event, result|
+  add_mapping(event, result)
 end
 
-Given /^a (\w+) listener that passes with "(.+)"$/ do |event, result|
-  add_listener(event, result)
-end
-
-Given "there are no listeners" do
-  sut.listeners.should be_empty
+Given "there are no setup or teardown mappings" do
+  sut.mappings.select do |mapping|
+    mapping.match([:setup, Object]) or mapping.match([:teardown, Object])
+  end.should be_empty
 end
 
 Given /^a passing before hook$/ do
@@ -200,17 +196,17 @@ module CucumberWorld
     end
   end
 
-  def add_listener(event, result = "passed", filter = Object)
-    listener = ::TextMapper::BlockMapping.new([event.to_sym, filter]) { |test_case| result }
-    sut.add_mapping(listener)
+  def add_mapping(event, result = "passed", filter = Object)
+    mapping = ::TextMapper::BlockMapping.new([event.to_sym, filter]) { |test_case| result }
+    sut.add_mapping(mapping)
   end
 
-  def add_failing_listener(event, filter = Object)
-    listener = ::TextMapper::BlockMapping.new([event.to_sym, filter]) { |text_case| true.should eq(false) }
-    sut.add_mapping(listener)
+  def add_failing_mapping(event, filter = Object)
+    mapping = ::TextMapper::BlockMapping.new([event.to_sym, filter]) { |text_case| true.should eq(false) }
+    sut.add_mapping(mapping)
   end
 
-  def add_mapping(from, to)
+  def add_method_mapping(from, to)
     mapping = ::TextMapper::MethodMapping.from_primitives(from.unshift(:map), to)
     sut.add_mapping(mapping)
   end
@@ -289,7 +285,7 @@ module CucumberWorld
   def create_mappings(steps_text, target)
     steps_text.split("\n").each do |line|
       from = line.gsub(/(Given|When|Then|But|And)\s/, '')
-      add_mapping([from], [target])
+      add_method_mapping([from], [target])
     end
   end
 
