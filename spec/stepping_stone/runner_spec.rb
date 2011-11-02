@@ -27,7 +27,7 @@ module SteppingStone
       end
 
       def response_for(request)
-        Model::Result.new(status_for(request.arguments), nil, request)
+        Model::Result.new(request, status_for(request.arguments))
       end
 
       def status_for(instruction)

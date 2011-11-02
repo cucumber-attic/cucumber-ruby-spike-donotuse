@@ -24,6 +24,10 @@ module SteppingStone
         def reify!
           self
         end
+
+        def id
+          object_id
+        end
       end
 
       class AroundHook

@@ -6,6 +6,7 @@ require 'simplecov'
 require 'rspec'
 require 'stepping_stone'
 require 'text_mapper'
+require 'text_mapper/support/listener_spec'
 
 RSpec.configure do |config|
   module CucumberHelpers

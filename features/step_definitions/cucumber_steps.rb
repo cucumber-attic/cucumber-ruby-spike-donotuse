@@ -47,6 +47,18 @@ Given /^these passing listeners:$/ do |listeners|
   end
 end
 
+Given /^a passing (\w+) listener$/ do |event|
+  add_listener(event)
+end
+
+Given /^a failing (\w+) listener$/ do |event|
+  add_failing_listener(event)
+end
+
+Given /^a (\w+) listener that passes with "(.+)"$/ do |event, result|
+  add_listener(event, result)
+end
+
 Given "there are no listeners" do
   sut.listeners.should be_empty
 end
@@ -129,7 +141,14 @@ end
 Then /^the life cycle history is:$/ do |table|
   table.map_column!(:event, &:to_sym)
   table.map_column!(:status, &:to_sym)
-  table.map_column!(:name) { |name| [name] }
+  table.map_column!(:arguments) { |name| [name] }
+  table.map_column!(:result) do |result|
+    if ["true", "false"].include?(result)
+      eval(result)
+    else
+      result
+    end
+  end
   life_cycle_history.should eq(table.rows)
 end
 
@@ -181,8 +200,13 @@ module CucumberWorld
     end
   end
 
-  def add_listener(event, filter = nil, result = :pass)
+  def add_listener(event, result = "passed", filter = Object)
     listener = ::TextMapper::BlockMapping.new([event.to_sym, filter]) { |test_case| result }
+    sut.add_mapping(listener)
+  end
+
+  def add_failing_listener(event, filter = Object)
+    listener = ::TextMapper::BlockMapping.new([event.to_sym, filter]) { |text_case| true.should eq(false) }
     sut.add_mapping(listener)
   end
 
@@ -225,7 +249,24 @@ module CucumberWorld
   end
 
   def life_cycle_history
-    reporter.history.map(&:to_a)
+    reporter.history.inject([]) do |memo, result|
+      if result.value.is_a?(Hash)
+        result.value.values.each do |value|
+          memo << [result.event, result.arguments, result.status, value]
+        end
+      else
+        memo << [result.event, result.arguments, result.status, convert_value(result.value)]
+      end
+      memo
+    end
+  end
+
+  def convert_value(val)
+    if val.kind_of?(Exception)
+      "exception"
+    else
+      val
+    end
   end
 
   def test_case_start_time

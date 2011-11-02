@@ -3,7 +3,7 @@ require 'spec_helper'
 module SteppingStone
   describe EventLog do
     def ev(event, status)
-      Model::Result.new(status, nil, inst(event, []))
+      Model::Result.new(inst(event, []), status)
     end
 
     before do
@@ -41,7 +41,7 @@ module SteppingStone
     end
 
     describe "#add" do
-      let(:event) { Model::Result.new(:passed, nil, inst(:event, [])) }
+      let(:event) { Model::Result.new(inst(:event, []), :passed) }
 
       it "adds the event to the log" do
         subject.add(event)

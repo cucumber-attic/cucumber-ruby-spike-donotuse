@@ -3,16 +3,18 @@ require 'date'
 module SteppingStone
   module Model
     class Result
-      EVENT_ERRORS    = [:failed, :pending] 
+      KNOWN_STATUSES  = [:passed, :failed, :undefined, :skipped, :pending]
+      EVENT_ERRORS    = [:failed, :pending]
       DISPATCH_ERRORS = [:failed, :pending, :undefined, :skipped]
-      
-      attr_reader :status, :value, :instruction, :created_at
 
-      def initialize(status, value=nil, instruction=nil)
-        @status = status
-        @value = value
+      attr_reader :instruction, :status, :value, :created_at
+
+      def initialize(instruction, status, value={})
+        ensure_known_status(status)
         @instruction = instruction
-        @created_at = DateTime.now
+        @status      = status
+        @value       = value
+        @created_at  = DateTime.now
       end
 
       def event
@@ -23,14 +25,14 @@ module SteppingStone
         @instruction.arguments
       end
 
-      def important?
-        response_required? or !undefined?
-      end
-      
       def response_required?
         @instruction.name == :map
       end
-      
+
+      def important?
+        response_required? or !undefined?
+      end
+
       def halt?
         if response_required?
           DISPATCH_ERRORS.include?(@status)
@@ -60,11 +62,19 @@ module SteppingStone
       end
 
       def ==(obj)
-        value == obj
+        @instruction == obj.instruction and
+        @status == obj.status and
+        @value == obj.value
       end
 
       def to_a
-        [event, arguments, status]
+        [event, arguments, status, value]
+      end
+
+      private
+
+      def ensure_known_status(status)
+        raise ArgumentError, "Unknown status '#{status}'" unless KNOWN_STATUSES.include?(status)
       end
     end
   end

@@ -27,59 +27,40 @@ module SteppingStone
         end
 
         describe "#dispatch" do
-          context "when a passing mapping exists" do
-            it "invokes the mapping" do
-              mappings = double("mappings")
-              mapping  = double("mapping")
-              mappings.stub(:find_mapping).and_return(mapping)
-              subject.mappings = mappings
+          let(:mappings) { CucumberNamespace.new }
 
-              mapping.should_receive(:call).with(subject, [:map, :foo])
-              subject.dispatch(inst(:map, [:foo]))
-            end
+          def listener(from, &body)
+            ::TextMapper::BlockMapping.new([from], &body)
+          end
 
+          context "when a passing listener exists" do
             it "returns a passed result" do
-              mappings = double("mappings")
-              mapping = double("mapping")
-              mappings.stub(:find_mapping).and_return(mapping)
+              mappings.add_mapping(listener(:from){})
               subject.mappings = mappings
-              mapping.stub(:call).with(subject, [:map, :foo]) { :success! }
-              subject.dispatch(inst(:map, [:foo])).should be_passed
+              subject.dispatch(inst(:from)).should be_passed
             end
           end
 
-          context "when a mapping does not exist" do
+          context "when a matching listener does not exist" do
             it "returns an undefined result" do
-              mappings = double("mappings")
-              mappings.stub(:find_mapping) do
-                raise ::TextMapper::UndefinedMappingError, [:bar]
-              end
               subject.mappings = mappings
-              subject.dispatch(inst(:map, [:bar])).should be_undefined
+              subject.dispatch(inst(:from)).should be_undefined
             end
           end
 
-          context "when a mapping invocation fails" do
+          context "when invocation fails" do
             it "returns a failed result" do
-              mappings = double("mappings")
-              mapping  = double("mapping")
-              mappings.stub(:find_mapping).and_return(mapping)
+              mappings.add_mapping(listener(:from){ raise RSpec::Expectations::ExpectationNotMetError })
               subject.mappings = mappings
-
-              mapping.stub(:call) do
-                raise RSpec::Expectations::ExpectationNotMetError
-              end
-              subject.dispatch(inst(:map, [:go!])).should be_failed
+              subject.dispatch(inst(:from)).should be_failed
             end
           end
 
-          context "when a mapping calls pending" do
+          context "when a listener is pending" do
             it "returns a pending result" do
-              mapping = ::TextMapper::Mapping.from_primitives([:do_pending], [:pending])
-              mappings = double("mappings")
-              mappings.stub(:find_mapping).and_return(mapping)
+              mappings.add_mapping(listener(:from){ pending })
               subject.mappings = mappings
-              subject.dispatch(inst(:map, [:do_pending])).should be_pending
+              subject.dispatch(inst(:from)).should be_pending
             end
           end
         end

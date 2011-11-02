@@ -1,10 +1,11 @@
+require 'stepping_stone/servers/text_mapper/invocation'
 require 'stepping_stone/model/result'
 require 'stepping_stone/pending'
 
 module SteppingStone
   module Servers
     class TextMapper
-      class Context
+     class Context
         attr_accessor :mappings
 
         def mappers=(mappers)
@@ -20,14 +21,16 @@ module SteppingStone
         def dispatch(instruction)
           pattern = instruction.to_a.flatten
           metadata = instruction.metadata
-          mapping = mappings.find_mapping(pattern, metadata)
-          Model::Result.new(:passed, mapping.call(self, pattern), instruction)
+          listeners = mappings.find_all_matching(pattern, metadata)
+          invocation = Invocation.new(listeners)
+          results = invocation.call(self, pattern)
+          Model::Result.new(instruction, :passed, results)
         rescue SteppingStone::Pending => error
-          Model::Result.new(:pending, error, instruction)
+          Model::Result.new(instruction, :pending, error)
         rescue ::TextMapper::UndefinedMappingError => error
-          Model::Result.new(:undefined, error, instruction)
+          Model::Result.new(instruction, :undefined, error)
         rescue RSpec::Expectations::ExpectationNotMetError => error
-          Model::Result.new(:failed, error, instruction)
+          Model::Result.new(instruction, :failed, error)
         end
 
         def set_attribute(name, value)

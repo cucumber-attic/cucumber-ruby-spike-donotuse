@@ -3,15 +3,15 @@ require 'spec_helper'
 module SteppingStone
   describe Reporter do
     def setup(name)
-      Model::Result.new(:undefined, nil, inst(:setup, name))
+      Model::Result.new(inst(:setup, name), :undefined)
     end
 
     def teardown(name)
-      Model::Result.new(:undefined, nil, inst(:teardown, name))
+      Model::Result.new(inst(:teardown, name), :undefined)
     end
 
     def map(pattern, status)
-      Model::Result.new(status, nil, inst(:map, pattern))
+      Model::Result.new(inst(:map, pattern), status)
     end
 
     it "keeps a record of events" do

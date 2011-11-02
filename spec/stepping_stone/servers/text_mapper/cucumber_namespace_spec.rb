@@ -35,7 +35,7 @@ module SteppingStone
               end
             end
 
-            hook = subject.find_mapping([:setup])
+            hook = subject.find_matching([:setup])
             hook.call(ctx)
             ctx.instance_variable_get(:@before).should eq(:before)
           end
@@ -47,7 +47,7 @@ module SteppingStone
               end
             end
 
-            hook = subject.find_mapping([:teardown])
+            hook = subject.find_matching([:teardown])
             hook.call(ctx)
             ctx.instance_variable_get(:@after).should eq(:after)
           end

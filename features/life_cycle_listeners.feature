@@ -38,25 +38,41 @@ Feature: Life cycle event listeners
     Given there are no listeners
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle history is:
-      | event | name            | status |
-      | map   | I add 4 and 5   | passed |
-      | map   | the result is 9 | passed |
+      | event | arguments       | status | result |
+      | map   | I add 4 and 5   | passed | true   |
+      | map   | the result is 9 | passed | true   |
 
   Scenario: Passing listeners for every event
-    Given these passing listeners:
-      | event        | filter |
-      | setup        | none   |
-      | teardown     | none   |
+    Given a passing setup listener
+    And a passing teardown listener
     When Cucumber executes the scenario "Basic Arithmetic"
     Then the life cycle history is:
-      | event        | name             | status |
-      | setup        | Basic Arithmetic | passed |
-      | map          | I add 4 and 5    | passed |
-      | map          | the result is 9  | passed |
-      | teardown     | Basic Arithmetic | passed |
+      | event        | arguments        | status | result |
+      | setup        | Basic Arithmetic | passed | passed |
+      | map          | I add 4 and 5    | passed | true   |
+      | map          | the result is 9  | passed | true   |
+      | teardown     | Basic Arithmetic | passed | passed |
+
+  Scenario: Two passing listeners on the same event
+    Given a setup listener that passes with "setup 1"
+    And a setup listener that passes with "setup 2"
+    When Cucumber executes the scenario "Basic Arithmetic"
+    Then the life cycle history is:
+      | event | arguments        | status | result  |
+      | setup | Basic Arithmetic | passed | setup 1 |
+      | setup | Basic Arithmetic | passed | setup 2 |
+      | map   | I add 4 and 5    | passed | true    |
+      | map   | the result is 9  | passed | true    |
 
   Scenario: Failing listener skips the rest of the test case
-  Scenario: Two passing listeners on the same event
+    Given a failing setup listener
+    When Cucumber executes the scenario "Basic Arithmetic"
+    Then the life cycle history is:
+      | event | arguments        | status  | result    |
+      | setup | Basic Arithmetic | failed  | exception |
+      | map   | I add 4 and 5    | skipped | n/a       |
+      | map   | the result is 9  | skipped | n/a       |
+
   Scenario: One passing, one failing listener on the same event
   Scenario: Executing on particular metadata
   Scenario: Observing results

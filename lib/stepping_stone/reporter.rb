@@ -6,7 +6,7 @@ module SteppingStone
   class Reporter
     class Result
       attr_reader :id
-      
+
       def initialize(id)
         @id = id
         @events = []
@@ -19,7 +19,7 @@ module SteppingStone
       def last
         @events.last
       end
-      
+
       def steps
         @events.select { |event| ![:setup, :teardown].include?(event.event) }
       end
@@ -29,7 +29,7 @@ module SteppingStone
         return :failed if @events.any?(&:failed?)
       end
     end
-    
+
     include Observable
 
     attr_reader :log
@@ -63,7 +63,7 @@ module SteppingStone
     def result_for(id)
       @results.find { |res| res.id == id }.status
     end
-    
+
     def events
       @log.events
     end
@@ -84,7 +84,7 @@ module SteppingStone
 
     def broadcast_skip(instruction)
       if instruction.name == :map
-        broadcast(Model::Result.new(:skipped, nil, instruction))
+        broadcast(Model::Result.new(instruction, :skipped, "n/a"))
       end
     end
 

@@ -5,6 +5,9 @@ module SteppingStone
     class TextMapper
       module Hooks
         describe HookMapping do
+          subject { HookMapping.new(:setup, ["@foo"]) }
+          it_behaves_like "a listener"
+
           describe "#match" do
             it "matches on the first element of the pattern and the tags metadata" do
               hook = HookMapping.new(:setup, ["@foo"])
