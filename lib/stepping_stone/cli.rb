@@ -56,16 +56,17 @@ module SteppingStone
         reporter = Reporter.new
         runner = Runner.new(server, reporter)
 
+        require 'stringio'
+        output = StringIO.new
+        formatter = Observers::Progress.new(reporter, output)
+
         reporter.record_run do
           test_cases.each do |test_case|
             runner.execute(test_case)
           end
         end
 
-        require 'stringio'
-        out = StringIO.new
-        reporter.write(out)
-        puts out.string
+        puts output.string
       end
     end
   end

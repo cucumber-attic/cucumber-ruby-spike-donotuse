@@ -40,6 +40,7 @@ module SteppingStone
     end
 
     def record(event)
+      @last_result = event
       @log.add(event)
       case event.event
       when :setup
@@ -50,6 +51,10 @@ module SteppingStone
       else
         @result.record(event)
       end
+    end
+
+    def last_status
+      @last_result
     end
 
     def test_cases
@@ -88,10 +93,6 @@ module SteppingStone
       end
     end
 
-    def last_status
-      @result.last
-    end
-
     def summary
       @results
     end
@@ -114,21 +115,6 @@ module SteppingStone
 
     def undefined?
       history.any?(&:undefined?)
-    end
-
-    def write(out)
-      history.each do |ev|
-        if ev.response_required?
-          letter = {
-            :passed    => ".",
-            :failed    => "F",
-            :undefined => "U",
-            :skipped   => "S",
-            :pending   => "P"
-          }[ev.status]
-          out.write(letter)
-        end
-      end
     end
   end
 end

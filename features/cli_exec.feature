@@ -86,6 +86,9 @@ Feature: CLI exec
       """
       ...
 
+      1 scenario (1 passed)
+      3 steps (3 passed)
+
       """
 
   Scenario: Executing a failing scenario
@@ -103,6 +106,9 @@ Feature: CLI exec
     Then the output should contain exactly:
       """
       ..FS
+
+      0 scenarios (0 passed)
+      0 steps (0 passed)
 
       """
 
@@ -123,6 +129,9 @@ Feature: CLI exec
     Then the output should contain exactly:
       """
       ..USS
+
+      0 scenarios (0 passed)
+      0 steps (0 passed)
 
       """
 
@@ -146,6 +155,9 @@ Feature: CLI exec
       """
       ......
 
+      2 scenarios (2 passed)
+      6 steps (6 passed)
+
       """
 
   Scenario: Executing a scenario with a doc string
@@ -167,6 +179,9 @@ Feature: CLI exec
       """
       ...
 
+      1 scenario (1 passed)
+      3 steps (3 passed)
+
       """
 
   Scenario: Executing a scenario with a data table
@@ -185,6 +200,9 @@ Feature: CLI exec
     Then the output should contain exactly:
       """
       ...
+
+      1 scenario (1 passed)
+      3 steps (3 passed)
 
       """
 
