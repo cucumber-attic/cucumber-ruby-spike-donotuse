@@ -6,7 +6,7 @@ module SteppingStone
       module Hooks
         describe HookMapping do
           subject { HookMapping.new(:setup, ["@foo"]) }
-          it_behaves_like "a listener"
+          it_behaves_like "a mapping"
 
           describe "#match" do
             it "matches on the first element of the pattern and the tags metadata" do

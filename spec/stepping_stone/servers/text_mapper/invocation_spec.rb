@@ -4,7 +4,7 @@ module SteppingStone
   module Servers
     class TextMapper
       describe Invocation do
-        it_behaves_like "a listener"
+        it_behaves_like "a mapping"
 
         let(:ctx) { Object.new }
 
