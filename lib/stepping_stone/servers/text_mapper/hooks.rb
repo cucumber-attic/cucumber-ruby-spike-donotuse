@@ -21,7 +21,7 @@ module SteppingStone
           ctx.instance_exec(pattern, &@body)
         end
 
-        def reify!
+        def build
           self
         end
 

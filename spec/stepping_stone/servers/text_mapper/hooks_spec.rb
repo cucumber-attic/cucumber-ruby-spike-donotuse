@@ -72,10 +72,10 @@ module SteppingStone
             end
           end
 
-          describe "#reify!" do
+          describe "#build" do
             it "returns self" do
               hook = HookMapping.new(:ev, ["@tag"])
-              hook.reify!.should be(hook)
+              hook.build.should be(hook)
             end
           end
         end
