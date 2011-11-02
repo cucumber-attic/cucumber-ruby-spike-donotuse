@@ -207,7 +207,7 @@ module CucumberWorld
   end
 
   def add_method_mapping(from, to)
-    mapping = ::TextMapper::MethodMapping.from_primitives(from.unshift(:map), to)
+    mapping = ::TextMapper::MethodMapping.from_primitives(from.unshift(:dispatch), to)
     sut.add_mapping(mapping)
   end
 

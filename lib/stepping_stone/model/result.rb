@@ -26,7 +26,7 @@ module SteppingStone
       end
 
       def response_required?
-        @instruction.name == :map
+        @instruction.name == :dispatch
       end
 
       def important?

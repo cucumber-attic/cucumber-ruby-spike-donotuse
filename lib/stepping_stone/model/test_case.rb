@@ -48,7 +48,7 @@ module SteppingStone
       def build_instructions(instructions)
         [
           Instruction.new(:setup, [@name]),
-          instructions.map { |i| Instruction.new(:map, i) },
+          instructions.map { |i| Instruction.new(:dispatch, i) },
           Instruction.new(:teardown, [@name]),
         ].flatten
       end

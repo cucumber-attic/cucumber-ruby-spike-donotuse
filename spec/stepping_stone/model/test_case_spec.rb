@@ -11,7 +11,7 @@ module SteppingStone
 
       its(:metadata) { should eq({}) }
 
-      context "with no map instructions" do
+      context "with no dispatch instructions" do
         it "has setup and teardown instructions" do
           subject.instructions.map(&:to_a).should eq([[:setup, ["test case"]], [:teardown, ["test case"]]])
         end
@@ -25,11 +25,11 @@ module SteppingStone
         end
       end
 
-      context "with map instructions" do
+      context "with dispatch instructions" do
         subject { TestCase.new("test case", "foo", "bar") }
 
         it "converts each step into a map instruction" do
-          subject.instructions.map(&:to_a).should eq([[:setup, ["test case"]], [:map, "foo"], [:map, "bar"], [:teardown, ["test case"]]])
+          subject.instructions.map(&:to_a).should eq([[:setup, ["test case"]], [:dispatch, "foo"], [:dispatch, "bar"], [:teardown, ["test case"]]])
         end
 
         describe "#each" do

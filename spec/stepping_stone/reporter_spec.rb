@@ -10,14 +10,14 @@ module SteppingStone
       Model::Result.new(inst(:teardown, name), :undefined)
     end
 
-    def map(pattern, status)
-      Model::Result.new(inst(:map, pattern), status)
+    def dispatch(pattern, status)
+      Model::Result.new(inst(:dispatch, pattern), status)
     end
 
     it "keeps a record of events" do
       reporter = Reporter.new
       reporter.record(setup("test case"))
-      reporter.record(map("foo", :passed))
+      reporter.record(dispatch("foo", :passed))
       reporter.record(teardown("test case"))
       reporter.should have(3).events
     end
@@ -34,10 +34,10 @@ module SteppingStone
     it "tracks test case results" do
       reporter = Reporter.new
       reporter.record(setup("test case 1"))
-      reporter.record(map("foo", :passed))
+      reporter.record(dispatch("foo", :passed))
       reporter.record(teardown("test case 1"))
       reporter.record(setup("test case 2"))
-      reporter.record(map("foo", :failed))
+      reporter.record(dispatch("foo", :failed))
       reporter.record(teardown("test case 2"))
       reporter.result_for("test case 1").should eq(:passed)
       reporter.result_for("test case 2").should eq(:failed)

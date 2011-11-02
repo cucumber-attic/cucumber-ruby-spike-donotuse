@@ -83,7 +83,7 @@ module SteppingStone
     end
 
     def broadcast_skip(instruction)
-      if instruction.name == :map
+      if instruction.name == :dispatch
         broadcast(Model::Result.new(instruction, :skipped, "n/a"))
       end
     end

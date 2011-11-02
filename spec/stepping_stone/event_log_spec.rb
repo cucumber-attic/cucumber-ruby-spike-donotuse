@@ -8,9 +8,9 @@ module SteppingStone
 
     before do
       subject.add(ev(:setup, :passed))
-      subject.add(ev(:map, :passed))
-      subject.add(ev(:map, :undefined))
-      subject.add(ev(:map, :skipped))
+      subject.add(ev(:dispatch, :passed))
+      subject.add(ev(:dispatch, :undefined))
+      subject.add(ev(:dispatch, :skipped))
       subject.add(ev(:teardown, :failed))
     end
 
@@ -21,7 +21,7 @@ module SteppingStone
 
       it "filters events" do
         subject.events(status: :passed).length.should eq(2)
-        subject.events(event: :map).length.should eq(3)
+        subject.events(event: :dispatch).length.should eq(3)
       end
     end
 
@@ -53,7 +53,7 @@ module SteppingStone
       it "iterates through all the events" do
         events = []
         subject.each { |e| events << e }
-        events.map(&:event).should eq([:setup, :map, :map, :map, :teardown])
+        events.map(&:event).should eq([:setup, :dispatch, :dispatch, :dispatch, :teardown])
       end
     end
   end

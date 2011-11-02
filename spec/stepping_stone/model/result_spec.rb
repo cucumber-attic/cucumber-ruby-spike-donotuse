@@ -3,7 +3,7 @@ require 'spec_helper'
 module SteppingStone
   module Model
     describe Result do
-      let(:instruction) { Instruction.new(:map, ["foo"]) }
+      let(:instruction) { Instruction.new(:dispatch, ["foo"]) }
       subject { Result.new(instruction, :passed) }
 
       describe ".new" do
@@ -26,7 +26,7 @@ module SteppingStone
 
       describe "#event" do
         it "returns the type of event that triggered this result" do
-          subject.event.should eq(:map)
+          subject.event.should eq(:dispatch)
         end
       end
 

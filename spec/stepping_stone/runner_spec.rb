@@ -44,7 +44,7 @@ module SteppingStone
 
       it "send requests to the session" do
         subject.execute(tc(:pass, :pass))
-        events.should eq([:setup, :map, :map, :teardown])
+        events.should eq([:setup, :dispatch, :dispatch, :teardown])
       end
 
       it "stops executing when an instruction fails" do
