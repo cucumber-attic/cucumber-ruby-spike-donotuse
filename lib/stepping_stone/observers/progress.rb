@@ -32,12 +32,11 @@ module SteppingStone
 
       def do_summary
         summary = @reporter.summary
-        scenario_count = summary.length
-        scenario_passed = summary.count { |result| result.status == :passed }
-        step_count = summary.inject(0) { |sum, res| sum + res.steps.length }
-        steps_passed = summary.inject(0) { |sum, res| sum + res.steps.count(&:passed?) }
+        scenario_count, scenarios_passed = summary[:test_cases].values_at(:total, :passed)
+        step_count, steps_passed = summary[:instructions].values_at(:total, :passed)
+
         @output.print "\n\n"
-        @output.puts "#{scenario_count} #{scenario_count == 1 ? "scenario" : "scenarios"} (#{scenario_passed} passed)"
+        @output.puts "#{scenario_count} #{scenario_count == 1 ? "scenario" : "scenarios"} (#{scenarios_passed} passed)"
         @output.puts "#{step_count} #{step_count == 1 ? "step" : "steps"} (#{steps_passed} passed)"
       end
     end

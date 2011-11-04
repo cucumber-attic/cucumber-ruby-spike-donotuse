@@ -28,11 +28,19 @@ module SteppingStone
         return :passed if @events.all?(&:passed?)
         return :failed if @events.any?(&:failed?)
       end
+
+      def passed?
+        status == :passed
+      end
+
+      def failed?
+        status == :failed
+      end
     end
 
     include Observable
 
-    attr_reader :log
+    attr_reader :log, :results
 
     def initialize
       @log = EventLog.new
@@ -74,9 +82,13 @@ module SteppingStone
     end
 
     def record_run
+      @start_time = Time.now
       changed
       notify_observers(:start_run)
+
       yield
+
+      @end_time = Time.now
       changed
       notify_observers(:end_run)
     end
@@ -94,7 +106,18 @@ module SteppingStone
     end
 
     def summary
-      @results
+      {
+        start_time:   @start_time,
+        end_time:     @end_time,
+
+        test_cases:   { total: @results.count,
+                        passed: @results.select(&:passed?).count,
+                        failed: @results.select(&:failed?).count },
+
+        instructions: { total: @results.inject(0) { |sum, res| sum + res.steps.count },
+                        passed: @results.inject(0) { |sum, res| sum + res.steps.count(&:passed?) },
+                        failed: @results.inject(0) { |sum, res| sum + res.steps.count(&:failed?) } }
+      }
     end
 
     def history

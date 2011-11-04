@@ -2,8 +2,9 @@ require 'bundler'
 Bundler.setup
 
 require 'simplecov'
-
 require 'rspec'
+require 'timecop'
+
 require 'stepping_stone'
 require 'text_mapper'
 require 'text_mapper/support/mapping_spec'
