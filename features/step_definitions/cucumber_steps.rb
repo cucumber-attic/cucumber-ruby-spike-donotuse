@@ -15,6 +15,10 @@ Given "all of the steps in the scenario fail" do
   create_failing_mappings(@body)
 end
 
+Given "all of the steps in the scenario are undefined" do
+  create_undefined_mappings(@body)
+end
+
 Given /^a passing scenario "(.+)" with:$/ do |name, body|
   @test_case = compile_scenario(name, body, @background)
   create_passing_mappings(body)
@@ -301,6 +305,10 @@ module CucumberWorld
 
   def create_failing_mappings(steps_text)
     create_mappings(steps_text, :do_failing)
+  end
+
+  def create_undefined_mappings(steps_text)
+    # no-op
   end
 
   def create_mappings(steps_text, target)

@@ -130,8 +130,8 @@ Feature: CLI exec
       """
       ..USS
 
-      1 scenario
-      5 steps (2 passed)
+      1 scenario (1 undefined)
+      5 steps (2 passed) (1 undefined)
 
       """
 

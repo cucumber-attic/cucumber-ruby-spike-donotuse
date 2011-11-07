@@ -27,6 +27,7 @@ module SteppingStone
       def status
         return :passed if @events.all?(&:passed?)
         return :failed if @events.any?(&:failed?)
+        return :undefined if @events.any?(&:undefined?)
       end
 
       def passed?
@@ -35,6 +36,10 @@ module SteppingStone
 
       def failed?
         status == :failed
+      end
+
+      def undefined?
+        status == :undefined
       end
     end
 
@@ -113,11 +118,13 @@ module SteppingStone
 
         test_cases:   { total: @results.count,
                         passed: @results.select(&:passed?).count,
-                        failed: @results.select(&:failed?).count },
+                        failed: @results.select(&:failed?).count,
+                        undefined: @results.select(&:undefined?).count },
 
         instructions: { total: @results.inject(0) { |sum, res| sum + res.steps.count },
                         passed: @results.inject(0) { |sum, res| sum + res.steps.count(&:passed?) },
-                        failed: @results.inject(0) { |sum, res| sum + res.steps.count(&:failed?) } }
+                        failed: @results.inject(0) { |sum, res| sum + res.steps.count(&:failed?) },
+                        undefined: @results.inject(0) { |sum, res| sum + res.steps.count(&:undefined?) } }
       }
     end
 

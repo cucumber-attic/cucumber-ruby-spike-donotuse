@@ -42,6 +42,13 @@ module SteppingStone
       subject.result_for("test case 2").should eq(:failed)
     end
 
+    it "says if a scenario was undefined" do
+      subject.record(setup("undefined"))
+      subject.record(dispatch("foo", :undefined))
+      subject.record(teardown("undefined"))
+      subject.result_for("undefined").should eq(:undefined)
+    end
+
     it "maintains a summary of events" do
       start_time = Time.now
       end_time = start_time + 60
@@ -61,8 +68,8 @@ module SteppingStone
       subject.summary.should eq({
         start_time:   start_time,
         end_time:     end_time,
-        test_cases:   { total: 2, passed: 1, failed: 1 },
-        instructions: { total: 3, passed: 2, failed: 1 }
+        test_cases:   { total: 2, passed: 1, failed: 1, undefined: 0 },
+        instructions: { total: 3, passed: 2, failed: 1, undefined: 0 }
       })
     end
 

@@ -9,7 +9,7 @@ Feature: Showing the progress of a test run
       Given a step
       """
 
-  Scenario: 1 passing
+  Scenario: Passing
     Given I'm using the progress formatter
     And all of the steps in the scenario pass
     When Cucumber executes the scenario
@@ -22,7 +22,7 @@ Feature: Showing the progress of a test run
 
       """
 
-  Scenario: 1 failing
+  Scenario: Failing
     Given I'm using the progress formatter
     And all of the steps in the scenario fail
     When Cucumber executes the scenario
@@ -32,5 +32,18 @@ Feature: Showing the progress of a test run
 
       1 scenario (1 failed)
       1 step (1 failed)
+
+      """
+
+  Scenario: Undefined
+    Given I'm using the progress formatter
+    And all of the steps in the scenario are undefined
+    When Cucumber executes the scenario
+    Then the progress output looks like:
+      """
+      U
+
+      1 scenario (1 undefined)
+      1 step (1 undefined)
 
       """
