@@ -108,7 +108,7 @@ Feature: CLI exec
       ..FS
 
       1 scenario (1 failed)
-      4 steps (2 passed) (1 failed)
+      4 steps (2 passed) (1 failed) (1 skipped)
 
       """
 
@@ -131,7 +131,7 @@ Feature: CLI exec
       ..USS
 
       1 scenario (1 undefined)
-      5 steps (2 passed) (1 undefined)
+      5 steps (2 passed) (1 undefined) (2 skipped)
 
       """
 

@@ -69,7 +69,7 @@ module SteppingStone
         start_time:   start_time,
         end_time:     end_time,
         test_cases:   { total: 2, passed: 1, failed: 1, undefined: 0 },
-        instructions: { total: 3, passed: 2, failed: 1, undefined: 0 }
+        instructions: { total: 3, passed: 2, failed: 1, undefined: 0, skipped: 0 }
       })
     end
 

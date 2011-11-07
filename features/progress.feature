@@ -7,6 +7,7 @@ Feature: Showing the progress of a test run
     Given a scenario with:
       """
       Given a step
+      Then another step
       """
 
   Scenario: Passing
@@ -15,10 +16,10 @@ Feature: Showing the progress of a test run
     When Cucumber executes the scenario
     Then the progress output looks like:
       """
-      .
+      ..
 
       1 scenario (1 passed)
-      1 step (1 passed)
+      2 steps (2 passed)
 
       """
 
@@ -28,10 +29,10 @@ Feature: Showing the progress of a test run
     When Cucumber executes the scenario
     Then the progress output looks like:
       """
-      F
+      FS
 
       1 scenario (1 failed)
-      1 step (1 failed)
+      2 steps (1 failed) (1 skipped)
 
       """
 
@@ -41,9 +42,9 @@ Feature: Showing the progress of a test run
     When Cucumber executes the scenario
     Then the progress output looks like:
       """
-      U
+      US
 
       1 scenario (1 undefined)
-      1 step (1 undefined)
+      2 steps (1 undefined) (1 skipped)
 
       """

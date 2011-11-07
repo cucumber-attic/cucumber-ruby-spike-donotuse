@@ -34,8 +34,8 @@ module SteppingStone
         summary = @reporter.summary
         scenario_count, scenarios_passed, scenarios_failed, scenarios_undefined =
           summary[:test_cases].values_at(:total, :passed, :failed, :undefined)
-        step_count, steps_passed, steps_failed, steps_undefined = 
-          summary[:instructions].values_at(:total, :passed, :failed, :undefined)
+        step_count, steps_passed, steps_failed, steps_undefined, steps_skipped =
+          summary[:instructions].values_at(:total, :passed, :failed, :undefined, :skipped)
 
         @output.print "\n\n"
         @output.print "#{scenario_count} #{scenario_count == 1 ? "scenario" : "scenarios"}"
@@ -47,6 +47,7 @@ module SteppingStone
         @output.print " (#{steps_passed} passed)" if steps_passed > 0
         @output.print " (#{steps_failed} failed)" if steps_failed > 0
         @output.print " (#{steps_undefined} undefined)" if steps_undefined > 0
+        @output.print " (#{steps_skipped} skipped)" if steps_skipped > 0
         @output.puts
       end
     end

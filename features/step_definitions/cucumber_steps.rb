@@ -34,6 +34,10 @@ Given "a passing background with:" do |background|
   create_passing_mappings(background)
 end
 
+Given "a background with:" do |background|
+  @background = background
+end
+
 Given /^the step "(.+)" has a (\w+) mapping$/ do |name, status|
   add_method_mapping([name], ["do_#{status}".to_sym])
 end

@@ -124,7 +124,8 @@ module SteppingStone
         instructions: { total: @results.inject(0) { |sum, res| sum + res.steps.count },
                         passed: @results.inject(0) { |sum, res| sum + res.steps.count(&:passed?) },
                         failed: @results.inject(0) { |sum, res| sum + res.steps.count(&:failed?) },
-                        undefined: @results.inject(0) { |sum, res| sum + res.steps.count(&:undefined?) } }
+                        undefined: @results.inject(0) { |sum, res| sum + res.steps.count(&:undefined?) },
+                        skipped: @results.inject(0) { |sum, res| sum + res.steps.count(&:skipped?) } }
       }
     end
 
