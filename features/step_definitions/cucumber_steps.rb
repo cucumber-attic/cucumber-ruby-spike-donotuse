@@ -131,10 +131,6 @@ Then /^the hook is not fired$/ do
   session.value_of(:before_time).should_not be_nil
 end
 
-When /^Cucumber executes the scenario "(.+)"$/ do |name|
-  execute(@test_case)
-end
-
 When "Cucumber executes the scenario" do
   execute(@test_case)
 end
