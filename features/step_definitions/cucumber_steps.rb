@@ -2,6 +2,19 @@ Given /^a scenario "(.+)" with:$/ do |name, body|
   @test_case = compile_scenario(name, body)
 end
 
+Given "a scenario with:" do |body|
+  @body = body
+  @test_case = compile_scenario("test scenario", body)
+end
+
+Given "all of the steps in the scenario pass" do
+  create_passing_mappings(@body)
+end
+
+Given "all of the steps in the scenario fail" do
+  create_failing_mappings(@body)
+end
+
 Given /^a passing scenario "(.+)" with:$/ do |name, body|
   @test_case = compile_scenario(name, body, @background)
   create_passing_mappings(body)
@@ -110,6 +123,10 @@ Then /^the hook is not fired$/ do
 end
 
 When /^Cucumber executes the scenario "(.+)"$/ do |name|
+  execute(@test_case)
+end
+
+When "Cucumber executes the scenario" do
   execute(@test_case)
 end
 
@@ -280,6 +297,10 @@ module CucumberWorld
 
   def create_passing_mappings(steps_text)
     create_mappings(steps_text, :do_passing)
+  end
+
+  def create_failing_mappings(steps_text)
+    create_mappings(steps_text, :do_failing)
   end
 
   def create_mappings(steps_text, target)

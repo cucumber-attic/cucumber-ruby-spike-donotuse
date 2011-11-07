@@ -88,6 +88,7 @@ module SteppingStone
 
       yield
 
+      @results.push(@result) if @result
       @end_time = Time.now
       changed
       notify_observers(:end_run)

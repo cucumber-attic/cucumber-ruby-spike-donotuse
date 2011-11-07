@@ -2,9 +2,9 @@ module SteppingStone
   module Observers
     class Progress
       def initialize(reporter, output)
+        reporter.add_observer(self)
         @reporter = reporter
         @output = output
-        reporter.add_observer(self)
       end
 
       def update(type)
@@ -32,12 +32,18 @@ module SteppingStone
 
       def do_summary
         summary = @reporter.summary
-        scenario_count, scenarios_passed = summary[:test_cases].values_at(:total, :passed)
-        step_count, steps_passed = summary[:instructions].values_at(:total, :passed)
+        scenario_count, scenarios_passed, scenarios_failed = summary[:test_cases].values_at(:total, :passed, :failed)
+        step_count, steps_passed, steps_failed = summary[:instructions].values_at(:total, :passed, :failed)
 
         @output.print "\n\n"
-        @output.puts "#{scenario_count} #{scenario_count == 1 ? "scenario" : "scenarios"} (#{scenarios_passed} passed)"
-        @output.puts "#{step_count} #{step_count == 1 ? "step" : "steps"} (#{steps_passed} passed)"
+        @output.print "#{scenario_count} #{scenario_count == 1 ? "scenario" : "scenarios"}"
+        @output.print " (#{scenarios_passed} passed)" if scenarios_passed > 0
+        @output.print " (#{scenarios_failed} failed)" if scenarios_failed > 0
+        @output.puts
+        @output.print "#{step_count} #{step_count == 1 ? "step" : "steps"}" 
+        @output.print " (#{steps_passed} passed)" if steps_passed > 0
+        @output.print " (#{steps_failed} failed)" if steps_failed > 0
+        @output.puts
       end
     end
   end

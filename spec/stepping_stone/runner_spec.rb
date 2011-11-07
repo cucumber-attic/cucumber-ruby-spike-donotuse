@@ -53,7 +53,7 @@ module SteppingStone
       end
 
       context "test case with failing setup"
-      context "test case with failing teardown"      
+      context "test case with failing teardown"
       context "test case with undefined setup and teardown"
       context "test case with all steps passing"
       context "test case with an undefined step"

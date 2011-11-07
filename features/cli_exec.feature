@@ -107,8 +107,8 @@ Feature: CLI exec
       """
       ..FS
 
-      0 scenarios (0 passed)
-      0 steps (0 passed)
+      1 scenario (1 failed)
+      4 steps (2 passed) (1 failed)
 
       """
 
@@ -130,8 +130,8 @@ Feature: CLI exec
       """
       ..USS
 
-      0 scenarios (0 passed)
-      0 steps (0 passed)
+      1 scenario
+      5 steps (2 passed)
 
       """
 

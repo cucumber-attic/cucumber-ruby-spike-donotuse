@@ -4,19 +4,33 @@ Feature: Showing the progress of a test run
   as it executes scenarios.
 
   Background:
-    Given a passing scenario "Passing" with:
+    Given a scenario with:
       """
-      Given passing
+      Given a step
       """
 
-  Scenario: Show progress
+  Scenario: 1 passing
     Given I'm using the progress formatter
-    When Cucumber executes the scenario "Passing"
+    And all of the steps in the scenario pass
+    When Cucumber executes the scenario
     Then the progress output looks like:
       """
       .
 
       1 scenario (1 passed)
       1 step (1 passed)
+
+      """
+
+  Scenario: 1 failing
+    Given I'm using the progress formatter
+    And all of the steps in the scenario fail
+    When Cucumber executes the scenario
+    Then the progress output looks like:
+      """
+      F
+
+      1 scenario (1 failed)
+      1 step (1 failed)
 
       """
