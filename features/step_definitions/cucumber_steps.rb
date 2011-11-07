@@ -24,6 +24,11 @@ Given /^a passing scenario "(.+)" with:$/ do |name, body|
   create_passing_mappings(body)
 end
 
+Given "a passing scenario with:" do |body|
+  @test_case = compile_scenario(DEFAULT_SCENARIO_NAME, body, @background)
+  create_passing_mappings(body)
+end
+
 Given "a passing background with:" do |background|
   @background = background
   create_passing_mappings(background)
@@ -174,6 +179,8 @@ Then "the progress output looks like:" do |output|
 end
 
 module CucumberWorld
+  DEFAULT_SCENARIO_NAME = "Test scenario"
+
   def compile_scenario(name, body, background=nil, tags=nil)
     feature = build_feature(name, body, background, tags)
     if test_cases = SteppingStone::GherkinCompiler.new.compile(feature)

@@ -21,7 +21,7 @@ Feature: Execution life cycle
 
   Scenario: No setup or teardown mappings
     Given there are no setup or teardown mappings
-    When Cucumber executes the scenario "Basic Arithmetic"
+    When Cucumber executes the scenario
     Then the life cycle history is:
       | event    | arguments       | status | result |
       | dispatch | I add 4 and 5   | passed | true   |
@@ -30,7 +30,7 @@ Feature: Execution life cycle
   Scenario: Passing mappings for every event
     Given a passing setup mapping
     And a passing teardown mapping
-    When Cucumber executes the scenario "Basic Arithmetic"
+    When Cucumber executes the scenario
     Then the life cycle history is:
       | event        | arguments        | status | result |
       | setup        | Basic Arithmetic | passed | passed |
@@ -41,7 +41,7 @@ Feature: Execution life cycle
   Scenario: Two passing mappings on the same event
     Given a setup mapping that passes with "setup 1"
     And a setup mapping that passes with "setup 2"
-    When Cucumber executes the scenario "Basic Arithmetic"
+    When Cucumber executes the scenario
     Then the life cycle history is:
       | event    | arguments        | status | result  |
       | setup    | Basic Arithmetic | passed | setup 1 |
@@ -51,7 +51,7 @@ Feature: Execution life cycle
 
   Scenario: Failing mapping skips the rest of the test case
     Given a failing setup mapping
-    When Cucumber executes the scenario "Basic Arithmetic"
+    When Cucumber executes the scenario
     Then the life cycle history is:
       | event    | arguments        | status  | result    |
       | setup    | Basic Arithmetic | failed  | exception |

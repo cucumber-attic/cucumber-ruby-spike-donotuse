@@ -10,12 +10,12 @@ Feature: Backgrounds
       """
       Given a new calculator
       """
-    And a passing scenario "Arithmetic" with:
+    And a passing scenario with:
       """
       When I add 4 and 5
       Then the result is 9
       """
-    When Cucumber executes the scenario "Arithmetic"
+    When Cucumber executes the scenario
     Then the life cycle history is:
       | event    | arguments        | status | result |
       | dispatch | a new calculator | passed | true   |
