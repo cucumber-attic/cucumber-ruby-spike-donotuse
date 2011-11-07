@@ -4,7 +4,7 @@ end
 
 Given "a scenario with:" do |body|
   @body = body
-  @test_case = compile_scenario("test scenario", body)
+  @test_case = compile_scenario(DEFAULT_SCENARIO_NAME, body)
 end
 
 Given "all of the steps in the scenario pass" do
@@ -47,19 +47,19 @@ Given "I'm using the progress formatter" do
 end
 
 Then "the scenario passes" do
-  reporter.should be_passed
+  reporter.result_for(DEFAULT_SCENARIO_NAME).should be(:passed)
 end
 
 Then "the scenario fails" do
-  reporter.should be_failed
+  reporter.result_for(DEFAULT_SCENARIO_NAME).should be(:failed)
 end
 
 Then "the scenario is pending" do
-  reporter.should be_pending
+  reporter.result_for(DEFAULT_SCENARIO_NAME).should be(:pending)
 end
 
 Then "the scenario is undefined" do
-  reporter.should be_undefined
+  reporter.result_for(DEFAULT_SCENARIO_NAME).should be(:undefined)
 end
 
 Then /^the step "(.+)" is skipped$/ do |name|

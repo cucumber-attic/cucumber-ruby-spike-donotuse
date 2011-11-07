@@ -28,6 +28,7 @@ module SteppingStone
         return :passed if @events.all?(&:passed?)
         return :failed if @events.any?(&:failed?)
         return :undefined if @events.any?(&:undefined?)
+        return :pending if @events.any?(&:pending?)
       end
 
       def passed?
@@ -40,6 +41,10 @@ module SteppingStone
 
       def undefined?
         status == :undefined
+      end
+
+      def pending?
+        status == :pending
       end
     end
 
@@ -64,26 +69,6 @@ module SteppingStone
       else
         @result.record(event)
       end
-    end
-
-    def last_status
-      @last_result
-    end
-
-    def test_cases
-      @log.select do |event|
-        event.event == :setup
-      end.map do |setup|
-        setup.arguments
-      end.flatten
-    end
-
-    def result_for(id)
-      @results.find { |res| res.id == id }.status
-    end
-
-    def events
-      @log.events
     end
 
     def record_run
@@ -111,6 +96,30 @@ module SteppingStone
       end
     end
 
+    def history
+      @log.history
+    end
+
+    def events
+      @log.events
+    end
+
+    def last_status
+      @last_result
+    end
+
+    def test_cases
+      @log.select do |event|
+        event.event == :setup
+      end.map do |setup|
+        setup.arguments
+      end.flatten
+    end
+
+    def result_for(id)
+      @results.find { |res| res.id == id }.status
+    end
+
     def summary
       {
         start_time:   @start_time,
@@ -127,26 +136,6 @@ module SteppingStone
                         undefined: @results.inject(0) { |sum, res| sum + res.steps.count(&:undefined?) },
                         skipped: @results.inject(0) { |sum, res| sum + res.steps.count(&:skipped?) } }
       }
-    end
-
-    def history
-      log.history
-    end
-
-    def passed?
-      history.all?(&:passed?)
-    end
-
-    def failed?
-      history.any?(&:failed?)
-    end
-
-    def pending?
-      history.any?(&:pending?)
-    end
-
-    def undefined?
-      history.any?(&:undefined?)
     end
   end
 end
