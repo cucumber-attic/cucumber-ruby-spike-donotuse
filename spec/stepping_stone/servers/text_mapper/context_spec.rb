@@ -6,7 +6,7 @@ module SteppingStone
       describe "Context" do
         subject { Context.new }
 
-        describe "#mappers=" do
+        describe "#mixins=" do
           it "mixes in the methods from the helper modules" do
             helper_a = Module.new do
               def helper_a
@@ -20,14 +20,14 @@ module SteppingStone
               end
             end
 
-            subject.mappers = [helper_a, helper_b]
+            subject.mixins = [helper_a, helper_b]
             subject.helper_a.should eq(:helper_a)
             subject.helper_b.should eq(:helper_b)
           end
         end
 
         describe "#dispatch" do
-          let(:mappings) { CucumberNamespace.new }
+          let(:namespace) { CucumberNamespace.new }
 
           def mapping(from, &body)
             ::TextMapper::BlockMapping.new([from], &body)
@@ -35,31 +35,31 @@ module SteppingStone
 
           context "when a passing mapping exists" do
             it "returns a passed result" do
-              mappings.add_mapping(mapping(:from){})
-              subject.mappings = mappings
+              namespace.add_mapping(mapping(:from){})
+              subject.namespace = namespace
               subject.dispatch(inst(:from)).should be_passed
             end
           end
 
           context "when a matching mapping does not exist" do
             it "returns an undefined result" do
-              subject.mappings = mappings
+              subject.namespace = namespace
               subject.dispatch(inst(:from)).should be_undefined
             end
           end
 
           context "when invocation fails" do
             it "returns a failed result" do
-              mappings.add_mapping(mapping(:from){ raise RSpec::Expectations::ExpectationNotMetError })
-              subject.mappings = mappings
+              namespace.add_mapping(mapping(:from){ raise RSpec::Expectations::ExpectationNotMetError })
+              subject.namespace = namespace
               subject.dispatch(inst(:from)).should be_failed
             end
           end
 
           context "when a mapping is pending" do
             it "returns a pending result" do
-              mappings.add_mapping(mapping(:from){ pending })
-              subject.mappings = mappings
+              namespace.add_mapping(mapping(:from){ pending })
+              subject.namespace = namespace
               subject.dispatch(inst(:from)).should be_pending
             end
           end

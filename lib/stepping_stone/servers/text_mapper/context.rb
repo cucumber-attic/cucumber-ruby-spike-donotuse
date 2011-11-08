@@ -6,10 +6,10 @@ module SteppingStone
   module Servers
     class TextMapper
      class Context
-        attr_accessor :mappings
+        attr_accessor :namespace
 
-        def mappers=(mappers)
-          mappers.each { |mapper| extend(mapper) }
+        def mixins=(mixins)
+          mixins.each { |mixin| extend(mixin) }
         end
 
         def pending(msg=nil)
@@ -21,7 +21,7 @@ module SteppingStone
         def dispatch(instruction)
           pattern = instruction.to_a.flatten
           metadata = instruction.metadata
-          matches = mappings.find_all_matching(pattern, metadata)
+          matches = namespace.find_all_matching(pattern, metadata)
           invocation = Invocation.new(matches)
           results = invocation.call(self, pattern)
           Model::Result.new(instruction, :passed, results)

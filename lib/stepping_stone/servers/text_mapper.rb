@@ -44,7 +44,7 @@ module SteppingStone
       end
 
       def new_context
-        mapper_namespace.initialize_context(Context.new)
+        mapper_namespace.build_context(Context.new)
       end
 
       def dsl_module
