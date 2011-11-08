@@ -65,7 +65,7 @@ Given /^the step "(.+)" has a (\w+) mapping$/ do |name, status|
   add_method_mapping([name], ["do_#{status}".to_sym])
 end
 
-Given "I'm using the progress formatter" do
+Given "the progress formatter is observing execution" do
   start_progress_formatter
 end
 

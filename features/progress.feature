@@ -4,15 +4,15 @@ Feature: Showing the progress of a test run
   as it executes scenarios.
 
   Background:
-    Given a scenario with:
+    Given the progress formatter is observing execution
+    And a scenario with:
       """
       Given a step
       Then another step
       """
 
   Scenario: Passing
-    Given I'm using the progress formatter
-    And all of the steps in the scenario pass
+    Given all of the steps in the scenario pass
     When Cucumber executes the scenario
     Then the progress output looks like:
       """
@@ -24,8 +24,7 @@ Feature: Showing the progress of a test run
       """
 
   Scenario: Failing
-    Given I'm using the progress formatter
-    And all of the steps in the scenario fail
+    Given all of the steps in the scenario fail
     When Cucumber executes the scenario
     Then the progress output looks like:
       """
@@ -37,8 +36,7 @@ Feature: Showing the progress of a test run
       """
 
   Scenario: Undefined
-    Given I'm using the progress formatter
-    And all of the steps in the scenario are undefined
+    Given all of the steps in the scenario are undefined
     When Cucumber executes the scenario
     Then the progress output looks like:
       """
