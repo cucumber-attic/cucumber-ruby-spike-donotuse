@@ -7,10 +7,6 @@ module SteppingStone
         @name, @arguments, @metadata = name, arguments, metadata
       end
 
-      def event
-        @name
-      end
-
       def response_required?
         @name == :dispatch
       end
