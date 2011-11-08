@@ -17,7 +17,7 @@ Feature: Backgrounds
       """
     When Cucumber executes the scenario
     Then the life cycle history is:
-      | event    | arguments        | status | result |
-      | dispatch | a new calculator | passed | true   |
-      | dispatch | I add 4 and 5    | passed | true   |
-      | dispatch | the result is 9  | passed | true   |
+      | event    | status |
+      | dispatch | passed |
+      | dispatch | passed |
+      | dispatch | passed |

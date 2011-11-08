@@ -23,40 +23,40 @@ Feature: Execution life cycle
     Given there are no setup or teardown mappings
     When Cucumber executes the scenario
     Then the life cycle history is:
-      | event    | arguments       | status | result |
-      | dispatch | I add 4 and 5   | passed | true   |
-      | dispatch | the result is 9 | passed | true   |
+      | event    | status |
+      | dispatch | passed |
+      | dispatch | passed |
 
   Scenario: Passing mappings for every event
     Given a passing setup mapping
     And a passing teardown mapping
     When Cucumber executes the scenario
     Then the life cycle history is:
-      | event        | arguments        | status | result |
-      | setup        | Basic Arithmetic | passed | passed |
-      | dispatch     | I add 4 and 5    | passed | true   |
-      | dispatch     | the result is 9  | passed | true   |
-      | teardown     | Basic Arithmetic | passed | passed |
+      | event    | status |
+      | setup    | passed |
+      | dispatch | passed |
+      | dispatch | passed |
+      | teardown | passed |
 
   Scenario: Two passing mappings on the same event
     Given a setup mapping that passes with "setup 1"
     And a setup mapping that passes with "setup 2"
     When Cucumber executes the scenario
     Then the life cycle history is:
-      | event    | arguments        | status | result  |
-      | setup    | Basic Arithmetic | passed | setup 1 |
-      | setup    | Basic Arithmetic | passed | setup 2 |
-      | dispatch | I add 4 and 5    | passed | true    |
-      | dispatch | the result is 9  | passed | true    |
+      | event    | status |
+      | setup    | passed |
+      | setup    | passed |
+      | dispatch | passed |
+      | dispatch | passed |
 
   Scenario: Failing mapping skips the rest of the test case
     Given a failing setup mapping
     When Cucumber executes the scenario
     Then the life cycle history is:
-      | event    | arguments        | status  | result    |
-      | setup    | Basic Arithmetic | failed  | exception |
-      | dispatch | I add 4 and 5    | skipped | n/a       |
-      | dispatch | the result is 9  | skipped | n/a       |
+      | event    | status  |
+      | setup    | failed  |
+      | dispatch | skipped |
+      | dispatch | skipped |
 
   Scenario: One passing, one failing mapping on the same event
   Scenario: Executing on particular metadata

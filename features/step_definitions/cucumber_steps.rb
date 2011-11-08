@@ -163,14 +163,6 @@ end
 Then /^the life cycle history is:$/ do |table|
   table.map_column!(:event, &:to_sym)
   table.map_column!(:status, &:to_sym)
-  table.map_column!(:arguments) { |name| [name] }
-  table.map_column!(:result) do |result|
-    if ["true", "false"].include?(result)
-      eval(result)
-    else
-      result
-    end
-  end
   life_cycle_history.should eq(table.rows)
 end
 
@@ -273,23 +265,15 @@ module CucumberWorld
   end
 
   def life_cycle_history
-    reporter.history.inject([]) do |memo, result|
-      if result.value.is_a?(Hash)
-        result.value.values.each do |value|
-          memo << [result.event, result.arguments, result.status, value]
+    reporter.history.inject([]) do |memo, e|
+      if e.value.is_a?(Hash)
+        e.value.values.each do |v|
+          memo << [e.event, e.status]
         end
       else
-        memo << [result.event, result.arguments, result.status, convert_value(result.value)]
+        memo << [e.event, e.status]
       end
       memo
-    end
-  end
-
-  def convert_value(val)
-    if val.kind_of?(Exception)
-      "exception"
-    else
-      val
     end
   end
 
