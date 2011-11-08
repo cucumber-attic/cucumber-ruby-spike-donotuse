@@ -1,7 +1,6 @@
 require 'kerplutz'
 
 require 'stepping_stone'
-require 'stepping_stone/gherkin_compiler'
 require 'stepping_stone/reporter'
 require 'stepping_stone/runner'
 
@@ -44,7 +43,7 @@ module SteppingStone
         CodeLoader.add_to_load_path('.', 'cukes')
         require 'cukes/cukes_helper'
 
-        compiler = GherkinCompiler.new
+        compiler = Compilers.boot!(:default)
 
         # Do this properly: no need to flatten
         test_cases = @locations.collect do |location|

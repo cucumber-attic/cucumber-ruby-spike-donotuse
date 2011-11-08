@@ -174,7 +174,7 @@ module CucumberWorld
   end
 
   def compile(gherkin)
-    SteppingStone::GherkinCompiler.new.compile(gherkin)
+    SteppingStone::Compilers::Gherkin.new.compile(gherkin)
   end
 
   def execute_cucumber

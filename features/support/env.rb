@@ -11,7 +11,6 @@ require 'stringio'
 require_relative 'feature_builder'
 
 require 'stepping_stone'
-require 'stepping_stone/gherkin_compiler'
 require 'stepping_stone/reporter'
 require 'stepping_stone/model'
 

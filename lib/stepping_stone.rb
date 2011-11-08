@@ -1,5 +1,6 @@
 require 'stepping_stone/configuration'
 require 'stepping_stone/model'
+require 'stepping_stone/compilers'
 require 'stepping_stone/servers'
 require 'stepping_stone/runner'
 require 'stepping_stone/reporter'
