@@ -57,6 +57,7 @@ Feature: Execution life cycle
       | setup    | failed  |
       | dispatch | skipped |
       | dispatch | skipped |
+      | teardown | skipped |
 
   Scenario: One passing, one failing mapping on the same event
   Scenario: Executing on particular metadata

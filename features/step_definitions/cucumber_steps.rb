@@ -270,7 +270,7 @@ module CucumberWorld
 
   def life_cycle_history
     @event_log.history.inject([]) do |memo, e|
-      if e.value.is_a?(Hash)
+      if e.value.is_a?(Hash) and !e.value.empty?
         e.value.values.each do |v|
           memo << [e.name, e.status]
         end

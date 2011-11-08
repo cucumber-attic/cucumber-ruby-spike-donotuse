@@ -1,5 +1,4 @@
 require 'observer'
-require 'stepping_stone/model/result'
 
 module SteppingStone
   class Reporter
@@ -85,12 +84,6 @@ module SteppingStone
       record(result)
       changed
       notify_observers(:event) if result.important?
-    end
-
-    def broadcast_skip(instruction)
-      if instruction.name == :dispatch
-        broadcast(Model::Result.new(instruction, :skipped, "n/a"))
-      end
     end
 
     def last_event

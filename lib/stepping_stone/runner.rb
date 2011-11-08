@@ -9,40 +9,9 @@ module SteppingStone
     def execute(test_case)
       server.start_test(test_case) do |session|
         @current_session = session
-        @state = ContinueState.new(session, broker)
         test_case.each do |instruction|
-          @state.execute(instruction)
-          @state = SkipState.new(session, broker) if @state.halt_execution?
+          @broker.broadcast(@current_session.execute(instruction))
         end
-      end
-    end
-
-    private
-
-    class State
-      def initialize(session, broker)
-        @session, @broker = session, broker
-      end
-    end
-
-    class ContinueState < State
-      def execute(instruction)
-        @result = @session.dispatch(instruction)
-        @broker.broadcast(@result)
-      end
-
-      def halt_execution?
-        @result.halt?
-      end
-    end
-
-    class SkipState < State
-      def execute(instruction)
-        @broker.broadcast_skip(instruction)
-      end
-
-      def halt_execution?
-        true
       end
     end
   end

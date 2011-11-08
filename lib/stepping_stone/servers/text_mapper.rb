@@ -1,5 +1,6 @@
 require 'stepping_stone/servers/text_mapper/cucumber_namespace'
 require 'stepping_stone/servers/text_mapper/context'
+require 'stepping_stone/servers/text_mapper/session'
 
 module SteppingStone
   module Servers
@@ -20,7 +21,7 @@ module SteppingStone
       end
 
       def start_test(test_case)
-        session = new_context
+        session = Session.new(new_context)
         mapper_namespace.wrap_execution_of(session, test_case.tags) do
           yield session
         end
@@ -43,7 +44,7 @@ module SteppingStone
       end
 
       def new_context
-        mapper_namespace.initialize_context(Servers::TextMapper::Context.new)
+        mapper_namespace.initialize_context(Context.new)
       end
 
       def dsl_module
