@@ -1,41 +1,64 @@
 Given /^a scenario "(.+)" with:$/ do |name, body|
-  @test_case = compile_scenario(name, body)
+  feature.add_scenario(body, name)
 end
 
 Given "a scenario with:" do |body|
-  @body = body
-  @test_case = compile_scenario(DEFAULT_SCENARIO_NAME, body)
-end
-
-Given "all of the steps in the scenario pass" do
-  create_passing_mappings(@body)
-end
-
-Given "all of the steps in the scenario fail" do
-  create_failing_mappings(@body)
-end
-
-Given "all of the steps in the scenario are undefined" do
-  create_undefined_mappings(@body)
+  feature.add_scenario(body)
 end
 
 Given /^a passing scenario "(.+)" with:$/ do |name, body|
-  @test_case = compile_scenario(name, body, @background)
-  create_passing_mappings(body)
+  feature.add_scenario(body, name)
+  create_passing_mappings(feature.steps_text)
 end
 
 Given "a passing scenario with:" do |body|
-  @test_case = compile_scenario(DEFAULT_SCENARIO_NAME, body, @background)
+  feature.add_scenario(body)
   create_passing_mappings(body)
 end
 
 Given "a passing background with:" do |background|
-  @background = background
+  feature.background = background
   create_passing_mappings(background)
 end
 
 Given "a background with:" do |background|
-  @background = background
+  feature.background = background
+end
+
+When "Cucumber executes the scenario" do
+  execute_cucumber
+end
+
+When "Cucumber executes a scenario" do
+  feature.add_default_scenario
+  create_passing_mappings(feature.steps_text)
+  execute_cucumber
+end
+
+When /^Cucumber executes a scenario tagged with "(.+)"$/ do |tag|
+  feature.add_default_scenario
+  feature.tags = tag
+  create_passing_mappings(feature.steps_text)
+  execute_cucumber
+end
+
+When /^Cucumber executes a scenario with no tags$/ do
+  feature.add_default_scenario
+  feature.tags = []
+  create_passing_mappings(feature.steps_text)
+  execute_cucumber
+end
+
+Given "all of the steps in the scenario pass" do
+  create_passing_mappings(feature.steps_text)
+end
+
+Given "all of the steps in the scenario fail" do
+  create_failing_mappings(feature.steps_text)
+end
+
+Given "all of the steps in the scenario are undefined" do
+  create_undefined_mappings(feature.steps_text)
 end
 
 Given /^the step "(.+)" has a (\w+) mapping$/ do |name, status|
@@ -135,31 +158,6 @@ Then /^the hook is not fired$/ do
   session.value_of(:before_time).should_not be_nil
 end
 
-When "Cucumber executes the scenario" do
-  execute(@test_case)
-end
-
-When "Cucumber executes a scenario" do
-  body = "Given a passing step"
-  @test_case = compile_scenario("Test Scenario", body)
-  create_passing_mappings(body)
-  execute(@test_case)
-end
-
-When /^Cucumber executes a scenario tagged with "(.+)"$/ do |tag|
-  body = "Given a passing step"
-  create_passing_mappings(body)
-  @test_case = compile_scenario("Test Scenario", body, background=nil, tags=tag)
-  execute(@test_case)
-end
-
-When /^Cucumber executes a scenario with no tags$/ do
-  body = "Given a passing step"
-  create_passing_mappings(body)
-  @test_case = compile_scenario("Test Scenario", body, background=nil, tags=[])
-  execute(@test_case)
-end
-
 Then /^the life cycle history is:$/ do |table|
   table.map_column!(:event, &:to_sym)
   table.map_column!(:status, &:to_sym)
@@ -171,24 +169,82 @@ Then "the progress output looks like:" do |output|
 end
 
 module CucumberWorld
-  DEFAULT_SCENARIO_NAME = "Test scenario"
+  class FeatureBuilder
+    DEFAULT_FEATURE_NAME  = "Test Feature"
+    DEFAULT_SCENARIO_NAME = "Test scenario"
+    DEFAULT_SCENARIO_BODY = "Given a passing step"
 
-  def compile_scenario(name, body, background=nil, tags=nil)
-    feature = build_feature(name, body, background, tags)
-    if test_cases = SteppingStone::GherkinCompiler.new.compile(feature)
-      test_cases[0]
-    else
-      raise "Something when wrong while compiling #{body}"
+    attr_reader :scenarios
+
+    def initialize(name = DEFAULT_FEATURE_NAME)
+      @name = name
+      @scenarios = []
+    end
+
+    def background=(background)
+      @background = background
+    end
+
+    def tags=(tags)
+      @tags = tags
+    end
+
+    def add_scenario(body, name = DEFAULT_SCENARIO_NAME)
+      @scenarios.push([name, body])
+    end
+
+    def add_default_scenario
+      @scenarios.push([DEFAULT_SCENARIO_NAME, DEFAULT_SCENARIO_BODY])
+    end
+
+    def steps_text
+      String.new.tap do |output|
+        output << @background if @background
+        @scenarios.inject(output) { |out, (_, body)| out << body }
+      end
+    end
+
+    def build
+      String.new.tap do |output|
+        build_header(output)
+        build_background(output)
+        build_scenarios(output)
+      end
+    end
+
+    def build_header(str)
+      str << "Feature: #{@name}\n"
+    end
+
+    def build_background(str)
+      str << "Background:\n#{@background}\n" if @background
+    end
+
+    def build_scenarios(str)
+      @scenarios.inject(str) do |text, (name, body)|
+        text << "#{@tags}\n" if @tags
+        text << "Scenario: #{name}\n#{body}"
+      end
     end
   end
 
-  def build_feature(name, body, background=nil, tags=nil)
-    out = "Feature: test\n"
-    out << "Background:\n #{background}\n" if background
-    out << "\n"
-    out << "#{tags}\n" if tags
-    out << "Scenario: #{name}\n#{body}"
+  def feature
+    @feature ||= FeatureBuilder.new
   end
+
+  def compile(gherkin)
+    SteppingStone::GherkinCompiler.new.compile(gherkin)
+  end
+
+  def execute_cucumber
+    execute(compile(feature.build).first)
+  end
+
+  def execute(test_case)
+    reporter.record_run { runner.execute(test_case) }
+  end
+
+  DEFAULT_SCENARIO_NAME = "Test scenario"
 
   def define_context_mixins
     add_mixin do
@@ -258,10 +314,6 @@ module CucumberWorld
 
   def progress_output
     @progress.string
-  end
-
-  def execute(test_case)
-    reporter.record_run { runner.execute(test_case) }
   end
 
   def start_event_log
