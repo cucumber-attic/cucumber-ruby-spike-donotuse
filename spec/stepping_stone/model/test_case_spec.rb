@@ -28,7 +28,7 @@ module SteppingStone
       context "with dispatch instructions" do
         subject { TestCase.new("test case", "foo", "bar") }
 
-        it "converts each step into a map instruction" do
+        it "converts each step into a dispatch instruction" do
           subject.instructions.map(&:to_a).should eq([[:setup, ["test case"]], [:dispatch, "foo"], [:dispatch, "bar"], [:teardown, ["test case"]]])
         end
 

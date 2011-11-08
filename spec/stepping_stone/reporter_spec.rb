@@ -16,21 +16,6 @@ module SteppingStone
 
     subject { Reporter.new }
 
-    it "keeps a record of events" do
-      subject.record(setup("test case"))
-      subject.record(dispatch("foo", :passed))
-      subject.record(teardown("test case"))
-      subject.should have(3).events
-    end
-
-    it "keeps a record of test cases from the events" do
-      subject.record(setup("test case 1"))
-      subject.record(teardown("test case 1"))
-      subject.record(setup("test case 2"))
-      subject.record(teardown("test case 2"))
-      subject.test_cases.should eq(["test case 1", "test case 2"])
-    end
-
     it "tracks test case results" do
       subject.record(setup("test case 1"))
       subject.record(dispatch("foo", :passed))

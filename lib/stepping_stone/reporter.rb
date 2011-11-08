@@ -1,11 +1,10 @@
 require 'observer'
-require 'stepping_stone/event_log'
 require 'stepping_stone/model/result'
 
 module SteppingStone
   class Reporter
     class Result
-      attr_reader :id
+      attr_reader :id, :events
 
       def initialize(id)
         @id = id
@@ -50,16 +49,14 @@ module SteppingStone
 
     include Observable
 
-    attr_reader :log, :results
+    attr_reader :results
 
     def initialize
-      @log = EventLog.new
       @results = []
     end
 
     def record(event)
       @last_result = event
-      @log.add(event)
       case event.event
       when :setup
         @result = Result.new(event.arguments[0])
@@ -96,24 +93,8 @@ module SteppingStone
       end
     end
 
-    def history
-      @log.history
-    end
-
-    def events
-      @log.events
-    end
-
-    def last_status
+    def last_event
       @last_result
-    end
-
-    def test_cases
-      @log.select do |event|
-        event.event == :setup
-      end.map do |setup|
-        setup.arguments
-      end.flatten
     end
 
     def result_for(id)

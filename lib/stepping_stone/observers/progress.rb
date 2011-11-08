@@ -17,7 +17,7 @@ module SteppingStone
       end
 
       def do_event
-        event = @reporter.last_status
+        event = @reporter.last_event
         if event && event.response_required?
           letter = {
             :passed    => ".",

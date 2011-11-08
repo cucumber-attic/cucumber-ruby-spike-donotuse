@@ -4,7 +4,6 @@ require 'stepping_stone/servers'
 require 'stepping_stone/runner'
 require 'stepping_stone/reporter'
 require 'stepping_stone/observers'
-require 'stepping_stone/event_log'
 
 module SteppingStone
   VERSION = "0.0.1"

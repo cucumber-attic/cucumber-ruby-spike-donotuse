@@ -63,7 +63,7 @@ Then "the scenario is undefined" do
 end
 
 Then /^the step "(.+)" is skipped$/ do |name|
-  skipped = reporter.history.find { |ev| ev.arguments == [name] }
+  skipped = @event_log.history.find { |ev| ev.arguments == [name] }
   skipped.should be_skipped
 end
 
@@ -264,8 +264,12 @@ module CucumberWorld
     reporter.record_run { runner.execute(test_case) }
   end
 
+  def start_event_log
+    @event_log ||= SteppingStone::Observers::EventLog.new(reporter)
+  end
+
   def life_cycle_history
-    reporter.history.inject([]) do |memo, e|
+    @event_log.history.inject([]) do |memo, e|
       if e.value.is_a?(Hash)
         e.value.values.each do |v|
           memo << [e.event, e.status]
@@ -278,11 +282,11 @@ module CucumberWorld
   end
 
   def test_case_start_time
-    reporter.history.first.created_at
+    @event_log.history.first.created_at
   end
 
   def test_case_end_time
-    reporter.history.last.created_at
+    @event_log.history.last.created_at
   end
 
   def start_progress_formatter
@@ -316,6 +320,7 @@ end
 
 Before do
   define_context_mixins
+  start_event_log
 end
 
 World(CucumberWorld)
