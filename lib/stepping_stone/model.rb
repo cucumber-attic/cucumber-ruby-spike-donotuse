@@ -1,4 +1,5 @@
 require 'stepping_stone/model/test_case'
+require 'stepping_stone/model/instruction'
 require 'stepping_stone/model/result'
 
 module SteppingStone

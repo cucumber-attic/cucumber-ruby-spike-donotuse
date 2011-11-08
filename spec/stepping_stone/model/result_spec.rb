@@ -24,9 +24,9 @@ module SteppingStone
         end
       end
 
-      describe "#event" do
+      describe "#name" do
         it "returns the type of event that triggered this result" do
-          subject.event.should eq(:dispatch)
+          subject.name.should eq(:dispatch)
         end
       end
 

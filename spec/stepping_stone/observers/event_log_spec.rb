@@ -24,7 +24,7 @@ module SteppingStone
 
         it "filters events" do
           subject.events(status: :passed).length.should eq(2)
-          subject.events(event: :dispatch).length.should eq(3)
+          subject.events(name: :dispatch).length.should eq(3)
         end
       end
 
@@ -56,7 +56,7 @@ module SteppingStone
         it "iterates through all the events" do
           events = []
           subject.each { |e| events << e }
-          events.map(&:event).should eq([:setup, :dispatch, :dispatch, :dispatch, :teardown])
+          events.map(&:name).should eq([:setup, :dispatch, :dispatch, :dispatch, :teardown])
         end
       end
     end

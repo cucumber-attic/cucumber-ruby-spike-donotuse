@@ -20,7 +20,7 @@ module SteppingStone
       end
 
       def steps
-        @events.select { |event| ![:setup, :teardown].include?(event.event) }
+        @events.select { |event| ![:setup, :teardown].include?(event.name) }
       end
 
       def status
@@ -57,7 +57,7 @@ module SteppingStone
 
     def record(event)
       @last_result = event
-      case event.event
+      case event.name
       when :setup
         @result = Result.new(event.arguments[0])
       when :teardown

@@ -17,7 +17,7 @@ module SteppingStone
         @created_at  = DateTime.now
       end
 
-      def event
+      def name
         @instruction.name
       end
 
@@ -26,7 +26,7 @@ module SteppingStone
       end
 
       def response_required?
-        @instruction.name == :dispatch
+        @instruction.response_required?
       end
 
       def important?

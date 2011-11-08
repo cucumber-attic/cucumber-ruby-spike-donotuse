@@ -272,10 +272,10 @@ module CucumberWorld
     @event_log.history.inject([]) do |memo, e|
       if e.value.is_a?(Hash)
         e.value.values.each do |v|
-          memo << [e.event, e.status]
+          memo << [e.name, e.status]
         end
       else
-        memo << [e.event, e.status]
+        memo << [e.name, e.status]
       end
       memo
     end
