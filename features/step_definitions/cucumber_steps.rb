@@ -70,19 +70,19 @@ Given "the progress formatter is observing execution" do
 end
 
 Then "the scenario passes" do
-  reporter.result_for(DEFAULT_SCENARIO_NAME).should be(:passed)
+  last_scenario_status.should be(:passed)
 end
 
 Then "the scenario fails" do
-  reporter.result_for(DEFAULT_SCENARIO_NAME).should be(:failed)
+  last_scenario_status.should be(:failed)
 end
 
 Then "the scenario is pending" do
-  reporter.result_for(DEFAULT_SCENARIO_NAME).should be(:pending)
+  last_scenario_status.should be(:pending)
 end
 
 Then "the scenario is undefined" do
-  reporter.result_for(DEFAULT_SCENARIO_NAME).should be(:undefined)
+  last_scenario_status.should be(:undefined)
 end
 
 Then /^the step "(.+)" is skipped$/ do |name|
@@ -169,65 +169,6 @@ Then "the progress output looks like:" do |output|
 end
 
 module CucumberWorld
-  class FeatureBuilder
-    DEFAULT_FEATURE_NAME  = "Test Feature"
-    DEFAULT_SCENARIO_NAME = "Test scenario"
-    DEFAULT_SCENARIO_BODY = "Given a passing step"
-
-    attr_reader :scenarios
-
-    def initialize(name = DEFAULT_FEATURE_NAME)
-      @name = name
-      @scenarios = []
-    end
-
-    def background=(background)
-      @background = background
-    end
-
-    def tags=(tags)
-      @tags = tags
-    end
-
-    def add_scenario(body, name = DEFAULT_SCENARIO_NAME)
-      @scenarios.push([name, body])
-    end
-
-    def add_default_scenario
-      @scenarios.push([DEFAULT_SCENARIO_NAME, DEFAULT_SCENARIO_BODY])
-    end
-
-    def steps_text
-      String.new.tap do |output|
-        output << @background if @background
-        @scenarios.inject(output) { |out, (_, body)| out << body }
-      end
-    end
-
-    def build
-      String.new.tap do |output|
-        build_header(output)
-        build_background(output)
-        build_scenarios(output)
-      end
-    end
-
-    def build_header(str)
-      str << "Feature: #{@name}\n"
-    end
-
-    def build_background(str)
-      str << "Background:\n#{@background}\n" if @background
-    end
-
-    def build_scenarios(str)
-      @scenarios.inject(str) do |text, (name, body)|
-        text << "#{@tags}\n" if @tags
-        text << "Scenario: #{name}\n#{body}"
-      end
-    end
-  end
-
   def feature
     @feature ||= FeatureBuilder.new
   end
@@ -243,8 +184,6 @@ module CucumberWorld
   def execute(test_case)
     reporter.record_run { runner.execute(test_case) }
   end
-
-  DEFAULT_SCENARIO_NAME = "Test scenario"
 
   def define_context_mixins
     add_mixin do
@@ -314,6 +253,10 @@ module CucumberWorld
 
   def progress_output
     @progress.string
+  end
+
+  def last_scenario_status
+    reporter.status_of(FeatureBuilder::DEFAULT_SCENARIO_NAME)
   end
 
   def start_event_log

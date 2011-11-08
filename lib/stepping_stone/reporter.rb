@@ -55,7 +55,7 @@ module SteppingStone
     end
 
     def record(event)
-      @last_result = event
+      @last_event = event
       case event.name
       when :setup
         @result = Result.new(event.arguments[0])
@@ -87,10 +87,10 @@ module SteppingStone
     end
 
     def last_event
-      @last_result
+      @last_event
     end
 
-    def result_for(id)
+    def status_of(id)
       @results.find { |res| res.id == id }.status
     end
 

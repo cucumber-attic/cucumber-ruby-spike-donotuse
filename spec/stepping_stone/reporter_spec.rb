@@ -23,15 +23,15 @@ module SteppingStone
       subject.record(setup("test case 2"))
       subject.record(dispatch("foo", :failed))
       subject.record(teardown("test case 2"))
-      subject.result_for("test case 1").should eq(:passed)
-      subject.result_for("test case 2").should eq(:failed)
+      subject.status_of("test case 1").should eq(:passed)
+      subject.status_of("test case 2").should eq(:failed)
     end
 
     it "says if a scenario was undefined" do
       subject.record(setup("undefined"))
       subject.record(dispatch("foo", :undefined))
       subject.record(teardown("undefined"))
-      subject.result_for("undefined").should eq(:undefined)
+      subject.status_of("undefined").should eq(:undefined)
     end
 
     it "maintains a summary of events" do
