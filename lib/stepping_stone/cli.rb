@@ -42,8 +42,9 @@ module SteppingStone
         require 'stepping_stone/code_loader'
         CodeLoader.add_to_load_path('.', 'cukes')
         require 'cukes/cukes_helper'
+        config = SteppingStone.configuration
 
-        compiler = Compilers.boot!(:default)
+        compiler = Compilers.boot!(config.compiler)
 
         # Do this properly: no need to flatten
         test_cases = @locations.collect do |location|
@@ -51,7 +52,7 @@ module SteppingStone
           compiler.compile(content)
         end.flatten
 
-        server = Servers.boot!(:default)
+        server = Servers.boot!(config.server)
         reporter = Reporter.new
         runner = Runner.new(server, reporter)
 

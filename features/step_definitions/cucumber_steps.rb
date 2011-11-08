@@ -307,10 +307,6 @@ module CucumberWorld
       add_method_mapping([from], [target])
     end
   end
-
-  def global_opts
-    SteppingStone.configuration.global_opts
-  end
 end
 
 Before do
