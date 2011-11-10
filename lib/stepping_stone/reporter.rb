@@ -1,5 +1,7 @@
 require 'observer'
 
+require 'stepping_stone/model/run_result'
+
 module SteppingStone
   class Reporter
     class Result
@@ -52,6 +54,7 @@ module SteppingStone
 
     def initialize
       @results = []
+      @runs = []
     end
 
     def record(event)
@@ -68,14 +71,16 @@ module SteppingStone
     end
 
     def record_run
-      @start_time = Time.now
+      run = Model::RunResult.new
+      @runs.push(run)
+      run.start_run
       changed
       notify_observers(:start_run)
 
       yield
 
       @results.push(@result) if @result
-      @end_time = Time.now
+      run.end_run
       changed
       notify_observers(:end_run)
     end
@@ -84,6 +89,10 @@ module SteppingStone
       record(result)
       changed
       notify_observers(:event) if result.important?
+    end
+
+    def last_run
+      @runs.last
     end
 
     def last_event
@@ -96,8 +105,8 @@ module SteppingStone
 
     def summary
       {
-        start_time:   @start_time,
-        end_time:     @end_time,
+        start_time:   last_run.started_at,
+        end_time:     last_run.ended_at,
 
         test_cases:   { total: @results.count,
                         passed: @results.select(&:passed?).count,

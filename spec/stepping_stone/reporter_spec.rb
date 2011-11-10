@@ -56,6 +56,7 @@ module SteppingStone
         test_cases:   { total: 2, passed: 1, failed: 1, undefined: 0 },
         instructions: { total: 3, passed: 2, failed: 1, undefined: 0, skipped: 0 }
       })
+      Timecop.return
     end
 
     it "knows the last important event"
