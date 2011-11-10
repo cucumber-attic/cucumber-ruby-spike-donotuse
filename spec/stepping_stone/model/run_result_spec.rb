@@ -29,6 +29,7 @@ module SteppingStone
       end
 
       it "builds test case results from events"
+      it "fails if it cannot build a complete test case"
       it "tells you the run's status"
       it "counts test cases"
       it "counts instructions"
