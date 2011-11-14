@@ -4,7 +4,9 @@ require 'stepping_stone/model/run_result'
 
 module SteppingStone
   class Reporter
-    class Result
+    class TestCaseResult
+      include Enumerable
+
       attr_reader :id, :events
 
       def initialize(id)
@@ -12,16 +14,12 @@ module SteppingStone
         @events = []
       end
 
-      def record(event)
+      def each(&enum)
+        @events.each(&enum)
+      end
+
+      def add(event)
         @events << event
-      end
-
-      def last
-        @events.last
-      end
-
-      def steps
-        @events.select { |event| ![:setup, :teardown].include?(event.name) }
       end
 
       def status
@@ -50,10 +48,7 @@ module SteppingStone
 
     include Observable
 
-    attr_reader :results
-
     def initialize
-      @results = []
       @run = Model::RunResult.new
     end
 
@@ -61,13 +56,12 @@ module SteppingStone
       @last_event = event
       case event.name
       when :setup
-        @result = Result.new(event.arguments[0])
+        @result = TestCaseResult.new(event.arguments[0])
       when :teardown
-        @results.push(@result)
         @run.add(@result)
         @result = nil
       else
-        @result.record(event)
+        @result.add(event)
       end
     end
 
@@ -78,7 +72,6 @@ module SteppingStone
 
       yield
 
-      @results.push(@result) if @result
       @run.add(@result) if @result
 
       @run.end_run
@@ -105,16 +98,16 @@ module SteppingStone
         start_time:   @run.started_at,
         end_time:     @run.ended_at,
 
-        test_cases:   { total: @results.count,
-                        passed: @results.select(&:passed?).count,
-                        failed: @results.select(&:failed?).count,
-                        undefined: @results.select(&:undefined?).count },
+        test_cases:   { total: @run.count,
+                        passed: @run.count(&:passed?),
+                        failed: @run.count(&:failed?),
+                        undefined: @run.count(&:undefined?) },
 
-        instructions: { total: @results.inject(0) { |sum, res| sum + res.steps.count },
-                        passed: @results.inject(0) { |sum, res| sum + res.steps.count(&:passed?) },
-                        failed: @results.inject(0) { |sum, res| sum + res.steps.count(&:failed?) },
-                        undefined: @results.inject(0) { |sum, res| sum + res.steps.count(&:undefined?) },
-                        skipped: @results.inject(0) { |sum, res| sum + res.steps.count(&:skipped?) } }
+        instructions: { total: @run.inject(0) { |sum, res| sum + res.count },
+                        passed: @run.inject(0) { |sum, res| sum + res.count(&:passed?) },
+                        failed: @run.inject(0) { |sum, res| sum + res.count(&:failed?) },
+                        undefined: @run.inject(0) { |sum, res| sum + res.count(&:undefined?) },
+                        skipped: @run.inject(0) { |sum, res| sum + res.count(&:skipped?) } }
       }
     end
   end

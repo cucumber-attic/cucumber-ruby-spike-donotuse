@@ -1,10 +1,16 @@
 module SteppingStone
   module Model
     class RunResult
+      include Enumerable
+
       attr_reader :started_at, :ended_at
 
       def initialize
         @results = []
+      end
+
+      def each(&enum)
+        @results.each(&enum)
       end
 
       def start_run
