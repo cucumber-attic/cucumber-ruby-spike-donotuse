@@ -54,7 +54,7 @@ module SteppingStone
 
     def initialize
       @results = []
-      @runs = []
+      @run = Model::RunResult.new
     end
 
     def record(event)
@@ -64,6 +64,7 @@ module SteppingStone
         @result = Result.new(event.arguments[0])
       when :teardown
         @results.push(@result)
+        @run.add(@result)
         @result = nil
       else
         @result.record(event)
@@ -71,16 +72,16 @@ module SteppingStone
     end
 
     def record_run
-      run = Model::RunResult.new
-      @runs.push(run)
-      run.start_run
+      @run.start_run
       changed
       notify_observers(:start_run)
 
       yield
 
       @results.push(@result) if @result
-      run.end_run
+      @run.add(@result) if @result
+
+      @run.end_run
       changed
       notify_observers(:end_run)
     end
@@ -91,22 +92,18 @@ module SteppingStone
       notify_observers(:event) if result.important?
     end
 
-    def last_run
-      @runs.last
-    end
-
     def last_event
       @last_event
     end
 
     def status_of(id)
-      @results.find { |res| res.id == id }.status
+      @run.status_of(id)
     end
 
     def summary
       {
-        start_time:   last_run.started_at,
-        end_time:     last_run.ended_at,
+        start_time:   @run.started_at,
+        end_time:     @run.ended_at,
 
         test_cases:   { total: @results.count,
                         passed: @results.select(&:passed?).count,

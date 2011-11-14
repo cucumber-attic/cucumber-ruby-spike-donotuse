@@ -59,10 +59,6 @@ module SteppingStone
       Timecop.return
     end
 
-    it "knows the last run"
-    it "knows the last test case"
-    it "knows the last event"
-
     it "notifies observers when it has recieved a new event"
     it "distinguishes between important and unimportant events"
   end
