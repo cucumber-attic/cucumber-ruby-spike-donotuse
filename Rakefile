@@ -2,7 +2,7 @@ desc "Run Cukes and Specs"
 task :default => ["spec", "cucumber"]
 
 task :cucumber do
-  sh "cucumber"
+  sh "cucumber --dotcucumber features/.cucumber"
 end
 
 task :spec do

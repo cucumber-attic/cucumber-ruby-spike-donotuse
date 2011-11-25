@@ -1,0 +1,980 @@
+[
+  {
+    "source": "^I'm using a clean gemset \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a directory named \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a file named \"([^\"]*)\" with:$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a file named \"cukes/features/calculator.feature\" with:",
+        "args": [
+          {
+            "offset": 14,
+            "val": "cukes/features/calculator.feature"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a (\\d+) byte file named \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^an empty file named \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I write to \"([^\"]*)\" with:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I overwrite \"([^\"]*)\" with:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I append to \"([^\"]*)\" with:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I append to \"([^\"]*)\" with \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I remove the file \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I cd to \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I run \"(.*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I run `([^`]*)`$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I successfully run \"(.*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I successfully run `([^`]*)`$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "I successfully run `cuke exec cukes/features/calculator.feature`",
+        "args": [
+          {
+            "offset": 20,
+            "val": "cuke exec cukes/features/calculator.feature"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^I run \"([^\"]*)\" interactively$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I run `([^`]*)` interactively$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^I type \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the output should contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the output from \"([^\"]*)\" should contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the output from \"([^\"]*)\" should not contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the output should not contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the output should contain:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the output should not contain:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the output should contain exactly \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the output should contain exactly:$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the output should contain exactly:",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the output should match \\/([^\\/]*)\\/$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the output should match:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the exit status should be (\\d+)$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the exit status should not be (\\d+)$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^it should (pass|fail) with:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^it should (pass|fail) with exactly:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^it should (pass|fail) with regexp?:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stderr should contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stderr should contain:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stderr should contain exactly:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stdout should contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stdout should contain:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stdout should contain exactly:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stderr should not contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stderr should not contain:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stdout should not contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stdout should not contain:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stdout from \"([^\"]*)\" should contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stdout from \"([^\"]*)\" should not contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stderr from \"([^\"]*)\" should contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the stderr from \"([^\"]*)\" should not contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the file \"([^\"]*)\" should not exist$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the following files should exist:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the following files should not exist:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a file named \"([^\"]*)\" should exist$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a file named \"([^\"]*)\" should not exist$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a (\\d+) byte file named \"([^\"]*)\" should exist$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the following directories should exist:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the following directories should not exist:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a directory named \"([^\"]*)\" should exist$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a directory named \"([^\"]*)\" should not exist$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the file \"([^\"]*)\" should contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the file \"([^\"]*)\" should not contain \"([^\"]*)\"$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the file \"([^\"]*)\" should contain exactly:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the file \"([^\"]*)\" should match \\/([^\\/]*)\\/$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the file \"([^\"]*)\" should not match \\/([^\\/]*)\\/$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a scenario \"(.+)\" with:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a\\ scenario\\ with:$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a scenario with:",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a passing scenario \"(.+)\" with:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^a\\ passing\\ scenario\\ with:$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a passing scenario with:",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a\\ passing\\ background\\ with:$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a passing background with:",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a\\ background\\ with:$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^Cucumber\\ executes\\ the\\ scenario$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "Cucumber executes the scenario",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^Cucumber\\ executes\\ a\\ scenario$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "Cucumber executes a scenario",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^Cucumber executes a scenario tagged with \"(.+)\"$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "Cucumber executes a scenario tagged with \"@bar\"",
+        "args": [
+          {
+            "offset": 42,
+            "val": "@bar"
+          }
+        ]
+      },
+      {
+        "name": "Cucumber executes a scenario tagged with \"@foo\"",
+        "args": [
+          {
+            "offset": 42,
+            "val": "@foo"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^Cucumber executes a scenario with no tags$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "Cucumber executes a scenario with no tags",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^all\\ of\\ the\\ steps\\ in\\ the\\ scenario\\ pass$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "all of the steps in the scenario pass",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^all\\ of\\ the\\ steps\\ in\\ the\\ scenario\\ fail$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "all of the steps in the scenario fail",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^all\\ of\\ the\\ steps\\ in\\ the\\ scenario\\ are\\ undefined$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "all of the steps in the scenario are undefined",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the step \"(.+)\" has a (\\w+) mapping$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the step \"I add 4 and 5\" has a failing mapping",
+        "args": [
+          {
+            "offset": 10,
+            "val": "I add 4 and 5"
+          },
+          {
+            "offset": 31,
+            "val": "failing"
+          }
+        ]
+      },
+      {
+        "name": "the step \"I add 4 and 5\" has a passing mapping",
+        "args": [
+          {
+            "offset": 10,
+            "val": "I add 4 and 5"
+          },
+          {
+            "offset": 31,
+            "val": "passing"
+          }
+        ]
+      },
+      {
+        "name": "the step \"I add 4 and 5\" has a pending mapping",
+        "args": [
+          {
+            "offset": 10,
+            "val": "I add 4 and 5"
+          },
+          {
+            "offset": 31,
+            "val": "pending"
+          }
+        ]
+      },
+      {
+        "name": "the step \"the result is 9\" has a passing mapping",
+        "args": [
+          {
+            "offset": 10,
+            "val": "the result is 9"
+          },
+          {
+            "offset": 33,
+            "val": "passing"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the\\ progress\\ formatter\\ is\\ observing\\ execution$",
+    "flags": "",
+    "steps": [
+
+    ]
+  },
+  {
+    "source": "^the\\ scenario\\ passes$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the scenario passes",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the\\ scenario\\ fails$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the scenario fails",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the\\ scenario\\ is\\ pending$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the scenario is pending",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the\\ scenario\\ is\\ undefined$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the scenario is undefined",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the step \"(.+)\" is skipped$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the step \"the result is 9\" is skipped",
+        "args": [
+          {
+            "offset": 10,
+            "val": "the result is 9"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a passing (\\w+) mapping$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a passing setup mapping",
+        "args": [
+          {
+            "offset": 10,
+            "val": "setup"
+          }
+        ]
+      },
+      {
+        "name": "a passing teardown mapping",
+        "args": [
+          {
+            "offset": 10,
+            "val": "teardown"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a failing (\\w+) mapping$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a failing setup mapping",
+        "args": [
+          {
+            "offset": 10,
+            "val": "setup"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a (\\w+) mapping that passes with \"(.+)\"$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a setup mapping that passes with \"setup 1\"",
+        "args": [
+          {
+            "offset": 2,
+            "val": "setup"
+          },
+          {
+            "offset": 34,
+            "val": "setup 1"
+          }
+        ]
+      },
+      {
+        "name": "a setup mapping that passes with \"setup 2\"",
+        "args": [
+          {
+            "offset": 2,
+            "val": "setup"
+          },
+          {
+            "offset": 34,
+            "val": "setup 2"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^there\\ are\\ no\\ setup\\ or\\ teardown\\ mappings$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "there are no setup or teardown mappings",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a passing before hook$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a passing before hook",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a passing after hook$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a passing after hook",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a passing around hook$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a passing around hook",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^a hook tagged with \"(.+)\"$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "a hook tagged with \"@foo\"",
+        "args": [
+          {
+            "offset": 20,
+            "val": "@foo"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^an untagged hook$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "an untagged hook",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the before hook is fired before the scenario$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the before hook is fired before the scenario",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the after hook is fired after the scenario$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the after hook is fired after the scenario",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the around hook fires around the scenario$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the around hook fires around the scenario",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the around hook is fired around the other hooks$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the around hook is fired around the other hooks",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the hook is fired$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the hook is fired",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the hook is not fired$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the hook is not fired",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the life cycle history is:$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the life cycle history is:",
+        "args": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "source": "^the\\ progress\\ output\\ looks\\ like:$",
+    "flags": "",
+    "steps": [
+      {
+        "name": "the progress output looks like:",
+        "args": [
+
+        ]
+      }
+    ]
+  }
+]
